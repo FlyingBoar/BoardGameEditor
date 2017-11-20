@@ -11,9 +11,9 @@ namespace BGEditor.NodeSystem
 
         public LinkData() { }
 
-        public LinkData(List<INode> _nodes) {
+        public LinkData(List<INode> _nodes)
+        {
             LinkedNodes = _nodes;
         }
-
     }
 }

@@ -11,10 +11,8 @@ namespace BGEditor.NodeSystem
         public LinkData LinkData;
         public SectorData SectorData;
         
-        public CellData()
-        {
+        public CellData() { }
 
-        }
         public CellData(NodeData _nodeData, LinkData _linkData, SectorData _sectorData)
         {
             NodeData = _nodeData;

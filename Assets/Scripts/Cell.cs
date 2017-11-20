@@ -8,6 +8,11 @@ namespace BGEditor.NodeSystem
     {
         CellData cellData;
 
+        public CellData GetCellData()
+        {
+            return cellData;
+        }
+
         public void SetPosition(Vector3 _position)
         {
             cellData.NodeData.Position = _position;
@@ -16,7 +21,7 @@ namespace BGEditor.NodeSystem
         public float GetRadius()
         {
             return cellData.SectorData.Radius;
-        }
+        }        
 
         public Cell(CellData _data)
         {
