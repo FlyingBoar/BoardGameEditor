@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BGEditor.NodeSystem;
-
 using UnityEditor;
 
 [ExecuteInEditMode]
-
 public class Tester : MonoBehaviour
 {
     public NodeNetworkData NetworkData;
@@ -20,10 +18,12 @@ public class Tester : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
             CreateNewGrid();
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.D))
             ClearGrid();
         if (Input.GetKeyDown(KeyCode.S))
             SaveGrid(cells);
+        if (Input.GetKeyDown(KeyCode.L))
+            LoadGrid(NetworkData);
     }
 
     public void CreateNewGrid()
@@ -43,7 +43,17 @@ public class Tester : MonoBehaviour
 
     public void LoadGrid(NodeNetworkData _networkData)
     {
-        NetworkData = _networkData;
+        if(_networkData == null)
+        {
+            Debug.LogWarning("No data to load !");
+            return;
+        }
+
+        cells.Clear();
+        foreach (CellData cellData in _networkData.Cells)
+        {
+            cells.Add(new Cell(cellData));
+        }
     }
 
     public NodeNetworkData SaveGrid(List<Cell> _cells)
