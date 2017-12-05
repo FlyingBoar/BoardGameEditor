@@ -28,19 +28,16 @@ namespace BGEditor.NodeSystem
             cellData = _data;
         }
 
-        public Vector3 GetCenter()
-        {
-            return GetPosition(); // da rivedere
-        }
-
-        public List<INode> GetNeighbourgs()
-        {
-            return cellData.LinkData.LinkedNodes;
-        }
-
         public Vector3 GetPosition()
         {
             return cellData.NodeData.Position;
+        }
+
+        #region ISector
+
+        public Vector3 GetCenter()
+        {
+            return GetPosition(); // da rivedere
         }
 
         public bool IsInside()
@@ -48,9 +45,18 @@ namespace BGEditor.NodeSystem
             throw new System.NotImplementedException();
         }
 
+        #endregion
+
+        #region ILink
+
+        public List<INode> GetNeighbourgs()
+        {
+            return cellData.LinkData.LinkedNodes;
+        }
+
         public void Link(INode _node)
         {
-            throw new System.NotImplementedException();
+            cellData.LinkData.LinkedNodes.Add(_node);
         }
 
         public void UnLink(INode _node)
@@ -62,5 +68,7 @@ namespace BGEditor.NodeSystem
         {
             throw new System.NotImplementedException();
         }
+
+        #endregion
     }
 }

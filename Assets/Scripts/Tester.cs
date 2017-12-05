@@ -10,6 +10,9 @@ public class Tester : MonoBehaviour
     public NodeNetworkData NetworkData;
     public SectorData SectorData;
 
+    public bool ShowGrid;
+    public bool ShowLink;
+
     public Vector2 Size;
 
     List<Cell> cells = new List<Cell>();
@@ -17,13 +20,19 @@ public class Tester : MonoBehaviour
 	void Update ()
     {
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             CreateNewGrid();
+            //------
+            LinkCells();
+            //------
+        }
         if (Input.GetKeyDown(KeyCode.D))
             ClearGrid();
         if (Input.GetKeyDown(KeyCode.S))
             SaveGrid(cells);
         if (Input.GetKeyDown(KeyCode.L))
             LoadGrid(NetworkData);
+
     }
 
     public void CreateNewGrid()
@@ -36,11 +45,54 @@ public class Tester : MonoBehaviour
                 NodeData nodeD = new NodeData(new Vector3((transform.position.x + i * SectorData.Radius) - offset.x, 0f, (transform.position.z + j * SectorData.Radius) - offset.y));
                 LinkData linkD = new LinkData();
                 SectorData sectorD = SectorData;
-                cells.Add( new Cell( new CellData(nodeD, linkD, sectorD)));
+                Cell tempCell = new Cell(new CellData(nodeD, linkD, sectorD));
+                cells.Add(tempCell);
             }
         }
     }
 
+    //---------------------------------
+
+    public List<Cell> GetCells()
+    {
+        return cells;
+    }
+
+    /// <summary>
+    /// Crea i collegamenti alle celle
+    /// </summary>
+    void LinkCells()
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            for (int j = 0; j < cells.Count; j++)
+            {
+                if (Vector3.Distance(cells[i].GetPosition(), cells[j].GetPosition()) <= SectorData.Radius && i != j)
+                {
+                    cells[i].Link(cells[j]); 
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// data una posizione restituisce la cella corrispondente
+    /// </summary>
+    /// <param name="_position">la posizione da controllare</param>
+    /// <returns>la cella che si trova in quella posizione</returns>
+    public Cell WorldToGridPosition(Vector3 _position)
+    {
+        foreach (Cell cell in cells)
+        {
+            if (cell.GetPosition() == _position)
+            {
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    //---------------------------------
     public void LoadGrid(NodeNetworkData _networkData)
     {
         if(_networkData == null)
@@ -105,11 +157,23 @@ public class Tester : MonoBehaviour
         if (cells.Count <= 0)
             return;
 
-        Gizmos.color = Color.cyan;
         foreach (Cell item in cells)
         {
-            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * item.GetRadius());
-            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * (item.GetRadius()/50f) );
+            if (ShowGrid)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * item.GetRadius());
+                Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * (item.GetRadius() / 50f)); 
+            }
+            if (ShowLink)
+            {
+                Gizmos.color = Color.black;
+                foreach (ILink link in item.GetNeighbourgs())
+                {
+                    Vector3 line = link.GetPosition() - item.GetCenter();
+                    Gizmos.DrawLine(item.GetCenter() + line * 0.25f, item.GetCenter() + line * .75f);
+                } 
+            }
         }
     }
 }
