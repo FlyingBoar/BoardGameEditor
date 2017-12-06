@@ -7,7 +7,7 @@ public class MovementController : MonoBehaviour {
 
     public Tester Tester;
     public int PointsOfMovement = 6;
-
+    
     /// <summary>
     /// Calcola le celle in cui è possibile muoversi
     /// </summary>
@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour {
         List<Cell> possibleMovement = new List<Cell>();
         List<INode> tempList = new List<INode>();
 
-        Cell startCell = Tester.WorldToGridPosition(transform.position);
+        Cell startCell = Tester.ReturnCellFromPosition(transform.position);
         if (PointsOfMovement >= 0)
         {
             possibleMovement.Add(startCell);

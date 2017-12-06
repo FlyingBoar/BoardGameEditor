@@ -45,8 +45,7 @@ public class Tester : MonoBehaviour
                 NodeData nodeD = new NodeData(new Vector3((transform.position.x + i * SectorData.Radius) - offset.x, 0f, (transform.position.z + j * SectorData.Radius) - offset.y));
                 LinkData linkD = new LinkData();
                 SectorData sectorD = SectorData;
-                Cell tempCell = new Cell(new CellData(nodeD, linkD, sectorD));
-                cells.Add(tempCell);
+                cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
             }
         }
     }
@@ -80,7 +79,7 @@ public class Tester : MonoBehaviour
     /// </summary>
     /// <param name="_position">la posizione da controllare</param>
     /// <returns>la cella che si trova in quella posizione</returns>
-    public Cell WorldToGridPosition(Vector3 _position)
+    public Cell ReturnCellFromPosition(Vector3 _position)
     {
         foreach (Cell cell in cells)
         {
