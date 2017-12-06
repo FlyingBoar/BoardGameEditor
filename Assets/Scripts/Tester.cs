@@ -84,7 +84,7 @@ public class Tester : MonoBehaviour
     {
         foreach (Cell cell in cells)
         {
-            if (cell.GetPosition() == _position)
+            if (Vector3.Distance(cell.GetPosition(), _position) < cell.GetRadius())
             {
                 return cell;
             }
