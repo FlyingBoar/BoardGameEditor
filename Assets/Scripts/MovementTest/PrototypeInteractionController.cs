@@ -56,10 +56,7 @@ public class PrototypeInteractionController : MonoBehaviour {
                 mouseProjection = Camera.main.ScreenPointToRay(Input.mousePosition);
                 float distance;
                 if (gridLevel.Raycast(mouseProjection, out distance))
-                {
                     mousePosition = mouseProjection.GetPoint(distance);
-                    Debug.Log(mousePosition);
-                }
                 
                 /// Al click sull'oggetto il counter viene aumentato ad uno, quindi viene aumentato a due per impedire che rientri nello stesso if
                 /// ed esca dall'Update. Se viene ri clickato l'oggetto il counter passa a 3 entrando nel secondo if dove viene deselezionato l'oggetto
