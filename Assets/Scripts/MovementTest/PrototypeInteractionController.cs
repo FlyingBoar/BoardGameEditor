@@ -35,8 +35,6 @@ public class PrototypeInteractionController : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        if (movementCtrl == null)
-            movementCtrl = GetComponent<MovementController>();
         possibleCellOfMovement = movementCtrl.EvaluateMovementPown();
         isSelected = true;
         ShowPossibleMovement();
@@ -50,6 +48,7 @@ public class PrototypeInteractionController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         gridLevel = new Plane(Vector3.up,0);
+        movementCtrl = GetComponent<MovementController>();
     }
 
     // Update is called once per frame
