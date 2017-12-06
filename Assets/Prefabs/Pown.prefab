@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1293805298833758, guid: 82a6c57e6e551cd40bcba5f4b763f028, type: 2}
+  CurrentMovementMode: 1
 --- !u!114 &114832350985159100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tester: {fileID: 0}
-  PointsOfMovement: 6
+  PointsOfMovement: 5
 --- !u!135 &135478058260809764
 SphereCollider:
   m_ObjectHideFlags: 1
