@@ -7,7 +7,7 @@ public class MovementController : MonoBehaviour {
 
     public Tester Tester;
     public int PointsOfMovement = 6;
-    
+
     /// <summary>
     /// Calcola le celle in cui è possibile muoversi
     /// </summary>
@@ -42,5 +42,15 @@ public class MovementController : MonoBehaviour {
         }
 
         return possibleMovement;
+    }
+
+    public void Drag(Vector3 _position)
+    {
+        transform.position = _position;
+    }
+
+    public void Drop(Vector3 _position)
+    {
+        transform.position = _position;
     }
 }

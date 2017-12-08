@@ -3,152 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using BGEditor.NodeSystem;
 
-public class PrototypeInteractionController : MonoBehaviour {
+public class PrototypeInteractionController : MonoBehaviour
+{
 
     private bool _isSelected;
-
     public bool isSelected
     {
         get { return _isSelected; }
-        set {
+        set
+        {
             _isSelected = value;
-            if (value == false)
-                clickCounter = 0;
+            if (!_isSelected)
+                OnMouseUnselect();
+            else
+                OnMouseSelection();
         }
     }
-
-
-    List<Cell> possibleCellOfMovement = new List<Cell>();
-    public GameObject prefab;
-    List<GameObject> cubeInstantiated = new List<GameObject>();
-
-    Ray mouseProjection;
-    Plane gridLevel;
-    Vector3 mousePosition;
-    Vector3 pownStartPosition;
-
-    MovementController movementCtrl;
-
-    public MovementMode CurrentMovementMode;
 
     int clickCounter = 0;
+    public MovementMode CurrentMovementMode;
+    MovementController movementCtrl;
 
-    private void OnMouseDown()
-    {
-        possibleCellOfMovement = movementCtrl.EvaluateMovementPown();
-        isSelected = true;
-        ShowPossibleMovement();
-
-        if (CurrentMovementMode == MovementMode.Click)
-            clickCounter++;
-        else if (CurrentMovementMode == MovementMode.DragAndDrop)
-            pownStartPosition = transform.position;
-    }
-
-    // Use this for initialization
-    void Start () {
-        gridLevel = new Plane(Vector3.up,0);
-        movementCtrl = GetComponent<MovementController>();
-    }
-
-    // Update is called once per frame
-    void Update () {
-        if (isSelected)
-        {
-            Test_FindMousePositionOnGridPlane();
-
-            if (CurrentMovementMode == MovementMode.Click)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-
-                    if (CurrentMovementMode == MovementMode.Click)
-                    {
-                        /// Al click sull'oggetto il counter viene aumentato ad uno, quindi viene aumentato a due per impedire che rientri nello stesso if
-                        /// ed esca dall'Update. Se viene ri clickato l'oggetto il counter passa a 3 entrando nel secondo if dove viene deselezionato l'oggetto
-                        /// cancellato i cubi, e riazzerato il counter.
-
-                        switch (clickCounter)
-                        {
-                            case 1:
-                                clickCounter++;
-                                return;
-                            case 3:
-                                isSelected = false;
-                                HidePossibleMovement();
-                                return;
-                        }
-
-                        // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                        FindCloseCellToMousePosition();
-
-                        isSelected = false;
-                        HidePossibleMovement();
-                    }
-
-                    if (CurrentMovementMode == MovementMode.DragAndDrop)
-                    {
-                        transform.position = mousePosition;
-                    }
-                } 
-            }
-            else if (CurrentMovementMode == MovementMode.DragAndDrop)
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    transform.position = mousePosition;
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                    FindCloseCellToMousePosition();
-                }
-
-            }
-
-        }
-	}
-
-
-
-    void FindCloseCellToMousePosition()
-    {
-        foreach (Cell cell in possibleCellOfMovement)
-        {
-            if (Vector3.Distance(cell.GetPosition(), mousePosition) < movementCtrl.Tester.SectorData.Radius)
-            {
-                transform.position = cell.GetPosition();
-                HidePossibleMovement();
-                isSelected = false;
-                return;
-            }
-            else
-            {
-                transform.position = pownStartPosition;
-                HidePossibleMovement();
-                isSelected = false;
-            }
-        }
-    }
-
-    void Test_FindMousePositionOnGridPlane()
-    {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        mouseProjection = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float distance;
-        if (gridLevel.Raycast(mouseProjection, out distance))
-            mousePosition = mouseProjection.GetPoint(distance);
-    }
-
-    void HidePossibleMovement()
-    {
-        for (int i = 0; i < cubeInstantiated.Count; i++)
-        {
-            Destroy(cubeInstantiated[i]);
-        }
-    }
-
+    //------ViewLayer
+    List<Cell> possibleCellOfMovement = new List<Cell>();
+    public GameObject prefabViewGraphic;
+    List<GameObject> cubeInstantiated = new List<GameObject>();
     /// <summary>
     /// Mostra le celle in cui è possibile arrivare col movimento
     /// </summary>
@@ -156,9 +35,117 @@ public class PrototypeInteractionController : MonoBehaviour {
     {
         foreach (Cell cell in possibleCellOfMovement)
         {
-            GameObject tempObj = Instantiate(prefab, cell.GetPosition(), Quaternion.identity);
+            GameObject tempObj = Instantiate(prefabViewGraphic, cell.GetPosition(), Quaternion.identity);
             cubeInstantiated.Add(tempObj);
         }
+    }
+    void HidePossibleMovement()
+    {
+        for (int i = 0; i < cubeInstantiated.Count; i++)
+        {
+            Destroy(cubeInstantiated[i]);
+        }
+    }
+    //------InputLayer
+    Ray mouseProjection;
+    Plane gridLevel;
+    Vector3 mousePosition { get { return Test_FindMousePositionOnGridPlane(); } }
+    Vector3 Test_FindMousePositionOnGridPlane()
+    {
+        Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        mouseProjection = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float distance;
+        if (gridLevel.Raycast(mouseProjection, out distance))
+            currentMousePosition = mouseProjection.GetPoint(distance);
+
+        return currentMousePosition;
+    }
+
+    Vector3 pownStartPosition;
+    //------------------
+
+    private void OnMouseDown()
+    {
+        isSelected = true;
+    }
+    /// <summary>
+    /// Instruction called on selection of this Obj.
+    /// </summary>
+    void OnMouseSelection()
+    {
+        possibleCellOfMovement = movementCtrl.EvaluateMovementPown();
+        ShowPossibleMovement();
+
+        if (CurrentMovementMode == MovementMode.Click)
+            clickCounter++;
+        else if (CurrentMovementMode == MovementMode.DragAndDrop)
+            pownStartPosition = transform.position;
+    }
+    /// <summary>
+    /// Instruction called when this Obj is no more seleced
+    /// </summary>
+    void OnMouseUnselect()
+    {
+        clickCounter = 0;
+        HidePossibleMovement();
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        gridLevel = new Plane(Vector3.up, 0);
+        movementCtrl = GetComponent<MovementController>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (isSelected)
+            UpdateSelectedStatus();
+    }
+
+    void UpdateSelectedStatus()
+    {
+        if (CurrentMovementMode == MovementMode.Click)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (clickCounter > 1)
+                {
+                    DropAttempt(Tester.ReturnCellFromPosition(mousePosition));
+                    isSelected = false;
+                    return;
+                }
+                clickCounter++;
+            }
+        }
+        else if (CurrentMovementMode == MovementMode.DragAndDrop)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                movementCtrl.Drag(mousePosition);
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
+                DropAttempt(Tester.ReturnCellFromPosition(mousePosition));
+                isSelected = false;
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// It handle the drop attempt
+    /// </summary>
+    /// <param name="_cell"></param>
+    void DropAttempt(Cell _cell)
+    {
+        if (possibleCellOfMovement.Contains(_cell))
+            movementCtrl.Drop(_cell.GetCenter());
+        else
+            movementCtrl.Drop(pownStartPosition);
     }
 
     public enum MovementMode
