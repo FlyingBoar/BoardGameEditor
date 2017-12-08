@@ -42,7 +42,7 @@ public class Tester : MonoBehaviour
         {
             for (int j = 0; j < Size.y; j++)
             {
-                NodeData nodeD = new NodeData(new Vector3((transform.position.x + i * SectorData.Radius) - offset.x, 0f, (transform.position.z + j * SectorData.Radius) - offset.y));
+                NodeData nodeD = new NodeData(new Vector3((transform.position.x + i * SectorData.Radius *2) - offset.x, 0f, (transform.position.z + j * SectorData.Radius *2) - offset.y));
                 LinkData linkD = new LinkData();
                 SectorData sectorD = SectorData;
                 cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));

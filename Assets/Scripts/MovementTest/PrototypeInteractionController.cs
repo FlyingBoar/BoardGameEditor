@@ -55,7 +55,7 @@ public class PrototypeInteractionController : MonoBehaviour {
     void Update () {
         if (isSelected)
         {
-            FindMousePositionOnGridPlane();
+            Test_FindMousePositionOnGridPlane();
 
             if (CurrentMovementMode == MovementMode.Click)
             {
@@ -109,11 +109,13 @@ public class PrototypeInteractionController : MonoBehaviour {
         }
 	}
 
+
+
     void FindCloseCellToMousePosition()
     {
         foreach (Cell cell in possibleCellOfMovement)
         {
-            if (Vector3.Distance(cell.GetPosition(), mousePosition) < movementCtrl.Tester.SectorData.Radius / 2)
+            if (Vector3.Distance(cell.GetPosition(), mousePosition) < movementCtrl.Tester.SectorData.Radius)
             {
                 transform.position = cell.GetPosition();
                 HidePossibleMovement();
@@ -129,7 +131,7 @@ public class PrototypeInteractionController : MonoBehaviour {
         }
     }
 
-    void FindMousePositionOnGridPlane()
+    void Test_FindMousePositionOnGridPlane()
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
