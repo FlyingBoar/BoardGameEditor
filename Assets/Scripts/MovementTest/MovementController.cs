@@ -5,7 +5,6 @@ using BGEditor.NodeSystem;
 
 public class MovementController : MonoBehaviour {
 
-    public Tester Tester;
     public int PointsOfMovement = 6;
 
     /// <summary>
