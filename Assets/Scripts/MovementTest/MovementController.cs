@@ -17,7 +17,7 @@ public class MovementController : MonoBehaviour {
         List<Cell> possibleMovement = new List<Cell>();
         List<INode> tempList = new List<INode>();
 
-        Cell startCell = Tester.ReturnCellFromPosition(transform.position);
+        Cell startCell = GridController.ReturnCellFromPosition(transform.position);
         if (PointsOfMovement >= 0)
         {
             possibleMovement.Add(startCell);
