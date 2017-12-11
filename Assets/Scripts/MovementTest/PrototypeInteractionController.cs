@@ -109,7 +109,12 @@ public class PrototypeInteractionController : MonoBehaviour
         if (possibleCellOfMovement.Contains(_cell))
             movementCtrl.Drop(_cell.GetCenter());
         else
-            movementCtrl.Drop(pownStartPosition);
+        {
+            if (CurrentMovementMode == MovementMode.Click)
+                isSelected = false;
+            else
+                movementCtrl.Drop(pownStartPosition);
+        }
     }
 
     public enum MovementMode
