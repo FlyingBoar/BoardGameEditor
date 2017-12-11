@@ -87,11 +87,7 @@ public class Tester : MonoBehaviour
         }
         return null;
     }
-
-    public Cell GetCentralCell()
-    {
-        return ReturnCellFromPosition(transform.position);
-    }
+    
     //---------------------------------
     public void LoadGrid(NodeNetworkData _networkData)
     {
