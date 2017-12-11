@@ -19,6 +19,7 @@ namespace BGEditor.NodeSystem
         #region API
         public void CreateNewGrid()
         {
+            ClearGrid();
             Vector3 offset = CalculateOffset();
             for (int i = 0; i < Size.x; i++)
             {
