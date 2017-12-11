@@ -69,9 +69,9 @@ namespace BGEditor.NodeSystem
                 LoadFromNetworkData(NetworkData);
         }
 
-        public void Save()
+        public void SaveCurrent()
         {
-            SaveCurrent(cells);
+            Save(cells);
         }
 
         #region GridData Management
@@ -89,7 +89,7 @@ namespace BGEditor.NodeSystem
                 cells.Add(new Cell(cellData));
             }
         }
-        public NodeNetworkData SaveCurrent(List<Cell> _cells)
+        public NodeNetworkData Save(List<Cell> _cells)
         {
             NodeNetworkData asset = null;
 
