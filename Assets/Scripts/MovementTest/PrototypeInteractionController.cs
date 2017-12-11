@@ -113,7 +113,7 @@ public class PrototypeInteractionController : MonoBehaviour
             {
                 if (clickCounter > 1)
                 {
-                    DropAttempt(Tester.ReturnCellFromPosition(mousePosition));
+                    DropAttempt(GridController.ReturnCellFromPosition(mousePosition));
                     isSelected = false;
                     return;
                 }
@@ -129,7 +129,7 @@ public class PrototypeInteractionController : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                DropAttempt(Tester.ReturnCellFromPosition(mousePosition));
+                DropAttempt(GridController.ReturnCellFromPosition(mousePosition));
                 isSelected = false;
                 return;
             }
