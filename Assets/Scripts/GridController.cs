@@ -13,7 +13,7 @@ namespace BGEditor.NodeSystem
         public bool ShowGrid;
         public bool ShowLink;
 
-        public Vector2 Size;
+        public Vector3 Size;
 
         static List<Cell> cells = new List<Cell>();
         #region API
@@ -21,16 +21,20 @@ namespace BGEditor.NodeSystem
         {
             ClearGrid();
             Vector3 offset = CalculateOffset();
+
             for (int i = 0; i < Size.x; i++)
             {
                 for (int j = 0; j < Size.y; j++)
                 {
-                    Vector3 nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), 0f, (transform.position.z + j * SectorData.Radius * 2));
-                    nodePos -= offset;
-                    NodeData nodeD = new NodeData(nodePos);
-                    LinkData linkD = new LinkData();
-                    SectorData sectorD = SectorData;
-                    cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
+                    for (int k = 0; k < Size.z; k++)
+                    {
+                        Vector3 nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), (transform.position.z + k * SectorData.Radius * 2));
+                        nodePos -= offset;
+                        NodeData nodeD = new NodeData(nodePos);
+                        LinkData linkD = new LinkData();
+                        SectorData sectorD = SectorData;
+                        cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
+                    }
                 }
             }
 
@@ -144,7 +148,7 @@ namespace BGEditor.NodeSystem
 
         Vector3 CalculateOffset()
         {
-            return new Vector3((Size.x * SectorData.Radius) / 2, 0, (Size.y * SectorData.Radius) / 2);
+            return new Vector3((Size.x * SectorData.Radius) / 2, (Size.y * SectorData.Radius) / 2, (Size.z * SectorData.Radius) / 2);
         }
 
         private void OnDrawGizmos()
@@ -157,8 +161,8 @@ namespace BGEditor.NodeSystem
                 if (ShowGrid)
                 {
                     Gizmos.color = Color.cyan;
-                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * item.GetRadius() * 2);
-                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * (item.GetRadius() / 25f));
+                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * item.GetRadius() * 2);
+                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * (item.GetRadius() / 25f));
                 }
                 if (ShowLink)
                 {
