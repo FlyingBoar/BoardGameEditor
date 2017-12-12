@@ -109,6 +109,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    debug:
+      m_Flags: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &530846008
 GameObject:
@@ -185,7 +187,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!4 &530846013
 Transform:
   m_ObjectHideFlags: 0
@@ -317,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3397c4d68f8a8b24fb3ee417b8e287aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NetworkData: {fileID: 0}
+  NetworkData: {fileID: 11400000, guid: 511e8dba289e4674ab266e5a6fe7cb21, type: 2}
   SectorData:
     Shape: 1
     Radius: 2

@@ -16,12 +16,41 @@ namespace BGEditor.NodeSystem
         public Vector3 Size;
 
         static List<Cell> cells = new List<Cell>();
+
         #region API
         public void CreateNewGrid()
         {
             ClearGrid();
             Vector3 offset = CalculateOffset();
 
+            if (Size.x != 0 && Size.y != 0 && Size.z != 0)
+            {
+                CreateGrid3D(offset);
+            }
+            else
+            {
+                Vector2 size2D = new Vector2();
+
+                if (Size.x == 0 && Size.y != 0 && Size.z != 0)
+                    size2D = new Vector2(Size.y, Size.z);
+                else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
+                    size2D = new Vector2(Size.x, Size.z);
+                else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
+                    size2D = new Vector2(Size.x, Size.x);
+                else
+                {
+                    Debug.LogWarning("GridController -- The minimum axis number for building a grid is 2 !");
+                    return;
+                }
+
+                CreateGrid2D(size2D, offset);
+            }
+
+            LinkCells();
+        }
+
+        void CreateGrid3D(Vector3 _offset)
+        {
             for (int i = 0; i < Size.x; i++)
             {
                 for (int j = 0; j < Size.y; j++)
@@ -29,7 +58,7 @@ namespace BGEditor.NodeSystem
                     for (int k = 0; k < Size.z; k++)
                     {
                         Vector3 nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), (transform.position.z + k * SectorData.Radius * 2));
-                        nodePos -= offset;
+                        nodePos -= _offset;
                         NodeData nodeD = new NodeData(nodePos);
                         LinkData linkD = new LinkData();
                         SectorData sectorD = SectorData;
@@ -37,8 +66,30 @@ namespace BGEditor.NodeSystem
                     }
                 }
             }
+        }
 
-            LinkCells();
+        void CreateGrid2D(Vector2 size2D, Vector3 _offset)
+        {
+            for (int i = 0; i < size2D.x; i++)
+            {
+                for (int j = 0; j < size2D.y; j++)
+                {
+                    Vector3 nodePos = new Vector3();
+
+                    if (Size.x == 0 && Size.y != 0 && Size.z != 0)
+                        nodePos = new Vector3(0f, (transform.position.y + i * SectorData.Radius * 2), (transform.position.z + j * SectorData.Radius * 2));
+                    else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
+                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), 0f, (transform.position.z + j * SectorData.Radius * 2));
+                    else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
+                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), 0f);
+
+                    nodePos -= _offset;
+                    NodeData nodeD = new NodeData(nodePos);
+                    LinkData linkD = new LinkData();
+                    SectorData sectorD = SectorData;
+                    cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
+                }
+            }
         }
 
         /// <summary>
@@ -161,8 +212,29 @@ namespace BGEditor.NodeSystem
                 if (ShowGrid)
                 {
                     Gizmos.color = Color.cyan;
-                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * item.GetRadius() * 2);
-                    Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * (item.GetRadius() / 25f));
+                    if (Size.x != 0 && Size.y != 0 && Size.z != 0)
+                    {
+                        Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * item.GetRadius() * 2);
+                        Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * (item.GetRadius() / 25f));
+                    }
+                    else
+                    {
+                        if (Size.x == 0 && Size.y != 0 && Size.z != 0)
+                        {
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(0f, 1f, 1f) * item.GetRadius() * 2);
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(0f, 1f, 1f) * (item.GetRadius() / 25f));
+                        }
+                        else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
+                        {
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * item.GetRadius() * 2);
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * (item.GetRadius() / 25f));
+                        }
+                        else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
+                        {
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 0f) * item.GetRadius() * 2);
+                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 0f) * (item.GetRadius() / 25f));
+                        } 
+                    }
                 }
                 if (ShowLink)
                 {
