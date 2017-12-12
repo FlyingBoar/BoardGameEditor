@@ -318,10 +318,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3397c4d68f8a8b24fb3ee417b8e287aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NetworkData: {fileID: 11400000, guid: 511e8dba289e4674ab266e5a6fe7cb21, type: 2}
+  NetworkData: {fileID: 11400000, guid: c85ccc53174aefe448f3019ef8b08a17, type: 2}
   SectorData:
     Shape: 1
     Radius: 2
   ShowGrid: 1
   ShowLink: 1
-  Size: {x: 10, y: 10, z: 10}
+  Size: {x: 6, y: 10, z: 8}

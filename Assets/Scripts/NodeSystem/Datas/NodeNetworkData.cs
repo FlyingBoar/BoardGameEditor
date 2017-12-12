@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace BGEditor.NodeSystem {
     [CreateAssetMenu(fileName ="Network")]
-    public class NodeNetworkData : ScriptableObject {
-
+    public class NodeNetworkData : ScriptableObject
+    {
+        public Vector3 Size;
         public List<CellData> Cells = new List<CellData>();
-
     }
 }

@@ -135,11 +135,15 @@ namespace BGEditor.NodeSystem
         {
             if (_networkData == null)
             {
-                Debug.LogWarning("No data to load !");
+                Debug.LogWarning("GridController -- No data to load !");
                 return;
             }
 
             cells.Clear();
+
+            Size = _networkData.Size;
+            SectorData = _networkData.Cells[0].SectorData;
+
             foreach (CellData cellData in _networkData.Cells)
             {
                 cells.Add(new Cell(cellData));
@@ -157,6 +161,7 @@ namespace BGEditor.NodeSystem
 
             asset = ScriptableObject.CreateInstance<NodeNetworkData>();
             asset.Cells = cellsData;
+            asset.Size = Size;
 
             string assetName = "NodeNetworkData.asset";
             asset.name = assetName;
