@@ -212,42 +212,42 @@ namespace BGEditor.NodeSystem
             if (cells.Count <= 0)
                 return;
 
-            foreach (Cell item in cells)
+            foreach (Cell cell in cells)
             {
                 if (ShowGrid)
                 {
                     Gizmos.color = Color.cyan;
                     if (Size.x != 0 && Size.y != 0 && Size.z != 0)
                     {
-                        Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * item.GetRadius() * 2);
-                        Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 1f) * (item.GetRadius() / 25f));
+                        Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 1f) * cell.GetRadius() * 2);
+                        Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 1f) * (cell.GetRadius() / 25f));
                     }
                     else
                     {
                         if (Size.x == 0 && Size.y != 0 && Size.z != 0)
                         {
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(0f, 1f, 1f) * item.GetRadius() * 2);
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(0f, 1f, 1f) * (item.GetRadius() / 25f));
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(0f, 1f, 1f) * cell.GetRadius() * 2);
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(0f, 1f, 1f) * (cell.GetRadius() / 25f));
                         }
                         else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
                         {
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * item.GetRadius() * 2);
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 0f, 1f) * (item.GetRadius() / 25f));
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 0f, 1f) * cell.GetRadius() * 2);
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 0f, 1f) * (cell.GetRadius() / 25f));
                         }
                         else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
                         {
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 0f) * item.GetRadius() * 2);
-                            Gizmos.DrawWireCube(item.GetCenter(), new Vector3(1f, 1f, 0f) * (item.GetRadius() / 25f));
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 0f) * cell.GetRadius() * 2);
+                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 0f) * (cell.GetRadius() / 25f));
                         } 
                     }
                 }
                 if (ShowLink)
                 {
                     Gizmos.color = Color.black;
-                    foreach (ILink link in item.GetNeighbourgs())
+                    foreach (ILink link in cell.GetNeighbourgs())
                     {
-                        Vector3 line = link.GetPosition() - item.GetCenter();
-                        Gizmos.DrawLine(item.GetCenter() + line * 0.25f, item.GetCenter() + line * .75f);
+                        Vector3 line = link.GetPosition() - cell.GetCenter();
+                        Gizmos.DrawLine(cell.GetCenter() + line * 0.25f, cell.GetCenter() + line * .75f);
                     }
                 }
             }
