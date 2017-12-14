@@ -36,7 +36,7 @@ namespace BGEditor.NodeSystem
                 else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
                     size2D = new Vector2(Size.x, Size.z);
                 else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
-                    size2D = new Vector2(Size.x, Size.x);
+                    size2D = new Vector2(Size.x, Size.y);
                 else
                 {
                     Debug.LogWarning("GridController -- The minimum axis number for building a grid is 2 !");
