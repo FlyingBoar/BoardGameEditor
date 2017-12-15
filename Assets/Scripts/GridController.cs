@@ -130,6 +130,12 @@ namespace BGEditor.NodeSystem
             Save(cells);
         }
 
+        // TODO : per Test (per il momento)
+        public List<INode> GetListOfCells()
+        {
+            return cells.ConvertAll(c => c as INode);
+        }
+
         #region GridData Management
         public void LoadFromNetworkData(NodeNetworkData _networkData)
         {
