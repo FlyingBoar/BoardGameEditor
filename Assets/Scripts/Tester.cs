@@ -20,5 +20,10 @@ public class Tester : MonoBehaviour
             GridCtrl.SaveCurrent();
         if (Input.GetKeyDown(KeyCode.L))
             GridCtrl.Load();
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            GridScanner scaner = new GridScanner(GridCtrl.GetListOfCells(), GridCtrl.SectorData);
+            scaner.ScanGrid();
+        }
     }
 }

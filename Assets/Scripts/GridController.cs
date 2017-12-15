@@ -77,13 +77,11 @@ namespace BGEditor.NodeSystem
                     Vector3 nodePos = new Vector3();
 
                     if (Size.x == 0 && Size.y != 0 && Size.z != 0)
-                        nodePos = new Vector3(0f, (i * SectorData.Radius * 2), (j * SectorData.Radius * 2));
-
+                        nodePos = new Vector3(0f, (transform.position.y + i * SectorData.Radius * 2), (transform.position.z + j * SectorData.Radius * 2));
                     else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
-                        nodePos = new Vector3((i * SectorData.Radius * 2), 0f, (j * SectorData.Radius * 2));
-
+                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), 0f, (transform.position.z + j * SectorData.Radius * 2));
                     else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
-                        nodePos = new Vector3((i * SectorData.Radius * 2), (j * SectorData.Radius * 2), 0f);
+                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), 0f);
 
                     nodePos -= _offset;
                     NodeData nodeD = new NodeData(nodePos);
@@ -132,16 +130,10 @@ namespace BGEditor.NodeSystem
             Save(cells);
         }
 
-        public List<Cell> GetGridCorners()
+        // TODO : per Test (per il momento)
+        public List<INode> GetListOfCells()
         {
-            List<Cell> tempList = new List<Cell>();
-            Vector3 offset = CalculateOffset();
-            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x,0, -offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x,0, offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
-
-            return tempList;
+            return cells.ConvertAll(c => c as INode);
         }
 
         #region GridData Management
@@ -218,11 +210,7 @@ namespace BGEditor.NodeSystem
 
         Vector3 CalculateOffset()
         {
-            Vector3 offset= new Vector3((Size.x * SectorData.Radius) * 2, (Size.y * SectorData.Radius) * 2, (Size.z * SectorData.Radius) * 2);
-            offset -= Vector3.one * SectorData.Radius * 2;
-            offset.y *= 0;
-            offset /= 2;
-            return offset;
+            return new Vector3((Size.x * SectorData.Radius) / 2, (Size.y * SectorData.Radius) / 2, (Size.z * SectorData.Radius) / 2);
         }
 
         private void OnDrawGizmos()
