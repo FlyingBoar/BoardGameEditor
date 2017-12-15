@@ -130,6 +130,18 @@ namespace BGEditor.NodeSystem
             Save(cells);
         }
 
+        public List<Cell> GetGridCorners()
+        {
+            List<Cell> tempList = new List<Cell>();
+            Vector3 offset = CalculateOffset();
+            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
+            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
+            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, offset.z)));
+            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
+
+            return tempList;
+        }
+
         // TODO : per Test (per il momento)
         public List<INode> GetListOfCells()
         {
@@ -210,7 +222,11 @@ namespace BGEditor.NodeSystem
 
         Vector3 CalculateOffset()
         {
-            return new Vector3((Size.x * SectorData.Radius) / 2, (Size.y * SectorData.Radius) / 2, (Size.z * SectorData.Radius) / 2);
+            Vector3 offset = new Vector3((Size.x * SectorData.Radius) * 2, (Size.y * SectorData.Radius) * 2, (Size.z * SectorData.Radius) * 2);
+            offset -= Vector3.one * SectorData.Radius * 2;
+            offset.y *= 0;
+            offset /= 2;
+            return offset;
         }
 
         private void OnDrawGizmos()
