@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 { 
     [System.Serializable]
     public class SectorData
     {
         public AreaShape Shape;
-        public float Radius;
+        public Vector3 Radius;
+        public Vector3 Diameter { get { return Radius * 2; } }
 
         public SectorData() { }
 
-        public SectorData(AreaShape _shape, float _radius)
+        public SectorData(AreaShape _shape, Vector3 _radius)
         {
             Shape = _shape;
             Radius = _radius;

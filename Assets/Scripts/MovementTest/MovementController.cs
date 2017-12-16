@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BGEditor.NodeSystem;
+using Grid;
 
 public class MovementController : MonoBehaviour {
 
     public int PointsOfMovement = 6;
-
+    public GridController TESTController;
     /// <summary>
     /// Calcola le celle in cui è possibile muoversi
     /// </summary>
@@ -16,7 +16,7 @@ public class MovementController : MonoBehaviour {
         List<Cell> possibleMovement = new List<Cell>();
         List<INode> tempList = new List<INode>();
 
-        Cell startCell = GridController.ReturnCellFromPosition(transform.position);
+        Cell startCell = TESTController.GetCellFromPosition(transform.position);
         if (PointsOfMovement >= 0)
         {
             possibleMovement.Add(startCell);

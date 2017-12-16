@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public class GridScanner
     {
@@ -29,7 +29,7 @@ namespace BGEditor.NodeSystem
             foreach (INode cell in GridCells)
             {
                 scanCollider.transform.position = cell.GetPosition();
-                Physics.Raycast((cell.GetPosition() + new Vector3Int(0, 1000, 0)), -Vector3.up, out hit);
+                Physics.Raycast((cell.GetPosition() + new Vector3(0, 1000, 0)), -Vector3.up, out hit);
                 if(hit.transform.gameObject.GetComponent<ScanCollider>() != null)
                 {
                     if (hit.transform.gameObject.GetComponent<ScanCollider>().ObjType == ObjectType.Obstacle)
@@ -56,7 +56,7 @@ namespace BGEditor.NodeSystem
         {
             GameObject scannerObj = new GameObject("ScannerCollider");
             scanCollider = scannerObj.AddComponent<ScanCollider>();
-            scanCollider.Init(SectorData, ObjectType.Cell, new Vector3(SectorData.Radius * 2, 0.2f, SectorData.Radius * 2));
+            scanCollider.Init(SectorData, ObjectType.Cell, new Vector3(SectorData.Radius.x * 2, SectorData.Radius.y * 2, SectorData.Radius.z * 2));
         }
     }
 

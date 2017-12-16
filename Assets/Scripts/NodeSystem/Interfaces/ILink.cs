@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public interface ILink : INode
     {

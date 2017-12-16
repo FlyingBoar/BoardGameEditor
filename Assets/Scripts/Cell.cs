@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public class Cell : ISector, ILink
     {
@@ -18,7 +18,7 @@ namespace BGEditor.NodeSystem
             cellData.NodeData.Position = _position;
         }
 
-        public float GetRadius()
+        public Vector3 GetRadius()
         {
             return cellData.SectorData.Radius;
         }        

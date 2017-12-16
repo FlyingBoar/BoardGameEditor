@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BGEditor.NodeSystem;
+using Grid;
 
 public class PrototypeInteractionController : MonoBehaviour
 {
-
+    public GridController TESTGridController;
     private bool _isSelected;
     public bool isSelected
     {
@@ -77,7 +77,7 @@ public class PrototypeInteractionController : MonoBehaviour
             {
                 if (clickCounter > 1)
                 {
-                    DropAttempt(GridController.ReturnCellFromPosition(InputAdapter_Tester.I.PointerPosition));
+                    DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.I.PointerPosition));
                     isSelected = false;
                     return;
                 }
@@ -93,7 +93,7 @@ public class PrototypeInteractionController : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                DropAttempt(GridController.ReturnCellFromPosition(InputAdapter_Tester.I.PointerPosition));
+                DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.I.PointerPosition));
                 isSelected = false;
                 return;
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using BGEditor.NodeSystem;
+using Grid;
 
 [CustomEditor(typeof(GridController)), CanEditMultipleObjects]
 public class GridControllerEditor : Editor {
