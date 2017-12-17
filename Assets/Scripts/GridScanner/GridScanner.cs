@@ -39,8 +39,7 @@ namespace BGEditor.NodeSystem
                     }
                 }
             }
-
-            Debug.Log(GridObstacleCells.Count);
+            GameObject.Destroy(scanCollider.gameObject);
         }
 
         void UnlinkCell(INode _cell)
