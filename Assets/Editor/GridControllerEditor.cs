@@ -57,7 +57,7 @@ public class GridControllerEditor : Editor {
         if (makeGrid)
         {
             maker.CreateNewGrid();
-            SaveCornersPosition();
+            //SaveCornersPosition();
             testBool = true;
         }
         if (resetGrid)

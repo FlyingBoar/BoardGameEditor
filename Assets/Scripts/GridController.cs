@@ -27,9 +27,13 @@ namespace Grid
         {
             //Reset operation
             ClearGrid();
-            SizeInt.x = SectorData.Diameter.x != 0 ? (int)(Size.x / SectorData.Diameter.x) : 0;
-            SizeInt.y = SectorData.Diameter.y != 0 ? (int)(Size.y / SectorData.Diameter.y) : 0;
-            SizeInt.z = SectorData.Diameter.z != 0 ? (int)(Size.z / SectorData.Diameter.z) : 0;
+            SizeInt.x = (int)(Size.x / SectorData.Diameter.x);
+            SizeInt.x = SizeInt.x == 0 ? 1 : SizeInt.x;
+            SizeInt.y = (int)(Size.y / SectorData.Diameter.y);
+            SizeInt.y = SizeInt.y == 0 ? 1 : SizeInt.y;
+            SizeInt.z = (int)(Size.z / SectorData.Diameter.z);
+            SizeInt.z = SizeInt.z == 0 ? 1 : SizeInt.z;
+
             offSet = CalculateOffset();
             //New grid creation
             CreateGrid();
@@ -66,14 +70,16 @@ namespace Grid
         //the int cast on the normalized position
         public int[] GetCoordinatesByPosition(Vector3 _position)
         {
+            Vector3 spacePos = _position + offSet;
+
             int[] coordinates = new int[]
             {
                 //Radius == 0 is indefined. 0 as default
                 //Postion/Radius is the normalized space position
                 //i = V/(2R) + 1
-                SectorData.Radius.x != 0 ?(int)(_position.x/SectorData.Radius.x)/2 +1 : 0,
-                SectorData.Radius.y != 0 ?(int)(_position.y/SectorData.Radius.y)/2 +1 : 0,
-                SectorData.Radius.z != 0 ?(int)(_position.x/SectorData.Radius.z)/2 +1 : 0,
+                SectorData.Radius.x != 0 ?(int)(spacePos.x/SectorData.Radius.x)/2 +1 : 0,
+                SectorData.Radius.y != 0 ?(int)(spacePos.y/SectorData.Radius.y)/2 +1 : 0,
+                SectorData.Radius.z != 0 ?(int)(spacePos.x/SectorData.Radius.z)/2 +1 : 0,
             };
 
             return coordinates;

@@ -423,6 +423,21 @@ Prefab:
       propertyPath: CornersPos.Array.data[2].z
       value: -18
       objectReference: {fileID: 0}
+    - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
+        type: 2}
+      propertyPath: SectorData.Radius.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
+        type: 2}
+      propertyPath: SectorData.Radius.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
+        type: 2}
+      propertyPath: SectorData.Radius.z
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 907d00b0d8106634aaea465abc8361c9, type: 2}
   m_IsPrefabParent: 0
