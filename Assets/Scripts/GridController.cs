@@ -202,30 +202,107 @@ namespace Grid
             }
         }
 
+        #region Grid Creation
         void CreateGrid()
         {
-            //Be very carefull about the Matrix initialization.
-            CellsMatrix = new Cell[(int)SizeInt.x][][];
-            for (int i = 0; i < SizeInt.x; i++)
+            Vector2 size2D = new Vector2();
+            if (SizeInt.x > 0 && SizeInt.y > 0 && SizeInt.z > 0)
             {
-                CellsMatrix[i] = new Cell[(int)SizeInt.y][];
-                for (int j = 0; j < SizeInt.y; j++)
+                CreateGrid3D(SizeInt);
+            }
+            else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z > 0)
+            {
+                size2D = new Vector2(SizeInt.y, SizeInt.z);
+                CreateGrid2D(size2D, "x");
+            }
+            else if (SizeInt.x > 0 && SizeInt.y == 0 && SizeInt.z > 0)
+            {
+                size2D = new Vector2(SizeInt.x, SizeInt.z);
+                CreateGrid2D(size2D, "y");
+            }
+            else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z == 0)
+            {
+                size2D = new Vector2(SizeInt.x, SizeInt.y);
+                CreateGrid2D(size2D, "z");
+            }
+            else if (SizeInt.x > 0 && SizeInt.y == 0 && SizeInt.z == 0)
+            {
+                CreateGrid1D(SizeInt.x, new string[] { "y", "z" });
+            }
+            else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z == 0)
+            {
+                CreateGrid1D(SizeInt.y, new string[] { "x", "z" });
+            }
+            else if (SizeInt.x == 0 && SizeInt.y == 0 && SizeInt.z > 0)
+            {
+                CreateGrid1D(SizeInt.z, new string[] { "x", "y" });
+            }
+        }
+
+        void CreateGrid3D(Vector3 _sizeInt3D)
+        {
+            //Be very carefull about the Matrix initialization.
+            CellsMatrix = new Cell[(int)_sizeInt3D.x][][];
+            for (int i = 0; i < _sizeInt3D.x; i++)
+            {
+                CellsMatrix[i] = new Cell[(int)_sizeInt3D.y][];
+                for (int j = 0; j < _sizeInt3D.y; j++)
                 {
-                    CellsMatrix[i][j] = new Cell[(int)SizeInt.z];
-                    for (int k = 0; k < SizeInt.z; k++)
+                    CellsMatrix[i][j] = new Cell[(int)_sizeInt3D.z];
+                    for (int k = 0; k < _sizeInt3D.z; k++)
                     {
-                        Vector3 nodePos = GetPositionByCoordinates(i, j, k);
-
-                        NodeData nodeD = new NodeData(nodePos);
-                        LinkData linkD = new LinkData();
-                        SectorData sectorD = SectorData;
-
-                        CellsMatrix[i][j][k] = new Cell(new CellData(nodeD, linkD, sectorD));
-                        CellsList.Add(CellsMatrix[i][j][k]);
+                        CreateCell(i, j, k);
                     }
                 }
             }
         }
+
+        void CreateGrid2D(Vector2 _sizeInt2D, string _nullAxis)
+        {
+            //Be very carefull about the Matrix initialization.
+            CellsMatrix = new Cell[(int)_sizeInt2D.x][][];
+            for (int i = 0; i < _sizeInt2D.x; i++)
+            {
+                CellsMatrix[i] = new Cell[(int)_sizeInt2D.y][];
+                for (int j = 0; j < _sizeInt2D.y; j++)
+                {
+                    if(_nullAxis == "x")
+                        CreateCell(0, i, j);
+                    else if (_nullAxis == "y")
+                        CreateCell(i, 0, j);
+                    else if (_nullAxis == "z")
+                        CreateCell(i, j, 0);
+                }
+            }
+        }
+
+        void CreateGrid1D(float _sizeInt1D, string[] _nullAxes)
+        {
+            //Be very carefull about the Matrix initialization.
+            CellsMatrix = new Cell[(int)_sizeInt1D][][];
+            for (int i = 0; i < _sizeInt1D; i++)
+            {
+                if (_nullAxes[0] == "y" && _nullAxes[0] == "z")
+                    CreateCell(i, 0, 0);
+                else if (_nullAxes[0] == "x" && _nullAxes[0] == "z")
+                    CreateCell(0, i, 0);
+                else if (_nullAxes[0] == "x" && _nullAxes[0] == "y")
+                    CreateCell(0, 0, i);                
+            }
+        }
+
+        void CreateCell(int _i, int _j, int _k)
+        {
+            Vector3 nodePos = GetPositionByCoordinates(_i, _j, _k);
+
+            NodeData nodeD = new NodeData(nodePos);
+            LinkData linkD = new LinkData();
+            SectorData sectorD = SectorData;
+
+            CellsMatrix[_i][_j][_k] = new Cell(new CellData(nodeD, linkD, sectorD));
+            CellsList.Add(CellsMatrix[_i][_j][_k]);
+        }
+        #endregion
 
         Vector3 CalculateOffset()
         {
