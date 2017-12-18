@@ -13,8 +13,6 @@ public class GridControllerEditor : Editor {
     bool makeGrid;
     bool resetGrid;
 
-    bool testBool = false;
-
     List<Vector3> corners = new List<Vector3>();
 
     List<Vector3> handles = new List<Vector3>();
@@ -51,6 +49,8 @@ public class GridControllerEditor : Editor {
     {
         base.OnInspectorGUI();
 
+        #region Button Region
+
         makeGrid = GUILayout.Button("Make Grid");
         resetGrid = GUILayout.Button("Reset Grid");
 
@@ -58,10 +58,12 @@ public class GridControllerEditor : Editor {
         {
             maker.CreateNewGrid();
             SaveCornersPosition();
-            testBool = true;
         }
         if (resetGrid)
             maker.ClearGrid();
+        #endregion
+
+
     }
 
     void SaveCornersPosition()

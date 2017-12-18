@@ -148,6 +148,11 @@ namespace BGEditor.NodeSystem
             return cells.ConvertAll(c => c as INode);
         }
 
+        public void ModifyDensity(float _value)
+        {
+            // -radius +size
+        }
+
         #region GridData Management
         public void LoadFromNetworkData(NodeNetworkData _networkData)
         {
