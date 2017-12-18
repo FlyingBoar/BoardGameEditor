@@ -192,11 +192,11 @@ namespace Grid
                     {
                         //Link of the next and previus cell along all directions
                         CellsMatrix[i][j][k].Link(CellsMatrix[i != 0 ? i - 1 : 0][j][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i != SizeInt.x ? i + 1 : (int)SizeInt.x][j][k]);
+                        CellsMatrix[i][j][k].Link(CellsMatrix[i != (int)SizeInt.x ? i + 1 : (int)SizeInt.x][j][k]);
                         CellsMatrix[i][j][k].Link(CellsMatrix[i][j != 0 ? j - 1 : 0][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j != SizeInt.y ? j + 1 : (int)SizeInt.y][k]);
+                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j != (int)SizeInt.y ? j + 1 : (int)SizeInt.y][k]);
                         CellsMatrix[i][j][k].Link(CellsMatrix[i][j][k != 0 ? k - 1 : 0]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j][k != SizeInt.z ? k + 1 : (int)SizeInt.z]);
+                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j][k != (int)SizeInt.z ? k + 1 : (int)SizeInt.z]);
                     }
                 }
             }
