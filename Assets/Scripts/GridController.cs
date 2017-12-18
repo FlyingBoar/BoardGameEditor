@@ -170,29 +170,29 @@ namespace Grid
             else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z > 0)
             {
                 size2D = new Vector2(SizeInt.y, SizeInt.z);
-                CreateGrid2D(size2D, "x");
+                CreateGrid2D(size2D);
             }
             else if (SizeInt.x > 0 && SizeInt.y == 0 && SizeInt.z > 0)
             {
                 size2D = new Vector2(SizeInt.x, SizeInt.z);
-                CreateGrid2D(size2D, "y");
+                CreateGrid2D(size2D);
             }
             else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z == 0)
             {
                 size2D = new Vector2(SizeInt.x, SizeInt.y);
-                CreateGrid2D(size2D, "z");
+                CreateGrid2D(size2D);
             }
             else if (SizeInt.x > 0 && SizeInt.y == 0 && SizeInt.z == 0)
             {
-                CreateGrid1D(SizeInt.x, new string[] { "y", "z" });
+                CreateGrid1D(SizeInt.x);
             }
             else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z == 0)
             {
-                CreateGrid1D(SizeInt.y, new string[] { "x", "z" });
+                CreateGrid1D(SizeInt.y);
             }
             else if (SizeInt.x == 0 && SizeInt.y == 0 && SizeInt.z > 0)
             {
-                CreateGrid1D(SizeInt.z, new string[] { "x", "y" });
+                CreateGrid1D(SizeInt.z);
             }
         }
 
@@ -214,7 +214,7 @@ namespace Grid
             }
         }
 
-        void CreateGrid2D(Vector2 _sizeInt2D, string _nullAxis)
+        void CreateGrid2D(Vector2 _sizeInt2D)
         {
             //Be very carefull about the Matrix initialization.
             CellsMatrix = new Cell[(int)_sizeInt2D.x][][];
@@ -223,28 +223,18 @@ namespace Grid
                 CellsMatrix[i] = new Cell[(int)_sizeInt2D.y][];
                 for (int j = 0; j < _sizeInt2D.y; j++)
                 {
-                    if(_nullAxis == "x")
-                        CreateCell(0, i, j);
-                    else if (_nullAxis == "y")
-                        CreateCell(i, 0, j);
-                    else if (_nullAxis == "z")
-                        CreateCell(i, j, 0);
+                    CreateCell(i, j, 0);
                 }
             }
         }
 
-        void CreateGrid1D(float _sizeInt1D, string[] _nullAxes)
+        void CreateGrid1D(float _sizeInt1D)
         {
             //Be very carefull about the Matrix initialization.
             CellsMatrix = new Cell[(int)_sizeInt1D][][];
             for (int i = 0; i < _sizeInt1D; i++)
             {
-                if (_nullAxes[0] == "y" && _nullAxes[0] == "z")
-                    CreateCell(i, 0, 0);
-                else if (_nullAxes[0] == "x" && _nullAxes[0] == "z")
-                    CreateCell(0, i, 0);
-                else if (_nullAxes[0] == "x" && _nullAxes[0] == "y")
-                    CreateCell(0, 0, i);                
+                CreateCell(i, 0, 0);            
             }
         }
 
