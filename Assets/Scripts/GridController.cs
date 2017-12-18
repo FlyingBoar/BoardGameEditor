@@ -27,19 +27,23 @@ namespace Grid
         {
             //Reset operation
             ClearGrid();
+
+            if (SectorData.Radius.x == 0)
+                SectorData.Radius.x = float.Epsilon;
+            if (SectorData.Radius.y == 0)
+                SectorData.Radius.y = float.Epsilon;
+            if (SectorData.Radius.z == 0)
+                SectorData.Radius.z = float.Epsilon;
             SizeInt.x = (int)(Size.x / SectorData.Diameter.x);
-            SizeInt.x = SizeInt.x == 0 ? 1 : SizeInt.x;
             SizeInt.y = (int)(Size.y / SectorData.Diameter.y);
-            SizeInt.y = SizeInt.y == 0 ? 1 : SizeInt.y;
             SizeInt.z = (int)(Size.z / SectorData.Diameter.z);
-            SizeInt.z = SizeInt.z == 0 ? 1 : SizeInt.z;
 
             offSet = CalculateOffset();
             //New grid creation
             CreateGrid();
             //Linking process
-            if(autoLinkCells)
-                LinkCells();
+            //if(autoLinkCells)
+               // LinkCells();
         }
 
         public Cell GetCentralCell()
@@ -177,7 +181,7 @@ namespace Grid
                 size2D = new Vector2(SizeInt.x, SizeInt.z);
                 CreateGrid2D(size2D);
             }
-            else if (SizeInt.x == 0 && SizeInt.y > 0 && SizeInt.z == 0)
+            else if (SizeInt.x > 0 && SizeInt.y > 0 && SizeInt.z == 0)
             {
                 size2D = new Vector2(SizeInt.x, SizeInt.y);
                 CreateGrid2D(size2D);
