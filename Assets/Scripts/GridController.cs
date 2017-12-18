@@ -17,10 +17,10 @@ namespace Grid
         public Vector3 Size;
         protected Vector3 SizeInt;
 
-        static List<Cell> CellsList = new List<Cell>();
-        static Cell[][][] CellsMatrix;
+        public List<Cell> CellsList = new List<Cell>();
+        public Cell[][][] CellsMatrix;
 
-        Vector3 offSet;
+        public Vector3 offSet;
 
         #region API
         public void CreateNewGrid(bool autoLinkCells = true)
@@ -42,52 +42,9 @@ namespace Grid
                 LinkCells();
         }
 
-        /// <summary>
-        /// data una posizione restituisce la cella corrispondente
-        /// </summary>
-        /// <param name="_position">la posizione da controllare</param>
-        /// <returns>la cella che si trova in quella posizione</returns>
-        public Cell GetCellFromPosition(Vector3 _position)
-        {
-            Cell resultant;
-            int[] indexes = GetCoordinatesByPosition(_position);
-            resultant = CellsMatrix[indexes[0]][indexes[1]][indexes[2]];
-            return resultant;
-        }
-
-        public Vector3 GetPositionByCoordinates(int x, int y, int z) {
-
-            Vector3 spacePos = new Vector3((transform.position.x + x*SectorData.Diameter.x), (transform.position.y + y * SectorData.Diameter.y), (transform.position.z + z * SectorData.Diameter.z));
-            spacePos += SectorData.Radius;
-            spacePos -= offSet;
-
-            return spacePos;
-        }
-
-        //Associate the coordinate of clostest Cell center (or cell array index)
-        //to the position vector
-        //By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
-        //the int cast on the normalized position
-        public int[] GetCoordinatesByPosition(Vector3 _position)
-        {
-            Vector3 spacePos = _position + offSet;
-
-            int[] coordinates = new int[]
-            {
-                //Radius == 0 is indefined. 0 as default
-                //Postion/Radius is the normalized space position
-                //i = V/(2R) + 1
-                SectorData.Radius.x != 0 ?(int)(spacePos.x/SectorData.Radius.x)/2 +1 : 0,
-                SectorData.Radius.y != 0 ?(int)(spacePos.y/SectorData.Radius.y)/2 +1 : 0,
-                SectorData.Radius.z != 0 ?(int)(spacePos.x/SectorData.Radius.z)/2 +1 : 0,
-            };
-
-            return coordinates;
-        }
-
         public Cell GetCentralCell()
         {
-            return GetCellFromPosition(transform.position);
+            return this.GetCellFromPosition(transform.position);
         }
 
         public void ClearGrid()
@@ -110,10 +67,10 @@ namespace Grid
         {
             List<Cell> tempList = new List<Cell>();
             Vector3 offset = CalculateOffset();
-            tempList.Add(GetCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
-            tempList.Add(GetCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
-            tempList.Add(GetCellFromPosition(new Vector3(offset.x, 0, offset.z)));
-            tempList.Add(GetCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
 
             return tempList;
         }
@@ -293,7 +250,7 @@ namespace Grid
 
         void CreateCell(int _i, int _j, int _k)
         {
-            Vector3 nodePos = GetPositionByCoordinates(_i, _j, _k);
+            Vector3 nodePos = this.GetPositionByCoordinates(_i, _j, _k);
 
             NodeData nodeD = new NodeData(nodePos);
             LinkData linkD = new LinkData();
