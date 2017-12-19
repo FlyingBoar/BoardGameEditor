@@ -395,7 +395,7 @@ Prefab:
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: ShowLink
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
@@ -405,17 +405,17 @@ Prefab:
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: Size.y
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: Size.z
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: Size.x
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
@@ -440,7 +440,7 @@ Prefab:
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: SectorData.Radius.z
-      value: 1
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}

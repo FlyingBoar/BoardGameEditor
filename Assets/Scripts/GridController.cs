@@ -15,7 +15,6 @@ namespace Grid
         public bool ShowLink;
 
         public Vector3Int Size;
-        protected Vector3 SizeInt;
 
         Cell[,,] CellsMatrix;
 
@@ -32,10 +31,6 @@ namespace Grid
                 SectorData.Radius.y = float.Epsilon;
             if (SectorData.Radius.z == 0)
                 SectorData.Radius.z = float.Epsilon;
-
-            SizeInt.x = (uint)(Size.x / SectorData.Diameter.x);
-            SizeInt.y = (uint)(Size.y / SectorData.Diameter.y);
-            SizeInt.z = (uint)(Size.z / SectorData.Diameter.z);
 
             offSet = CalculateOffset();
             //New grid creation
@@ -70,15 +65,21 @@ namespace Grid
         public List<Cell> GetGridCorners()
         {
             List<Cell> tempList = new List<Cell>();
-            Vector3 offset = CalculateOffset();
-            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
-            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
-            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, offset.z)));
-            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
+            tempList.Add(this.GetCellByCoordinates(0, 0, 0));
+            tempList.Add(this.GetCellByCoordinates(Size.x -1, 0, 0));
+            tempList.Add(this.GetCellByCoordinates(Size.x -1, Size.y - 1, 0));
+            tempList.Add(this.GetCellByCoordinates(Size.x - 1, Size.y - 1, Size.z - 1));
+            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, 0));
+            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, Size.z - 1));
+            tempList.Add(this.GetCellByCoordinates(0, 0, Size.z - 1));
 
             return tempList;
         }
 
+        /// <summary>
+        /// Return the list of not null cell in Grid
+        /// </summary>
+        /// <returns></returns>
         public List<Cell> GetListOfCells()
         {
             List<Cell> cellsList = new List<Cell>();
@@ -94,12 +95,18 @@ namespace Grid
 
             return cellsList;
         }
-
+        /// <summary>
+        /// Return the Grid Offset
+        /// </summary>
+        /// <returns></returns>
         public Vector3 GetOffset()
         {
             return offSet;
         }
-
+        /// <summary>
+        /// Return the Matrix of the grid
+        /// </summary>
+        /// <returns></returns>
         public Cell[,,] GetCellsMatrix()
         {
             return CellsMatrix;
@@ -163,10 +170,9 @@ namespace Grid
         #region Grid Creation
         void CreateGrid()
         {
-            int maxSize = SizeInt.x >= SizeInt.y ? (int)SizeInt.x : (int)SizeInt.y;
-            maxSize = maxSize >= SizeInt.z ? maxSize : (int)SizeInt.z;
+            int maxSize = Size.x >= Size.y ? Size.x : Size.y;
+            maxSize = maxSize >= Size.z ? maxSize : Size.z;
 
-            //Be very carefull about the Matrix initialization.
             CellsMatrix = new Cell[maxSize, maxSize, maxSize];
             for (int i = 0; i < maxSize; i++)
             {
@@ -182,9 +188,9 @@ namespace Grid
 
         void CreateCell(int _i, int _j, int _k)
         {
-            int i = _i < SizeInt.x ? _i : 0;
-            int j = _j < SizeInt.y ? _j : 0;
-            int k = _k < SizeInt.z ? _k : 0;
+            int i = _i < Size.x ? _i : 0;
+            int j = _j < Size.y ? _j : 0;
+            int k = _k < Size.z ? _k : 0;
 
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
@@ -211,15 +217,15 @@ namespace Grid
 
                         //Link of the next and previus cell along all directions
                         CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k]);
-                        if (i < (int)SizeInt.x - 1)
+                        if (i < Size.x - 1)
                             CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k]);
 
                         CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k]);
-                        if(j < (int)SizeInt.y - 1)
+                        if(j < Size.y - 1)
                             CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k]);
 
                         CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0]);
-                        if(k < (int)SizeInt.z - 1)
+                        if(k < Size.z - 1)
                             CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1]);
                     }
                 }

@@ -17,8 +17,28 @@ namespace Grid {
             resultant = _gridCtrl.GetCellsMatrix()[indexes[0],indexes[1],indexes[2]];
             return resultant;
         }
-
-
+        /// <summary>
+        /// Return a specific cell based on coordinates
+        /// </summary>
+        /// <param name="_gridCtrl"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static Cell GetCellByCoordinates(this GridController _gridCtrl, int i, int j, int k)
+        {
+            Cell resultant;
+            resultant = _gridCtrl.GetCellsMatrix()[i, j, k];
+            return resultant;
+        }
+        /// <summary>
+        /// Return the center postion of the cell
+        /// </summary>
+        /// <param name="_gridCtrl"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
         public static Vector3 GetPositionByCoordinates(this GridController _gridCtrl, int i, int j, int k)
         {
 
@@ -28,8 +48,6 @@ namespace Grid {
 
             return spacePos;
         }
-
-
         //Associate the coordinate of clostest Cell center (or cell array index)
         //to the position vector
         //By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
