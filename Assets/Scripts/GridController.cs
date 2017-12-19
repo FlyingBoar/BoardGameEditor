@@ -14,7 +14,7 @@ namespace Grid
         public bool ShowGrid;
         public bool ShowLink;
 
-        public Vector3 Size;
+        public Vector3Int Size;
         protected Vector3 SizeInt;
 
         Cell[,,] CellsMatrix;
@@ -105,8 +105,10 @@ namespace Grid
             return CellsMatrix;
         }
         #endregion
+        #endregion
+
         #region GridData Management
-        public void LoadFromNetworkData(NodeNetworkData _networkData)
+        void LoadFromNetworkData(NodeNetworkData _networkData)
         {
             if (_networkData == null)
             {
@@ -116,13 +118,13 @@ namespace Grid
 
             ClearGrid();
 
-            Size = _networkData.Size;
-            SectorData = _networkData.Cells[0].SectorData;
+            CellsMatrix = _networkData.CellsMatrix;
 
-            // TODO : caricare la matrice della griglia da dato
-            Debug.LogWarning("Disabled");
+            Size = _networkData.Size;
+            SectorData = GetListOfCells().Where(c => c != null).First().GetCellData().SectorData;
         }
-        public NodeNetworkData Save(List<Cell> _cells)
+
+        NodeNetworkData Save(List<Cell> _cells)
         {
             NodeNetworkData asset = null;
 
@@ -133,7 +135,7 @@ namespace Grid
             }
 
             asset = ScriptableObject.CreateInstance<NodeNetworkData>();
-            asset.Cells = cellsData;
+            asset.CellsMatrix = CellsMatrix;
             asset.Size = Size;
 
             string assetName = "NodeNetworkData.asset";
@@ -146,6 +148,7 @@ namespace Grid
 
             return asset;
         }
+
         string CheckFolder()
         {
 #if UNITY_EDITOR
@@ -155,7 +158,6 @@ namespace Grid
 
             return "Assets/GridData/";
         }
-        #endregion
         #endregion
 
         #region Grid Creation

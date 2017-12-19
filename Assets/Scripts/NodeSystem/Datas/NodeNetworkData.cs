@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Grid {
+namespace Grid
+{
     [CreateAssetMenu(fileName ="Network")]
     public class NodeNetworkData : ScriptableObject
     {
-        public Vector3 Size;
-        public List<CellData> Cells = new List<CellData>();
+        public Vector3Int Size;
+        public Cell[,,] CellsMatrix;
     }
 }

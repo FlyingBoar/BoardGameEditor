@@ -9,10 +9,8 @@ namespace Grid
         List<INode> GetNeighbourgs();
 
         void Link(INode _node);
-
         void UnLink(INode _node);
         void UnLink(ILink _link);
-
         void UnLinkAll();
     }
 }
