@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4426453311316050}
-  - component: {fileID: 114700447129741438}
+  - component: {fileID: 114170876324051164}
   - component: {fileID: 114007491828289930}
   m_Layer: 0
   m_Name: Tester
@@ -35,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1187740152339980}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -52,14 +52,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3397c4d68f8a8b24fb3ee417b8e287aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NetworkData: {fileID: 0}
+  NetworkData: {fileID: 11400000, guid: a15d4a9dc6155ac428ad7afdd4652916, type: 2}
   SectorData:
     Shape: 1
-    Radius: 2
-  ShowGrid: 0
-  ShowLink: 0
-  Size: {x: 10, y: 10}
---- !u!114 &114700447129741438
+    Radius: {x: 1, y: 1, z: 1}
+  ShowGrid: 1
+  ShowLink: 1
+  Size: {x: 10, y: 10, z: 10}
+--- !u!114 &114170876324051164
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -70,4 +70,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd93dfc9825c98438fcde70afe5178e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridCtrl: {fileID: 114007491828289930}
+  GridCtrl: {fileID: 0}
