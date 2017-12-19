@@ -405,7 +405,7 @@ Prefab:
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: Size.y
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
@@ -415,7 +415,7 @@ Prefab:
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
       propertyPath: Size.x
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
         type: 2}
