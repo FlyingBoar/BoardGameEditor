@@ -4,29 +4,19 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class GridScanner
+    public class GridScanner : MonoBehaviour
     {
-        SectorData SectorData;
-        List<Cell> GridCells;
-
         ScanCollider scanCollider;
         List<Cell> GridObstacleCells = new List<Cell>();
 
-        // TODO : da rivedere il tipo con cui viene passata la lista di celle
-        public GridScanner(List<Cell> _gridCells, SectorData _sectorData)
-        {
-            SectorData = _sectorData;
-            GridCells = _gridCells;
-        }
-
-        public void ScanGrid()
+        public void ScanGrid(List<Cell> _gridCells, SectorData _sectorData)
         {
             if (scanCollider == null)
-                CreateScannerCollider();
+                CreateScannerCollider(_sectorData);
 
             RaycastHit hit = new RaycastHit();
 
-            foreach (Cell cell in GridCells)
+            foreach (Cell cell in _gridCells)
             {
                 scanCollider.transform.position = cell.GetPosition();
 
@@ -39,14 +29,14 @@ namespace Grid
                     cell.UnLinkAll();
                 }
             }
-            GameObject.Destroy(scanCollider.gameObject);
+            GameObject.DestroyImmediate(scanCollider.gameObject);
         }
 
-        void CreateScannerCollider()
+        void CreateScannerCollider(SectorData _sectorData)
         {
             GameObject scannerObj = new GameObject("ScannerCollider");
             scanCollider = scannerObj.AddComponent<ScanCollider>();
-            scanCollider.Init(SectorData, ObjectType.Cell, new Vector3(SectorData.Radius.x * 2, SectorData.Radius.y * 2, SectorData.Radius.z * 2));
+            scanCollider.Init(_sectorData, ObjectType.Cell, new Vector3(_sectorData.Radius.x * 2, _sectorData.Radius.y * 2, _sectorData.Radius.z * 2));
         }
     }
 

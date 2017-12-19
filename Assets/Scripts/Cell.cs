@@ -71,9 +71,10 @@ namespace Grid
 
         public void UnLinkAll()
         {
-            foreach (ILink link in cellData.LinkData.LinkedNodes)
+            List<ILink> linkedNodes = cellData.LinkData.LinkedNodes.ConvertAll(l => l as ILink);
+            for (int i = 0; i < linkedNodes.Count; i++)
             {
-                link.UnLink(this);
+                linkedNodes[i].UnLink(this);
             }
             cellData.LinkData.LinkedNodes.Clear();
         }

@@ -5,15 +5,10 @@ using UnityEditor;
 using Grid;
 
 [CustomEditor(typeof(GridController)), CanEditMultipleObjects]
-public class GridControllerEditor : Editor {
-
+public class GridControllerEditor : Editor
+{
     GridController maker;
     Rect rect;
-
-    bool makeGrid;
-    bool resetGrid;
-
-    bool testBool = false;
 
     List<Vector3> corners = new List<Vector3>();
 
@@ -49,19 +44,22 @@ public class GridControllerEditor : Editor {
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
-
-        makeGrid = GUILayout.Button("Make Grid");
-        resetGrid = GUILayout.Button("Reset Grid");
-
-        if (makeGrid)
+        if (GUILayout.Button("Make Grid"))
         {
             maker.CreateNewGrid();
             //SaveCornersPosition();
-            testBool = true;
         }
-        if (resetGrid)
+        if (GUILayout.Button("Reset Grid"))
             maker.ClearGrid();
+
+        GUILayout.Space(10);
+
+        if (GUILayout.Button("Save Grid"))
+            maker.SaveCurrent();
+        if (GUILayout.Button("Load Grid"))
+            maker.Load();
+
+        base.OnInspectorGUI();
     }
 
     void SaveCornersPosition()
