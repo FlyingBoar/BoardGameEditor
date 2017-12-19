@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public class ScanCollider : MonoBehaviour
     {
@@ -12,7 +12,7 @@ namespace BGEditor.NodeSystem
 
         public void Init(SectorData _sectorData, ObjectType _objType)
         {
-            Init(_sectorData, _objType, new Vector3(_sectorData.Radius, _sectorData.Radius, _sectorData.Radius));
+            Init(_sectorData, _objType, new Vector3(_sectorData.Radius.x, _sectorData.Radius.y, _sectorData.Radius.z));
         }
 
         public void Init(SectorData _sectorData, ObjectType _objType, Vector3 _size)

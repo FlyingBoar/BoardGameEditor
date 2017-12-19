@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public interface ILink : INode
     {
-
         List<INode> GetNeighbourgs();
 
         void Link(INode _node);
@@ -14,5 +13,6 @@ namespace BGEditor.NodeSystem
         void UnLink(INode _node);
         void UnLink(ILink _link);
 
+        void UnLinkAll();
     }
 }

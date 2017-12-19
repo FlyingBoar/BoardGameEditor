@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     [ExecuteInEditMode]
     public class GridController : MonoBehaviour
@@ -14,109 +15,39 @@ namespace BGEditor.NodeSystem
         public bool ShowLink;
 
         public Vector3 Size;
+        protected Vector3 SizeInt;
 
-        static List<Cell> cells = new List<Cell>();
+        Cell[,,] CellsMatrix;
+
+        Vector3 offSet;
 
         #region API
-        public void CreateNewGrid()
+        public void CreateNewGrid(bool autoLinkCells = true)
         {
+            //Reset operation
             ClearGrid();
-            Vector3 offset = CalculateOffset();
+            if (SectorData.Radius.x == 0)
+                SectorData.Radius.x = float.Epsilon;
+            if (SectorData.Radius.y == 0)
+                SectorData.Radius.y = float.Epsilon;
+            if (SectorData.Radius.z == 0)
+                SectorData.Radius.z = float.Epsilon;
 
-            if (Size.x != 0 && Size.y != 0 && Size.z != 0)
-            {
-                CreateGrid3D(offset);
-            }
-            else
-            {
-                Vector2 size2D = new Vector2();
+            SizeInt.x = (uint)(Size.x / SectorData.Diameter.x);
+            SizeInt.y = (uint)(Size.y / SectorData.Diameter.y);
+            SizeInt.z = (uint)(Size.z / SectorData.Diameter.z);
 
-                if (Size.x == 0 && Size.y != 0 && Size.z != 0)
-                    size2D = new Vector2(Size.y, Size.z);
-                else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
-                    size2D = new Vector2(Size.x, Size.z);
-                else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
-                    size2D = new Vector2(Size.x, Size.y);
-                else
-                {
-                    Debug.LogWarning("GridController -- The minimum axis number for building a grid is 2 !");
-                    return;
-                }
-
-                CreateGrid2D(size2D, offset);
-            }
-
-            LinkCells();
-        }
-
-        void CreateGrid3D(Vector3 _offset)
-        {
-            for (int i = 0; i < Size.x; i++)
-            {
-                for (int j = 0; j < Size.y; j++)
-                {
-                    for (int k = 0; k < Size.z; k++)
-                    {
-                        Vector3 nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), (transform.position.z + k * SectorData.Radius * 2));
-                        nodePos -= _offset;
-                        NodeData nodeD = new NodeData(nodePos);
-                        LinkData linkD = new LinkData();
-                        SectorData sectorD = SectorData;
-                        cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
-                    }
-                }
-            }
-        }
-
-        void CreateGrid2D(Vector2 size2D, Vector3 _offset)
-        {
-            for (int i = 0; i < size2D.x; i++)
-            {
-                for (int j = 0; j < size2D.y; j++)
-                {
-                    Vector3 nodePos = new Vector3();
-
-                    if (Size.x == 0 && Size.y != 0 && Size.z != 0)
-                        nodePos = new Vector3(0f, (transform.position.y + i * SectorData.Radius * 2), (transform.position.z + j * SectorData.Radius * 2));
-                    else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
-                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), 0f, (transform.position.z + j * SectorData.Radius * 2));
-                    else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
-                        nodePos = new Vector3((transform.position.x + i * SectorData.Radius * 2), (transform.position.y + j * SectorData.Radius * 2), 0f);
-
-                    nodePos -= _offset;
-                    NodeData nodeD = new NodeData(nodePos);
-                    LinkData linkD = new LinkData();
-                    SectorData sectorD = SectorData;
-                    cells.Add(new Cell(new CellData(nodeD, linkD, sectorD)));
-                }
-            }
-        }
-
-        /// <summary>
-        /// data una posizione restituisce la cella corrispondente
-        /// </summary>
-        /// <param name="_position">la posizione da controllare</param>
-        /// <returns>la cella che si trova in quella posizione</returns>
-        public static Cell ReturnCellFromPosition(Vector3 _position)
-        {
-            foreach (Cell cell in cells)
-            {
-                if (Vector3.Distance(cell.GetPosition(), _position) < cell.GetRadius())
-                {
-                    return cell;
-                }
-            }
-            return null;
-        }
-
-        public Cell GetCentralCell()
-        {
-            return ReturnCellFromPosition(transform.position);
+            offSet = CalculateOffset();
+            //New grid creation
+            CreateGrid();
+            //Linking process
+            if (autoLinkCells)
+                LinkCells();
         }
 
         public void ClearGrid()
         {
-            cells.Clear();
+            CellsMatrix = null;
         }
 
         public void Load()
@@ -127,32 +58,53 @@ namespace BGEditor.NodeSystem
 
         public void SaveCurrent()
         {
-            Save(cells);
+            Save(GetListOfCells());
+        }
+
+        #region Getter
+        public Cell GetCentralCell()
+        {
+            return this.GetCellFromPosition(transform.position);
         }
 
         public List<Cell> GetGridCorners()
         {
             List<Cell> tempList = new List<Cell>();
             Vector3 offset = CalculateOffset();
-            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, offset.z)));
-            tempList.Add(ReturnCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, -offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(-offset.x, 0, offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, offset.z)));
+            tempList.Add(this.GetCellFromPosition(new Vector3(offset.x, 0, -offset.z)));
 
             return tempList;
         }
 
-        // TODO : per Test (per il momento)
-        public List<INode> GetListOfCells()
+        public List<Cell> GetListOfCells()
         {
-            return cells.ConvertAll(c => c as INode);
+            List<Cell> cellsList = new List<Cell>();
+
+            if(CellsMatrix != null)
+            {
+                for (int i = 0; i < CellsMatrix.GetLength(0); i++)
+                    for (int j = 0; j < CellsMatrix.GetLength(1); j++)
+                        for (int k = 0; k < CellsMatrix.GetLength(2); k++)
+                            if (CellsMatrix[i, j, k] != null)
+                                cellsList.Add(CellsMatrix[i, j, k]);
+            }
+
+            return cellsList;
         }
 
-        public void ModifyDensity(float _value)
+        public Vector3 GetOffset()
         {
-            // -radius +size
+            return offSet;
         }
 
+        public Cell[,,] GetCellsMatrix()
+        {
+            return CellsMatrix;
+        }
+        #endregion
         #region GridData Management
         public void LoadFromNetworkData(NodeNetworkData _networkData)
         {
@@ -162,15 +114,13 @@ namespace BGEditor.NodeSystem
                 return;
             }
 
-            cells.Clear();
+            ClearGrid();
 
             Size = _networkData.Size;
             SectorData = _networkData.Cells[0].SectorData;
 
-            foreach (CellData cellData in _networkData.Cells)
-            {
-                cells.Add(new Cell(cellData));
-            }
+            // TODO : caricare la matrice della griglia da dato
+            Debug.LogWarning("Disabled");
         }
         public NodeNetworkData Save(List<Cell> _cells)
         {
@@ -208,65 +158,97 @@ namespace BGEditor.NodeSystem
         #endregion
         #endregion
 
-        /// <summary>
-        /// Crea i collegamenti alle celle
-        /// </summary>
-        void LinkCells()
+        #region Grid Creation
+        void CreateGrid()
         {
-            for (int i = 0; i < cells.Count; i++)
+            int maxSize = SizeInt.x >= SizeInt.y ? (int)SizeInt.x : (int)SizeInt.y;
+            maxSize = maxSize >= SizeInt.z ? maxSize : (int)SizeInt.z;
+
+            //Be very carefull about the Matrix initialization.
+            CellsMatrix = new Cell[maxSize, maxSize, maxSize];
+            for (int i = 0; i < maxSize; i++)
             {
-                for (int j = 0; j < cells.Count; j++)
+                for (int j = 0; j < maxSize; j++)
                 {
-                    if (Vector3.Distance(cells[i].GetPosition(), cells[j].GetPosition()) <= SectorData.Radius * 2 && i != j)
-                    {
-                        cells[i].Link(cells[j]);
+                    for (int k = 0; k < maxSize; k++)
+                    {                  
+                        CreateCell(i, j, k);
                     }
                 }
             }
         }
 
+        void CreateCell(int _i, int _j, int _k)
+        {
+            int i = _i < SizeInt.x ? _i : 0;
+            int j = _j < SizeInt.y ? _j : 0;
+            int k = _k < SizeInt.z ? _k : 0;
+
+            Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
+
+            NodeData nodeD = new NodeData(nodePos);
+            LinkData linkD = new LinkData();
+            SectorData sectorD = SectorData;
+
+            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD));
+        }
+
+        /// <summary>
+        /// Crea i collegamenti alle celle
+        /// </summary>
+        void LinkCells()
+        {
+            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
+                    {
+                        if (CellsMatrix[i, j, k] == null)
+                            continue;
+
+                        //Link of the next and previus cell along all directions
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k]);
+                        if (i < (int)SizeInt.x - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k]);
+
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k]);
+                        if(j < (int)SizeInt.y - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k]);
+
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0]);
+                        if(k < (int)SizeInt.z - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1]);
+                    }
+                }
+            }
+        }
+        #endregion
+
         Vector3 CalculateOffset()
         {
-            Vector3 offset = new Vector3((Size.x * SectorData.Radius) * 2, (Size.y * SectorData.Radius) * 2, (Size.z * SectorData.Radius) * 2);
-            offset -= Vector3.one * SectorData.Radius * 2;
-            offset.y *= 0;
+            Vector3 offset = new Vector3(Size.x * SectorData.Diameter.x, Size.y * SectorData.Diameter.y, Size.z * SectorData.Diameter.z);
+
             offset /= 2;
+            offset -= SectorData.Radius;
             return offset;
         }
 
         private void OnDrawGizmos()
         {
-            if (cells.Count <= 0)
+            List<Cell> cellList = GetListOfCells();
+            if (cellList.Count <= 0)
                 return;
 
-            foreach (Cell cell in cells)
+            foreach (Cell cell in cellList)
             {
                 if (ShowGrid)
                 {
                     Gizmos.color = Color.cyan;
-                    if (Size.x != 0 && Size.y != 0 && Size.z != 0)
-                    {
-                        Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 1f) * cell.GetRadius() * 2);
-                        Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 1f) * (cell.GetRadius() / 25f));
-                    }
-                    else
-                    {
-                        if (Size.x == 0 && Size.y != 0 && Size.z != 0)
-                        {
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(0f, 1f, 1f) * cell.GetRadius() * 2);
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(0f, 1f, 1f) * (cell.GetRadius() / 25f));
-                        }
-                        else if (Size.x != 0 && Size.y == 0 && Size.z != 0)
-                        {
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 0f, 1f) * cell.GetRadius() * 2);
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 0f, 1f) * (cell.GetRadius() / 25f));
-                        }
-                        else if (Size.x != 0 && Size.y != 0 && Size.z == 0)
-                        {
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 0f) * cell.GetRadius() * 2);
-                            Gizmos.DrawWireCube(cell.GetCenter(), new Vector3(1f, 1f, 0f) * (cell.GetRadius() / 25f));
-                        } 
-                    }
+                    
+                    Gizmos.DrawWireCube(cell.GetCenter(), cell.GetRadius() * 2);
+                    Gizmos.DrawWireCube(cell.GetCenter(), (cell.GetRadius() / 25f));
+                    
                 }
                 if (ShowLink)
                 {

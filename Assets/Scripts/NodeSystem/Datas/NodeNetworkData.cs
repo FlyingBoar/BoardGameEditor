@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem {
+namespace Grid {
     [CreateAssetMenu(fileName ="Network")]
     public class NodeNetworkData : ScriptableObject
     {

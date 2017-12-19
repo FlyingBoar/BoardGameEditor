@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BGEditor.NodeSystem
+namespace Grid
 {
     public class Cell : ISector, ILink
     {
@@ -18,7 +18,7 @@ namespace BGEditor.NodeSystem
             cellData.NodeData.Position = _position;
         }
 
-        public float GetRadius()
+        public Vector3 GetRadius()
         {
             return cellData.SectorData.Radius;
         }        
@@ -61,12 +61,21 @@ namespace BGEditor.NodeSystem
 
         public void UnLink(INode _node)
         {
-            throw new System.NotImplementedException();
+            cellData.LinkData.LinkedNodes.Remove(_node);
         }
 
         public void UnLink(ILink _link)
         {
-            throw new System.NotImplementedException();
+            cellData.LinkData.LinkedNodes.Remove(_link);
+        }
+
+        public void UnLinkAll()
+        {
+            foreach (ILink link in cellData.LinkData.LinkedNodes)
+            {
+                link.UnLink(this);
+            }
+            cellData.LinkData.LinkedNodes.Clear();
         }
 
         #endregion

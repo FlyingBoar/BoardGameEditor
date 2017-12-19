@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using BGEditor.NodeSystem;
+using Grid;
 
 [CustomEditor(typeof(GridController)), CanEditMultipleObjects]
 public class GridControllerEditor : Editor {
@@ -12,6 +12,8 @@ public class GridControllerEditor : Editor {
 
     bool makeGrid;
     bool resetGrid;
+
+    bool testBool = false;
 
     List<Vector3> corners = new List<Vector3>();
 
@@ -49,21 +51,17 @@ public class GridControllerEditor : Editor {
     {
         base.OnInspectorGUI();
 
-        #region Button Region
-
         makeGrid = GUILayout.Button("Make Grid");
         resetGrid = GUILayout.Button("Reset Grid");
 
         if (makeGrid)
         {
             maker.CreateNewGrid();
-            SaveCornersPosition();
+            //SaveCornersPosition();
+            testBool = true;
         }
         if (resetGrid)
             maker.ClearGrid();
-        #endregion
-
-
     }
 
     void SaveCornersPosition()
