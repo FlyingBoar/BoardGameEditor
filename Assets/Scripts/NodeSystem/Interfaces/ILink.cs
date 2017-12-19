@@ -6,7 +6,6 @@ namespace Grid
 {
     public interface ILink : INode
     {
-
         List<INode> GetNeighbourgs();
 
         void Link(INode _node);
@@ -14,5 +13,6 @@ namespace Grid
         void UnLink(INode _node);
         void UnLink(ILink _link);
 
+        void UnLinkAll();
     }
 }

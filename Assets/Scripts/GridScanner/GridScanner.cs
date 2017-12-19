@@ -7,13 +7,13 @@ namespace Grid
     public class GridScanner
     {
         SectorData SectorData;
-        List<INode> GridCells;
+        List<Cell> GridCells;
 
         ScanCollider scanCollider;
-        List<INode> GridObstacleCells = new List<INode>();
+        List<Cell> GridObstacleCells = new List<Cell>();
 
         // TODO : da rivedere il tipo con cui viene passata la lista di celle
-        public GridScanner(List<INode> _gridCells, SectorData _sectorData)
+        public GridScanner(List<Cell> _gridCells, SectorData _sectorData)
         {
             SectorData = _sectorData;
             GridCells = _gridCells;
@@ -26,29 +26,20 @@ namespace Grid
 
             RaycastHit hit = new RaycastHit();
 
-            foreach (INode cell in GridCells)
+            foreach (Cell cell in GridCells)
             {
                 scanCollider.transform.position = cell.GetPosition();
+
                 Physics.Raycast((cell.GetPosition() + new Vector3(0, 1000, 0)), -Vector3.up, out hit);
-                if(hit.transform.gameObject.GetComponent<ScanCollider>() != null)
+                ScanCollider hitCollider = hit.transform.gameObject.GetComponent<ScanCollider>();
+
+                if (hitCollider != null && hitCollider.ObjType == ObjectType.Obstacle)
                 {
-                    if (hit.transform.gameObject.GetComponent<ScanCollider>().ObjType == ObjectType.Obstacle)
-                    {
-                        GridObstacleCells.Add(cell);
-                        UnlinkCell(cell);
-                    }
+                    GridObstacleCells.Add(cell);
+                    cell.UnLinkAll();
                 }
             }
             GameObject.Destroy(scanCollider.gameObject);
-        }
-
-        void UnlinkCell(INode _cell)
-        {
-            foreach (INode link in (_cell as Cell).GetCellData().LinkData.LinkedNodes)
-            {
-                (link as ILink).GetNeighbourgs().Remove(_cell);
-            }
-            (_cell as Cell).GetCellData().LinkData.LinkedNodes.Clear();
         }
 
         void CreateScannerCollider()

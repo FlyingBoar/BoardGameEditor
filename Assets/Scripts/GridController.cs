@@ -17,11 +17,9 @@ namespace Grid
         public Vector3 Size;
         protected Vector3 SizeInt;
 
-        public List<Cell> CellsList = new List<Cell>();
+        Cell[,,] CellsMatrix;
 
-        public Cell[,,] CellsMatrix;
-
-        public Vector3 offSet;
+        Vector3 offSet;
 
         #region API
         public void CreateNewGrid(bool autoLinkCells = true)
@@ -47,14 +45,9 @@ namespace Grid
                 LinkCells();
         }
 
-        public Cell GetCentralCell()
-        {
-            return this.GetCellFromPosition(transform.position);
-        }
-
         public void ClearGrid()
         {
-            CellsList.Clear();
+            CellsMatrix = null;
         }
 
         public void Load()
@@ -65,7 +58,13 @@ namespace Grid
 
         public void SaveCurrent()
         {
-            Save(CellsList);
+            Save(GetListOfCells());
+        }
+
+        #region Getter
+        public Cell GetCentralCell()
+        {
+            return this.GetCellFromPosition(transform.position);
         }
 
         public List<Cell> GetGridCorners()
@@ -80,12 +79,32 @@ namespace Grid
             return tempList;
         }
 
-        // TODO : per Test (per il momento)
-        public List<INode> GetListOfCells()
+        public List<Cell> GetListOfCells()
         {
-            return CellsList.ConvertAll(c => c as INode);
+            List<Cell> cellsList = new List<Cell>();
+
+            if(CellsMatrix != null)
+            {
+                for (int i = 0; i < CellsMatrix.GetLength(0); i++)
+                    for (int j = 0; j < CellsMatrix.GetLength(1); j++)
+                        for (int k = 0; k < CellsMatrix.GetLength(2); k++)
+                            if (CellsMatrix[i, j, k] != null)
+                                cellsList.Add(CellsMatrix[i, j, k]);
+            }
+
+            return cellsList;
         }
 
+        public Vector3 GetOffset()
+        {
+            return offSet;
+        }
+
+        public Cell[,,] GetCellsMatrix()
+        {
+            return CellsMatrix;
+        }
+        #endregion
         #region GridData Management
         public void LoadFromNetworkData(NodeNetworkData _networkData)
         {
@@ -95,15 +114,13 @@ namespace Grid
                 return;
             }
 
-            CellsList.Clear();
+            ClearGrid();
 
             Size = _networkData.Size;
             SectorData = _networkData.Cells[0].SectorData;
 
-            foreach (CellData cellData in _networkData.Cells)
-            {
-                CellsList.Add(new Cell(cellData));
-            }
+            // TODO : caricare la matrice della griglia da dato
+            Debug.LogWarning("Disabled");
         }
         public NodeNetworkData Save(List<Cell> _cells)
         {
@@ -174,7 +191,6 @@ namespace Grid
             SectorData sectorD = SectorData;
 
             CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD));
-            CellsList.Add(CellsMatrix[i, j, k]);
         }
 
         /// <summary>
@@ -220,10 +236,11 @@ namespace Grid
 
         private void OnDrawGizmos()
         {
-            if (CellsList.Count <= 0)
+            List<Cell> cellList = GetListOfCells();
+            if (cellList.Count <= 0)
                 return;
 
-            foreach (Cell cell in CellsList)
+            foreach (Cell cell in cellList)
             {
                 if (ShowGrid)
                 {
