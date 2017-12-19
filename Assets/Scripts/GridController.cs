@@ -172,14 +172,14 @@ namespace Grid
 
             //Be very carefull about the Matrix initialization.
             CellsMatrix = new Cell[maxSize][][];
-            for (int i = 0; i < SizeInt.x; i++)
+            for (int i = 0; i < maxSize; i++)
             {
                 CellsMatrix[i] = new Cell[maxSize][];
-                for (int j = 0; j < SizeInt.y; j++)
+                for (int j = 0; j < maxSize; j++)
                 {
                     CellsMatrix[i][j] = new Cell[maxSize];
-                    for (int k = 0; k < SizeInt.z; k++)
-                    {
+                    for (int k = 0; k < maxSize; k++)
+                    {                  
                         CreateCell(i, j, k);
                     }
                 }
@@ -188,14 +188,18 @@ namespace Grid
 
         void CreateCell(int _i, int _j, int _k)
         {
-            Vector3 nodePos = this.GetPositionByCoordinates(_i, _j, _k);
+            int i = _i < SizeInt.x ? _i : 0;
+            int j = _j < SizeInt.y ? _j : 0;
+            int k = _k < SizeInt.z ? _k : 0;
+
+            Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
             NodeData nodeD = new NodeData(nodePos);
             LinkData linkD = new LinkData();
             SectorData sectorD = SectorData;
 
-            CellsMatrix[_i][_j][_k] = new Cell(new CellData(nodeD, linkD, sectorD));
-            CellsList.Add(CellsMatrix[_i][_j][_k]);
+            CellsMatrix[i][j][k] = new Cell(new CellData(nodeD, linkD, sectorD));
+            CellsList.Add(CellsMatrix[i][j][k]);
         }
         #endregion
 
