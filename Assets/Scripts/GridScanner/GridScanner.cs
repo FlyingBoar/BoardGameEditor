@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Grid
 {
+    [ExecuteInEditMode]
     public class GridScanner : MonoBehaviour
     {
         ScanCollider scanCollider;
