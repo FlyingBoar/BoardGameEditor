@@ -19,7 +19,7 @@ namespace Grid
 
         public List<Cell> CellsList = new List<Cell>();
 
-        public Cell[][][] CellsMatrix;
+        public Cell[,,] CellsMatrix;
 
         public Vector3 offSet;
 
@@ -43,8 +43,8 @@ namespace Grid
             //New grid creation
             CreateGrid();
             //Linking process
-            //if(autoLinkCells)
-            //    LinkCells();
+            if (autoLinkCells)
+                LinkCells();
         }
 
         public Cell GetCentralCell()
@@ -141,29 +141,6 @@ namespace Grid
         #endregion
         #endregion
 
-        /// <summary>
-        /// Crea i collegamenti alle celle
-        /// </summary>
-        void LinkCells()
-        {
-            for (int i = 0; i < SizeInt.x; i++)
-            {
-                for (int j = 0; j < SizeInt.y; j++)
-                {
-                    for (int k = 0; k < SizeInt.z; k++)
-                    {
-                        //Link of the next and previus cell along all directions
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i != 0 ? i - 1 : 0][j][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i != (int)SizeInt.x ? i + 1 : (int)SizeInt.x][j][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j != 0 ? j - 1 : 0][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j != (int)SizeInt.y ? j + 1 : (int)SizeInt.y][k]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j][k != 0 ? k - 1 : 0]);
-                        CellsMatrix[i][j][k].Link(CellsMatrix[i][j][k != (int)SizeInt.z ? k + 1 : (int)SizeInt.z]);
-                    }
-                }
-            }
-        }
-
         #region Grid Creation
         void CreateGrid()
         {
@@ -171,13 +148,11 @@ namespace Grid
             maxSize = maxSize >= SizeInt.z ? maxSize : (int)SizeInt.z;
 
             //Be very carefull about the Matrix initialization.
-            CellsMatrix = new Cell[maxSize][][];
+            CellsMatrix = new Cell[maxSize, maxSize, maxSize];
             for (int i = 0; i < maxSize; i++)
             {
-                CellsMatrix[i] = new Cell[maxSize][];
                 for (int j = 0; j < maxSize; j++)
                 {
-                    CellsMatrix[i][j] = new Cell[maxSize];
                     for (int k = 0; k < maxSize; k++)
                     {                  
                         CreateCell(i, j, k);
@@ -198,8 +173,39 @@ namespace Grid
             LinkData linkD = new LinkData();
             SectorData sectorD = SectorData;
 
-            CellsMatrix[i][j][k] = new Cell(new CellData(nodeD, linkD, sectorD));
-            CellsList.Add(CellsMatrix[i][j][k]);
+            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD));
+            CellsList.Add(CellsMatrix[i, j, k]);
+        }
+
+        /// <summary>
+        /// Crea i collegamenti alle celle
+        /// </summary>
+        void LinkCells()
+        {
+            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
+                    {
+                        if (CellsMatrix[i, j, k] == null)
+                            continue;
+
+                        //Link of the next and previus cell along all directions
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k]);
+                        if (i < (int)SizeInt.x - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k]);
+
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k]);
+                        if(j < (int)SizeInt.y - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k]);
+
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0]);
+                        if(k < (int)SizeInt.z - 1)
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1]);
+                    }
+                }
+            }
         }
         #endregion
 

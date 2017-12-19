@@ -14,7 +14,7 @@ namespace Grid {
         {
             Cell resultant;
             int[] indexes = _gridCtrl.GetCoordinatesByPosition(_position);
-            resultant = _gridCtrl.CellsMatrix[indexes[0]][indexes[1]][indexes[2]];
+            resultant = _gridCtrl.CellsMatrix[indexes[0],indexes[1],indexes[2]];
             return resultant;
         }
 
