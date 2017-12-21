@@ -198,7 +198,7 @@ namespace Grid
             LinkData linkD = new LinkData();
             SectorData sectorD = SectorData;
 
-            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD));
+            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD), this, new Vector3Int(i,j,k));
         }
 
         /// <summary>

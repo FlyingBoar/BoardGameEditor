@@ -8,6 +8,21 @@ namespace Grid
     {
         CellData cellData;
 
+        GridController gridCtrl;
+        Vector3Int gridPosition;
+
+        bool isGridEnbedded
+        {
+            get
+            {
+                if (gridCtrl != null)
+                    return true;
+                else
+                    return
+                        false;
+            }
+        }
+
         public CellData GetCellData()
         {
             return cellData;
@@ -28,9 +43,25 @@ namespace Grid
             cellData = _data;
         }
 
+        public Cell(CellData _data, GridController _ctrl, Vector3Int _gridPos)
+        {
+            cellData = _data;
+            gridCtrl = _ctrl;
+            gridPosition = _gridPos;
+        }
+
         public Vector3 GetPosition()
         {
-            return cellData.NodeData.Position;
+            if(!isGridEnbedded)
+                return cellData.NodeData.Position;
+            else
+            {
+                Vector3 centerPos;
+                centerPos = new Vector3(gridPosition.x * cellData.SectorData.Radius.x * 2, gridPosition.y * cellData.SectorData.Radius.y * 2, gridPosition.z * cellData.SectorData.Radius.z * 2);
+                centerPos -= cellData.SectorData.Radius;
+                centerPos += gridCtrl.transform.position;
+                return centerPos;
+            }
         }
 
         #region ISector

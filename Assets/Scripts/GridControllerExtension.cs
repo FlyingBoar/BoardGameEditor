@@ -44,7 +44,7 @@ namespace Grid {
 
             Vector3 spacePos = new Vector3(i * _gridCtrl.SectorData.Diameter.x,j * _gridCtrl.SectorData.Diameter.y, k * _gridCtrl.SectorData.Diameter.z);
             spacePos += _gridCtrl.SectorData.Radius;
-            spacePos -= _gridCtrl.GetOffset();
+            //spacePos -= _gridCtrl.GetOffset();
 
             return spacePos;
         }
@@ -54,7 +54,7 @@ namespace Grid {
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Vector3 spacePos = _position + _gridCtrl.GetOffset();
+            Vector3 spacePos = _position; //+ _gridCtrl.GetOffset();
 
             int[] coordinates = new int[]
             {
