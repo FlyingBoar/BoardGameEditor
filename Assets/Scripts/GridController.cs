@@ -15,6 +15,7 @@ namespace Grid
         public bool ShowLink;
 
         public Vector3Int Size;
+        public Vector3 ResolutionCorrection;
 
         Cell[,,] CellsMatrix;
 

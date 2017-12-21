@@ -68,7 +68,6 @@ public class PrototypeInteractionController : MonoBehaviour
         ViewController.HidePossibleMovement();
     }
 
-
     void UpdateSelectedStatus()
     {
         if (CurrentMovementMode == MovementMode.Click)

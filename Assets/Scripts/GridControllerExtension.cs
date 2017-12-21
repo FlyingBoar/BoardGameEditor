@@ -54,7 +54,7 @@ namespace Grid {
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Vector3 spacePos = _position; //+ _gridCtrl.GetOffset();
+            Vector3 spacePos = _position /*+ _gridCtrl.GetOffset()*/;
 
             int[] coordinates = new int[]
             {

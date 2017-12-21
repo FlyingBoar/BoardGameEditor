@@ -10,7 +10,7 @@ namespace Grid
 
         GridController gridCtrl;
         Vector3Int gridPosition;
-
+        Vector3 distance { get { return cellData.SectorData.Diameter + gridCtrl.ResolutionCorrection; } }
         bool isGridEnbedded
         {
             get
@@ -57,8 +57,8 @@ namespace Grid
             else
             {
                 Vector3 centerPos;
-                centerPos = new Vector3(gridPosition.x * cellData.SectorData.Radius.x * 2, gridPosition.y * cellData.SectorData.Radius.y * 2, gridPosition.z * cellData.SectorData.Radius.z * 2);
-                centerPos -= cellData.SectorData.Radius;
+                centerPos = new Vector3(gridPosition.x * distance.x, gridPosition.y * distance.y, gridPosition.z * distance.z);
+                //centerPos -= cellData.SectorData.Radius;
                 centerPos += gridCtrl.transform.position;
                 return centerPos;
             }
