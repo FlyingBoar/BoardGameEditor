@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Grid {
+namespace Grid
+{
     public static class GridControllerExtension
     {
         /// <summary>
@@ -14,7 +15,13 @@ namespace Grid {
         {
             Cell resultant;
             int[] indexes = _gridCtrl.GetCoordinatesByPosition(_position);
-            resultant = _gridCtrl.GetCellsMatrix()[indexes[0],indexes[1],indexes[2]];
+            Cell[,,] matrix = _gridCtrl.GetCellsMatrix();
+
+            if (matrix.GetLength(0) > indexes[0] && matrix.GetLength(1) > indexes[1] && matrix.GetLength(2) > indexes[2])
+                resultant = matrix[indexes[0], indexes[1], indexes[2]];
+            else
+                resultant = null;
+
             return resultant;
         }
         /// <summary>
@@ -42,7 +49,7 @@ namespace Grid {
         public static Vector3 GetPositionByCoordinates(this GridController _gridCtrl, int i, int j, int k)
         {
 
-            Vector3 spacePos = new Vector3(i * _gridCtrl.SectorData.Diameter.x,j * _gridCtrl.SectorData.Diameter.y, k * _gridCtrl.SectorData.Diameter.z);
+            Vector3 spacePos = new Vector3(i * _gridCtrl.SectorData.Diameter.x, j * _gridCtrl.SectorData.Diameter.y, k * _gridCtrl.SectorData.Diameter.z);
             spacePos += _gridCtrl.SectorData.Radius;
             //spacePos -= _gridCtrl.GetOffset();
 
