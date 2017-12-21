@@ -61,16 +61,18 @@ namespace Grid
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Vector3 spacePos = _position /*+ _gridCtrl.GetOffset()*/;
+            Vector3 spacePos = _position - _gridCtrl.transform.position /*+ _gridCtrl.GetOffset()*/;
+            float[] centerDis = new float[3];
+            for (int i = 0; i < 3; i++)
+            {
+                centerDis[i] = _gridCtrl.SectorData.Diameter[i] + _gridCtrl.ResolutionCorrection[i];
+            }
 
             int[] coordinates = new int[]
             {
-                //Radius == 0 is indefined. 0 as default
-                //Postion/Radius is the normalized space position
-                //i = V/(2R) + 1
-                _gridCtrl.SectorData.Radius.x != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.x)/2 +1 : 0,
-                _gridCtrl.SectorData.Radius.y != 0 ?(int)(spacePos.y/_gridCtrl.SectorData.Radius.y)/2 +1 : 0,
-                _gridCtrl.SectorData.Radius.z != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.z)/2 +1 : 0,
+                centerDis[0] != 0 ?(int)(spacePos.y/centerDis[0]): 0,
+                centerDis[1] != 0 ?(int)(spacePos.x/centerDis[1]): 0,
+                centerDis[2] != 0 ?(int)(spacePos.x/centerDis[2]): 0,
             };
 
             return coordinates;
