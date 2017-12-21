@@ -6,6 +6,7 @@ using Grid;
 public class PrototypeInteractionController : MonoBehaviour
 {
     public GridController TESTGridController;
+    public InputAdapter_Tester InputTester;
     private bool _isSelected;
     public bool isSelected
     {
@@ -76,7 +77,7 @@ public class PrototypeInteractionController : MonoBehaviour
             {
                 if (clickCounter > 1)
                 {
-                    DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.I.PointerPosition));
+                    DropAttempt(TESTGridController.GetCellFromPosition(InputTester.PointerPosition));
                     isSelected = false;
                     return;
                 }
@@ -87,12 +88,12 @@ public class PrototypeInteractionController : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                movementCtrl.Drag(InputAdapter_Tester.I.PointerPosition);
+                movementCtrl.Drag(InputTester.PointerPosition);
             }
             if (Input.GetMouseButtonUp(0))
             {
                 // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.I.PointerPosition));
+                DropAttempt(TESTGridController.GetCellFromPosition(InputTester.PointerPosition));
                 isSelected = false;
                 return;
             }

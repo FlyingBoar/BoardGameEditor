@@ -11,9 +11,6 @@ namespace Grid
         public NodeNetworkData NetworkData;
         public SectorData SectorData;
 
-        public bool ShowGrid;
-        public bool ShowLink;
-
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
@@ -241,34 +238,6 @@ namespace Grid
             offset /= 2;
             offset -= SectorData.Radius;
             return offset;
-        }
-
-        private void OnDrawGizmos()
-        {
-            List<Cell> cellList = GetListOfCells();
-            if (cellList.Count <= 0)
-                return;
-
-            foreach (Cell cell in cellList)
-            {
-                if (ShowGrid)
-                {
-                    Gizmos.color = Color.cyan;
-                    
-                    Gizmos.DrawWireCube(cell.GetCenter(), cell.GetRadius() * 2);
-                    Gizmos.DrawWireCube(cell.GetCenter(), (cell.GetRadius() / 25f));
-                    
-                }
-                if (ShowLink)
-                {
-                    Gizmos.color = Color.black;
-                    foreach (ILink link in cell.GetNeighbourgs())
-                    {
-                        Vector3 line = link.GetPosition() - cell.GetCenter();
-                        Gizmos.DrawLine(cell.GetCenter() + line * 0.25f, cell.GetCenter() + line * .75f);
-                    }
-                }
-            }
         }
     }
 }
