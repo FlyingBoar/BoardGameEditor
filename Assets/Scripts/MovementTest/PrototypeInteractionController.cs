@@ -77,7 +77,7 @@ public class PrototypeInteractionController : MonoBehaviour
             {
                 if (clickCounter > 1)
                 {
-                    DropAttempt(TESTGridController.GetCellFromPosition(InputTester.PointerPosition));
+                    DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.PointerPosition));
                     isSelected = false;
                     return;
                 }
@@ -88,12 +88,12 @@ public class PrototypeInteractionController : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                movementCtrl.Drag(InputTester.PointerPosition);
+                movementCtrl.Drag(InputAdapter_Tester.PointerPosition);
             }
             if (Input.GetMouseButtonUp(0))
             {
                 // determina la cella più vicina analizzando la distanza dal centro di ognuna (le celle facenti parte della lsita di possibili celle di movimento)
-                DropAttempt(TESTGridController.GetCellFromPosition(InputTester.PointerPosition));
+                DropAttempt(TESTGridController.GetCellFromPosition(InputAdapter_Tester.PointerPosition));
                 isSelected = false;
                 return;
             }

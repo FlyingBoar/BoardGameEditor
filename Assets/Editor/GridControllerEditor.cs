@@ -7,7 +7,7 @@ using Grid;
 [CustomEditor(typeof(GridController)), CanEditMultipleObjects]
 public class GridControllerEditor : Editor
 {
-    GridController maker;
+    GridController gridCtrl;
     Rect rect;
 
     List<Vector3> corners = new List<Vector3>();
@@ -16,12 +16,25 @@ public class GridControllerEditor : Editor
         
     private void OnEnable()
     {
-        maker = (GridController)target;
+        gridCtrl = (GridController)target;
         rect = new Rect(0, 0, 50, 50);
     }
 
     private void OnSceneGUI()
     {
+
+        if(Event.current.type == EventType.MouseDown)
+        {
+            if(Event.current.button == 1)
+            {
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Select Cell"), false, SelectCell);
+                menu.AddItem(new GUIContent("Deselect Cell"), false, SelectCell);
+                menu.ShowAsContext();
+            }
+        }
+
+     
         //if (corners.Count > 0)
         //{
         //    EditorGUI.BeginChangeCheck();
@@ -46,25 +59,42 @@ public class GridControllerEditor : Editor
     {
         if (GUILayout.Button("Make Grid"))
         {
-            maker.CreateNewGrid();
+            gridCtrl.CreateNewGrid();
             //SaveCornersPosition();
         }
         if (GUILayout.Button("Reset Grid"))
-            maker.ClearGrid();
+            gridCtrl.ClearGrid();
 
         GUILayout.Space(10);
 
         if (GUILayout.Button("Save Grid"))
-            maker.SaveCurrent();
+            gridCtrl.SaveCurrent();
         if (GUILayout.Button("Load Grid"))
-            maker.Load();
+            gridCtrl.Load();
 
         base.OnInspectorGUI();
     }
 
+    /// <summary>
+    /// Chiama la funzione SelectCell in GridController
+    /// </summary>
+    void SelectCell()
+    {
+        Debug.Log("Select Cell");
+        gridCtrl.SelectCell();
+    }
+    /// <summary>
+    /// Chiama Deselect in GridController
+    /// </summary>
+    void DeselectCell()
+    {
+        Debug.Log("Deselect Cell");
+        gridCtrl.DeselectCell();
+    }
+
     void SaveCornersPosition()
     {
-        foreach (Cell cell in maker.GetGridCorners())
+        foreach (Cell cell in gridCtrl.GetGridCorners())
         {
             corners.Add(cell.GetCenter());
         }

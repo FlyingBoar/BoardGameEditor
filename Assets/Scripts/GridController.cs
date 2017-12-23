@@ -18,6 +18,14 @@ namespace Grid
 
         Vector3 offSet;
 
+        private Cell _savedCell;
+
+        public Cell SavedCell
+        {
+            get { return _savedCell; }
+            set { _savedCell = value; }
+        }
+
         #region API
         public void CreateNewGrid(bool autoLinkCells = true)
         {
@@ -52,6 +60,23 @@ namespace Grid
         public void SaveCurrent()
         {
             Save(GetListOfCells());
+        }
+
+        /// <summary>
+        /// Salva la cella che si trova nella posizione del mouse in una variabile
+        /// </summary>
+        public void SelectCell()
+        {
+            // Prende la cella che si trova nella posizione del mouse e la salva, per poi chiamarle la funzione link.
+            SavedCell = this.GetCellFromPosition(InputAdapter_Tester.PointerPosition);
+        }
+
+        /// <summary>
+        /// svuota la variabile utilizzata per salvare la cella
+        /// </summary>
+        public void DeselectCell()
+        {
+            SavedCell = null;
         }
 
         #region Getter

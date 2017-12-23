@@ -18,8 +18,8 @@ namespace Grid
                 return _gridCtrl;
             }
         }
-        public InputAdapter_Tester InputTester;
-        Vector3 MousePos { get { return InputTester.Test_FindMousePositionOnGridPlane(); } }
+        //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
+        Vector3 MousePos { get { return InputAdapter_Tester.Test_FindMousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
         public bool ShowGrid;
         public bool ShowLink;
