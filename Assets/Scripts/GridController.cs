@@ -18,12 +18,12 @@ namespace Grid
 
         Vector3 offSet;
 
-        private Cell _savedCell;
+        private Cell _selectedCell;
 
-        public Cell SavedCell
+        public Cell SelectedCell
         {
-            get { return _savedCell; }
-            set { _savedCell = value; }
+            get { return _selectedCell; }
+            private set { _selectedCell = value; }
         }
 
         #region API
@@ -67,8 +67,7 @@ namespace Grid
         /// </summary>
         public void SelectCell()
         {
-            // Prende la cella che si trova nella posizione del mouse e la salva, per poi chiamarle la funzione link.
-            SavedCell = this.GetCellFromPosition(InputAdapter_Tester.PointerPosition);
+            SelectedCell = this.GetCellFromPosition(InputAdapter_Tester.PointerPosition);
         }
 
         /// <summary>
@@ -76,9 +75,16 @@ namespace Grid
         /// </summary>
         public void DeselectCell()
         {
-            SavedCell = null;
+            SelectedCell = null;
         }
 
+        /// <summary>
+        ///Chiama la funzione Link alla cella selezionata passando la cella su cui si trova il cursore
+        /// </summary>
+        public void LinkSelectedCell()
+        {
+            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition));
+        }
         #region Getter
         public Cell GetCentralCell()
         {

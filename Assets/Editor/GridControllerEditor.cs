@@ -29,7 +29,9 @@ public class GridControllerEditor : Editor
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Select Cell"), false, SelectCell);
-                menu.AddItem(new GUIContent("Deselect Cell"), false, SelectCell);
+                if(gridCtrl.SelectedCell != null)
+                    menu.AddItem(new GUIContent("Link Cell"), false, LinkSelectedCell);
+                menu.AddItem(new GUIContent("Deselect Cell"), false, DeselectCell);
                 menu.ShowAsContext();
             }
         }
@@ -90,6 +92,13 @@ public class GridControllerEditor : Editor
     {
         Debug.Log("Deselect Cell");
         gridCtrl.DeselectCell();
+    }
+    /// <summary>
+    /// Chiama la funzione link della cella salvata in precedenza
+    /// </summary>
+    void LinkSelectedCell()
+    {
+        gridCtrl.LinkSelectedCell();
     }
 
     void SaveCornersPosition()
