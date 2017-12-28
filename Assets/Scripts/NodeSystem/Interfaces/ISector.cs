@@ -6,10 +6,7 @@ namespace Grid
 {
     public interface ISector : INode
     {
-
         bool IsInside();
-
         Vector3 GetCenter();
-
     }
 }

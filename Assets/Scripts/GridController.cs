@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Grid
 {
     [ExecuteInEditMode]
+    [RequireComponent(typeof(LayerManager))]
     public class GridController : MonoBehaviour
     {
         public NodeNetworkData NetworkData;
@@ -13,6 +14,18 @@ namespace Grid
 
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
+
+        LayerManager _layerMng;
+        public LayerManager LayerMng
+        {
+            get
+            {
+                if (!_layerMng)
+                    _layerMng = GetComponent<LayerManager>();
+
+                return _layerMng;
+            }
+        }
 
         Cell[,,] CellsMatrix;
 
@@ -83,7 +96,7 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell()
         {
-            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition));
+            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerMng.Layers[0]);
         }
         #region Getter
         public Cell GetCentralCell()
@@ -224,7 +237,7 @@ namespace Grid
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
             NodeData nodeD = new NodeData(nodePos);
-            LinkData linkD = new LinkData();
+            LinkData linkD = new LinkData("Base");
             SectorData sectorD = SectorData;
 
             CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD), this, new Vector3Int(i,j,k));
@@ -245,17 +258,17 @@ namespace Grid
                             continue;
 
                         //Link of the next and previus cell along all directions
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k]);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k], LayerMng.Layers[0]);
                         if (i < Size.x - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k]);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k], LayerMng.Layers[0]);
 
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k]);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k], LayerMng.Layers[0]);
                         if(j < Size.y - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k]);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k], LayerMng.Layers[0]);
 
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0]);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0], LayerMng.Layers[0]);
                         if(k < Size.z - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1]);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1], LayerMng.Layers[0]);
                     }
                 }
             }

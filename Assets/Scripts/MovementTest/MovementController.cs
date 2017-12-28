@@ -28,7 +28,7 @@ public class MovementController : MonoBehaviour {
         {
             for (int j = 0; j < possibleMovement.Count; j++)
             {
-                tempList.AddRange(possibleMovement[j].GetNeighbourgs());
+                tempList.AddRange(possibleMovement[j].GetNeighbourgs(TESTController.LayerMng.Layers[0]));
             }
 
             for (int k = 0; k < tempList.Count; k++)

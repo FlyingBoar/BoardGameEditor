@@ -27,7 +27,7 @@ namespace Grid
                 if (hitCollider != null && hitCollider.ObjType == ObjectType.Obstacle)
                 {
                     GridObstacleCells.Add(cell);
-                    cell.UnLinkAll();
+                    cell.UnLinkAll(hitCollider.Layer);
                 }
             }
             GameObject.DestroyImmediate(scanCollider.gameObject);

@@ -7,6 +7,7 @@ namespace Grid
     public class ScanCollider : MonoBehaviour
     {
         public ObjectType ObjType;
+        public string Layer;
 
         BoxCollider boxCollider;
 

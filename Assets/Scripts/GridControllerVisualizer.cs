@@ -56,7 +56,7 @@ namespace Grid
         void DisplayLink(Cell _cell, Color color)
         {
             Gizmos.color = color;
-            foreach (ILink link in _cell.GetNeighbourgs())
+            foreach (ILink link in _cell.GetNeighbourgs(gridCtrl.LayerMng.Layers[0]))
             {
                 Vector3 line = link.GetPosition() - _cell.GetCenter();
                 Gizmos.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
