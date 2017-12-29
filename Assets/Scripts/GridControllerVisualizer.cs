@@ -8,7 +8,7 @@ namespace Grid
     public class GridControllerVisualizer : MonoBehaviour
     {
         GridController _gridCtrl;
-        GridController gridCtrl
+        public GridController GridCtrl
         {
             get
             {
@@ -22,13 +22,14 @@ namespace Grid
         Vector3 MousePos { get { return InputAdapter_Tester.Test_FindMousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
         public bool ShowGrid;
-        public bool ShowLink;
+        public bool ShowLayersLink;
+        public bool[] LinkArray;
         public bool ShowMousePosition;
         public bool ShowMouseCell;
 
         private void OnDrawGizmos()
         {
-            List<Cell> cellList = gridCtrl.GetListOfCells();
+            List<Cell> cellList = GridCtrl.GetListOfCells();
             if (cellList.Count <= 0)
                 return;
 
@@ -36,8 +37,14 @@ namespace Grid
             {
                 if (ShowGrid)
                     DisplayCell(cell, Color.cyan);
-                if (ShowLink)
-                    DisplayLink(cell, Color.black);
+                if (ShowLayersLink)
+                {
+                    for (int i = 0; i < LinkArray.Length; i++)
+                    {
+                        if(LinkArray[i])
+                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.Layers[i]);
+                    }
+                }
             }
 
             if (ShowMousePosition)
@@ -53,10 +60,10 @@ namespace Grid
             Gizmos.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
         }
 
-        void DisplayLink(Cell _cell, Color color)
+        void DisplayLayerLink(Cell _cell, Layer _layer)
         {
-            Gizmos.color = color;
-            foreach (ILink link in _cell.GetNeighbourgs(gridCtrl.LayerCtrl.Layers[0]))
+            Gizmos.color = _layer.GizmosColor;
+            foreach (ILink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
             {
                 Vector3 line = link.GetPosition() - _cell.GetCenter();
                 Gizmos.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
@@ -72,7 +79,7 @@ namespace Grid
         void DisplayMouseCell(Color _color)
         {
             Gizmos.color = _color;
-            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
+            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
                 Gizmos.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);

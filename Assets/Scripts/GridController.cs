@@ -57,9 +57,9 @@ namespace Grid
             //Linking process
             if (autoLinkCells)
             {
-                foreach (Layer layer in LayerCtrl.Layers)
+                for (int i = 0; i < LayerCtrl.Layers.Count; i++)
                 {
-                    LinkCells(layer);
+                    LinkCells(LayerCtrl.Layers[i]);
                 }
             }
         }

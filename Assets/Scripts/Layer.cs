@@ -9,6 +9,7 @@ namespace Grid
     {
         public string Name;
         public bool IsEditable;
+        public Color GizmosColor;
 
         public Layer(string _name, bool _isEditable)
         {
