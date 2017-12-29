@@ -227,7 +227,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Layers:
-  - Base
+  - Name: Base
+    IsEditable: 0
+  - Name: Test
+    IsEditable: 1
 --- !u!1001 &310909082
 Prefab:
   m_ObjectHideFlags: 0
@@ -485,6 +488,11 @@ Prefab:
         type: 2}
       propertyPath: m_Size.y
       value: 3.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 114817298323287628, guid: 7a319e95efda5714498564a625f4fa50,
+        type: 2}
+      propertyPath: Layer.Name
+      value: Test
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7a319e95efda5714498564a625f4fa50, type: 2}

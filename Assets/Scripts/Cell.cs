@@ -81,65 +81,35 @@ namespace Grid
 
         #region ILink
 
-        public List<INode> GetNeighbourgs(string _layer)
+        public List<INode> GetNeighbourgs(Layer _layer)
         {
-            foreach (LayeredLink layeredLink in cellData.LinkData.LayeredLinkedNodes)
-                if (layeredLink.Layer == _layer)
-                    return layeredLink.LinkedNodes;
-            return null;
+            return cellData.LinkData.GetLayeredLink(_layer);
         }
 
-        public void Link(INode _node, string _layer)
+        public void Link(INode _node, Layer _layer)
         {
-            foreach (LayeredLink layeredLink in cellData.LinkData.LayeredLinkedNodes)
-            {
-                if (layeredLink.Layer == _layer)
-                {
-                    layeredLink.LinkedNodes.Add(_node);
-                    return;
-                }
-            }
+            cellData.LinkData.AddLink(_node, _layer);
         }
 
-        public void UnLink(INode _node, string _layer)
+        public void UnLink(INode _node, Layer _layer)
         {
-            foreach (LayeredLink layeredLink in cellData.LinkData.LayeredLinkedNodes)
-            {
-                if (layeredLink.Layer == _layer)
-                {
-                    layeredLink.LinkedNodes.Remove(_node);
-                    return;
-                }
-            }
+            cellData.LinkData.RemoveLink(_node, _layer);
         }
 
-        public void UnLink(ILink _link, string _layer)
+        public void UnLink(ILink _link, Layer _layer)
         {
-            foreach (LayeredLink layeredLink in cellData.LinkData.LayeredLinkedNodes)
-            {
-                if (layeredLink.Layer == _layer)
-                {
-                    layeredLink.LinkedNodes.Remove(_link);
-                    return;
-                }
-            }
+            cellData.LinkData.RemoveLink(_link, _layer);
         }
 
-        public void UnLinkAll(string _layer)
+        public void UnLinkAll(Layer _layer)
         {
-            foreach (LayeredLink layeredLink in cellData.LinkData.LayeredLinkedNodes)
-            {
-                if (layeredLink.Layer == _layer)
-                {                   
-                    List<ILink> linkedNodes = layeredLink.LinkedNodes.ConvertAll(l => l as ILink);
-                    for (int i = 0; i < linkedNodes.Count; i++)
-                    {
-                        linkedNodes[i].UnLink(this, _layer);
-                    }
-                    layeredLink.LinkedNodes.Clear();
-                    return;
-                }
-            }
+            if (!_layer.IsEditable)
+                return;        
+            List<ILink> linkedNodes = cellData.LinkData.GetLayeredLink(_layer).ConvertAll(l => l as ILink);
+            for (int i = 0; i < linkedNodes.Count; i++)
+                linkedNodes[i].UnLink(this, _layer);
+            for (int i = 0; i < linkedNodes.Count; i++)
+                cellData.LinkData.RemoveLink(linkedNodes[i], _layer);
         }
         #endregion
     }
