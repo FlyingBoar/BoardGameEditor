@@ -212,8 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowGrid: 1
-  ShowLink: 1
-  LinkArray: 0000
+  GridGizmosColor: {r: 0, g: 1, b: 0.048275948, a: 1}
+  ShowLayersLink: 1
+  LinkArray: 000100
   ShowMousePosition: 1
   ShowMouseCell: 0
 --- !u!114 &195073408
@@ -234,6 +235,9 @@ MonoBehaviour:
   - Name: Test
     IsEditable: 1
     GizmosColor: {r: 1, g: 0, b: 0, a: 1}
+  - Name: Test2
+    IsEditable: 1
+    GizmosColor: {r: 0.94482756, g: 1, b: 0, a: 1}
 --- !u!1001 &310909082
 Prefab:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ namespace Grid
         Vector3 MousePos { get { return InputAdapter_Tester.Test_FindMousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
         public bool ShowGrid;
+        public Color GridGizmosColor;
         public bool ShowLayersLink;
         public bool[] LinkArray;
         public bool ShowMousePosition;
@@ -36,7 +37,7 @@ namespace Grid
             foreach (Cell cell in cellList)
             {
                 if (ShowGrid)
-                    DisplayCell(cell, Color.cyan);
+                    DisplayCell(cell, GridGizmosColor);
                 if (ShowLayersLink)
                 {
                     for (int i = 0; i < LinkArray.Length; i++)

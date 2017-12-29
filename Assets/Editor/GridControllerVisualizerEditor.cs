@@ -18,7 +18,14 @@ namespace Grid
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical();
+
+            EditorGUILayout.BeginHorizontal();
             visualizer.ShowGrid = EditorGUILayout.Toggle("ShowGrid", visualizer.ShowGrid);
+            if(visualizer.ShowGrid)
+            {
+                visualizer.GridGizmosColor = EditorGUILayout.ColorField(visualizer.GridGizmosColor);
+            }
+            EditorGUILayout.EndHorizontal();
 
             visualizer.ShowLayersLink = EditorGUILayout.BeginToggleGroup("ShowLayersLink :", visualizer.ShowLayersLink);
             if (visualizer.ShowLayersLink)
