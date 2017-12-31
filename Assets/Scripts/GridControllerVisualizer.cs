@@ -64,7 +64,7 @@ namespace Grid
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
             Gizmos.color = _layer.GizmosColor;
-            foreach (ILink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
+            foreach (ILayeredLink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
             {
                 Vector3 line = link.GetPosition() - _cell.GetCenter();
                 Gizmos.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);

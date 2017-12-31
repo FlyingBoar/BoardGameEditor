@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class Cell : ISector, ILink
+    public class Cell : ISector, ILayeredLink
     {
         CellData cellData;
 
@@ -96,7 +96,7 @@ namespace Grid
             cellData.LinkData.RemoveLink(_node, _layer);
         }
 
-        public void UnLink(ILink _link, Layer _layer)
+        public void UnLink(ILayeredLink _link, Layer _layer)
         {
             cellData.LinkData.RemoveLink(_link, _layer);
         }
@@ -105,7 +105,7 @@ namespace Grid
         {
             if (!_layer.IsEditable)
                 return;        
-            List<ILink> linkedNodes = cellData.LinkData.GetLayeredLink(_layer).ConvertAll(l => l as ILink);
+            List<ILayeredLink> linkedNodes = cellData.LinkData.GetLayeredLink(_layer).ConvertAll(l => l as ILayeredLink);
             for (int i = 0; i < linkedNodes.Count; i++)
                 linkedNodes[i].UnLink(this, _layer);
             for (int i = 0; i < linkedNodes.Count; i++)
