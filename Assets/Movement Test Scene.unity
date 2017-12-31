@@ -214,7 +214,7 @@ MonoBehaviour:
   ShowGrid: 1
   GridGizmosColor: {r: 0, g: 1, b: 0.048275948, a: 1}
   ShowLayersLink: 1
-  LinkArray: 000100
+  LinkArray: 010000
   ShowMousePosition: 1
   ShowMouseCell: 0
 --- !u!114 &195073408
