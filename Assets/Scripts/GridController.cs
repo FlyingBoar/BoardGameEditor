@@ -57,9 +57,9 @@ namespace Grid
             //Linking process
             if (autoLinkCells)
             {
-                for (int i = 0; i < LayerCtrl.Layers.Count; i++)
+                for (int i = 0; i < LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    LinkCells(LayerCtrl.Layers[i]);
+                    LinkCells(LayerCtrl.GetLayerAtIndex(i));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell()
         {
-            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.Layers[0]);
+            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
         }
         #region Getter
         public Cell GetCentralCell()

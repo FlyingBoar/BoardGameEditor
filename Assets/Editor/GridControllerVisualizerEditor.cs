@@ -35,13 +35,13 @@ namespace Grid
             if (visualizer.ShowLayersLink)
             {
                 EditorGUI.indentLevel = 1;
-                if(visualizer.LinkArray == null || visualizer.LinkArray.Length != visualizer.GridCtrl.LayerCtrl.Layers.Count)
+                if(visualizer.LinkArray == null || visualizer.LinkArray.Length != visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers())
                 {
-                    visualizer.LinkArray = new bool[visualizer.GridCtrl.LayerCtrl.Layers.Count];
+                    visualizer.LinkArray = new bool[visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers()];
                 }
-                for (int i = 0; i < visualizer.GridCtrl.LayerCtrl.Layers.Count; i++)
+                for (int i = 0; i < visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.Layers[i].Name, visualizer.LinkArray[i]);
+                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
                 }
 
                 EditorGUI.indentLevel = 0;

@@ -43,7 +43,7 @@ namespace Grid
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])
-                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.Layers[i]);
+                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(i));
                     }
                 }
             }

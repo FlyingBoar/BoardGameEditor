@@ -40,22 +40,22 @@ namespace Grid
 
             GUILayout.Space(4);
 
-            for (int i = 0; i < layerCtrl.Layers.Count; i++)
+            for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                if (layerCtrl.Layers[i].Name == "Base")
+                if (layerCtrl.GetLayerAtIndex(i).Name == "Base")
                     GUI.enabled = false;
 
-                layerCtrl.Layers[i].Name = EditorGUILayout.TextField(layerCtrl.Layers[i].Name);
-                layerCtrl.Layers[i].IsEditable = EditorGUILayout.Toggle(layerCtrl.Layers[i].IsEditable);
-                layerCtrl.Layers[i].GizmosColor = EditorGUILayout.ColorField(layerCtrl.Layers[i].GizmosColor);
+                layerCtrl.GetLayerAtIndex(i).Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Name);
+                layerCtrl.GetLayerAtIndex(i).IsEditable = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).IsEditable);
+                layerCtrl.GetLayerAtIndex(i).GizmosColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).GizmosColor);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {
-                    layerCtrl.RemoveLayer(layerCtrl.Layers[i]);
+                    layerCtrl.RemoveLayer(layerCtrl.GetLayerAtIndex(i));
                 }
 
-                if (layerCtrl.Layers[i].Name == "Base")
+                if (layerCtrl.GetLayerAtIndex(i).Name == "Base")
                     GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
