@@ -251,7 +251,7 @@ namespace Grid
         /// <summary>
         /// Crea i collegamenti alle celle
         /// </summary>
-        void LinkCells(Layer _layer)
+        internal void LinkCells(Layer _layer)
         {
             for (int i = 0; i < CellsMatrix.GetLength(0); i++)
             {

@@ -9,31 +9,79 @@ namespace Grid
     public class LayerControllerEditor : Editor
     {
         LayerController layerCtrl;
+        Texture addLayerTexture;
+        Texture removeLayerTexture;
+
+        string newLayerName;
+        bool newLayerEditable;
+        Color newLayerGizmosColor;
 
         private void OnEnable()
         {
             layerCtrl = (LayerController)target;
+            addLayerTexture = (Texture)EditorGUIUtility.Load("Plus.png");
+            removeLayerTexture = (Texture)EditorGUIUtility.Load("Minus.png");
         }
 
         public override void OnInspectorGUI()
         {
             GUILayout.BeginVertical();
 
+            GUI.enabled = false;
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((LayerController)target), typeof(LayerController), false);
+            GUI.enabled = true;
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Layer", EditorStyles.boldLabel);
             GUILayout.Space(10);
-            GUILayout.Label("IsEditable", EditorStyles.boldLabel);
-            GUILayout.Label("GizmosColor", EditorStyles.boldLabel);
+            GUILayout.Label("Is Editable", EditorStyles.boldLabel);
+            GUILayout.Label("Gizmos Color", EditorStyles.boldLabel);
             GUILayout.EndHorizontal();
 
-            foreach (Layer layer in layerCtrl.Layers)
+            GUILayout.Space(4);
+
+            for (int i = 0; i < layerCtrl.Layers.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                layer.Name = EditorGUILayout.TextField(layer.Name);
-                layer.IsEditable = EditorGUILayout.Toggle(layer.IsEditable);
-                layer.GizmosColor = EditorGUILayout.ColorField(layer.GizmosColor);
+                if (layerCtrl.Layers[i].Name == "Base")
+                    GUI.enabled = false;
+
+                layerCtrl.Layers[i].Name = EditorGUILayout.TextField(layerCtrl.Layers[i].Name);
+                layerCtrl.Layers[i].IsEditable = EditorGUILayout.Toggle(layerCtrl.Layers[i].IsEditable);
+                layerCtrl.Layers[i].GizmosColor = EditorGUILayout.ColorField(layerCtrl.Layers[i].GizmosColor);
+
+                if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
+                {
+                    layerCtrl.RemoveLayer(layerCtrl.Layers[i]);
+                }
+
+                if (layerCtrl.Layers[i].Name == "Base")
+                    GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
+
+            GUILayout.Space(2);
+            GUILayout.Label("Add New Layer", EditorStyles.boldLabel);
+            GUILayout.Space(2);
+
+            GUILayout.BeginHorizontal();
+            newLayerName = EditorGUILayout.TextField(newLayerName);
+            newLayerEditable = EditorGUILayout.Toggle(newLayerEditable);
+            newLayerGizmosColor = EditorGUILayout.ColorField(newLayerGizmosColor);
+
+            if(newLayerGizmosColor.a == 0)
+                newLayerGizmosColor.a = 100;
+
+            if (GUILayout.Button(addLayerTexture, GUILayout.Height(17), GUILayout.Width(20)))
+            {
+                layerCtrl.AddLayer(newLayerName, newLayerEditable, newLayerGizmosColor);
+                newLayerName = string.Empty;
+                newLayerEditable = false;
+                newLayerGizmosColor = Color.black;
+                newLayerGizmosColor.a = 100;
+            }
+
+            GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
         }
