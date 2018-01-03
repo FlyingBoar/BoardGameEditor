@@ -8,7 +8,6 @@ namespace Grid
     public class GridScanner : MonoBehaviour
     {
         ScannerCollider scanCollider;
-        List<Cell> GridObstacleCells = new List<Cell>();
 
         public void ScanGrid(List<Cell> _gridCells, SectorData _sectorData)
         {
@@ -26,8 +25,10 @@ namespace Grid
 
                 if (hitCollider != null && hitCollider.ObjType == ObjectType.Obstacle)
                 {
-                    GridObstacleCells.Add(cell);
-                    //cell.UnLinkAll(hitCollider.Layers);
+                    //for (int i = 0; i < hitCollider.Layers.Count; i++)
+                    //{
+                    //    cell.UnLinkAll();                   
+                    //}
                 }
             }
             GameObject.DestroyImmediate(scanCollider.gameObject);
