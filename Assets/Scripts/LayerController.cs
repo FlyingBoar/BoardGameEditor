@@ -8,7 +8,7 @@ namespace Grid
     [RequireComponent(typeof(GridController))]
     public class LayerController : MonoBehaviour
     {
-        List<Layer> Layers = new List<Layer> { new Layer("Base", true) };
+        List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
 
         GridController _gridCtrl;
         GridController gridCtrl
