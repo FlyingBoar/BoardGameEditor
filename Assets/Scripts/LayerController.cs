@@ -40,6 +40,9 @@ namespace Grid
         {
             if(!Layers.Contains(_layer))
                 Layers.Add(_layer);
+
+            if(gridCtrl != null)
+                gridCtrl.LinkCells(_layer);
         }
 
         public void AddLayer(string _name, bool _isEditable, Color _gizmoColor)
@@ -48,13 +51,16 @@ namespace Grid
             if (!Layers.Contains(newLayer))
                 Layers.Add(newLayer);
 
-            gridCtrl.LinkCells(newLayer);
+            if (gridCtrl != null)
+                gridCtrl.LinkCells(newLayer);
         }
 
         public void RemoveLayer(Layer _layer)
         {
             Layers.Remove(_layer);
-            gridCtrl.RemoveLinks(_layer);
+
+            if(gridCtrl != null)
+                gridCtrl.RemoveLinks(_layer);
         }
         #endregion
     }
