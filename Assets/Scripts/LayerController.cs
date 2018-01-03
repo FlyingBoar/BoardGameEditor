@@ -41,7 +41,7 @@ namespace Grid
             if(!Layers.Contains(_layer))
                 Layers.Add(_layer);
 
-            if(gridCtrl != null)
+            if(gridCtrl.DoesGridExist())
                 gridCtrl.LinkCells(_layer);
         }
 
@@ -51,7 +51,7 @@ namespace Grid
             if (!Layers.Contains(newLayer))
                 Layers.Add(newLayer);
 
-            if (gridCtrl != null)
+            if (gridCtrl.DoesGridExist())
                 gridCtrl.LinkCells(newLayer);
         }
 
@@ -59,7 +59,7 @@ namespace Grid
         {
             Layers.Remove(_layer);
 
-            if(gridCtrl != null)
+            if (gridCtrl.DoesGridExist())
                 gridCtrl.RemoveLinks(_layer);
         }
         #endregion

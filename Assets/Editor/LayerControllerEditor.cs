@@ -55,6 +55,7 @@ namespace Grid
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {
                     layerCtrl.RemoveLayer(layerCtrl.GetLayerAtIndex(i));
+                    continue;
                 }
 
                 if (layerCtrl.GetLayerAtIndex(i).Name == "Base")
@@ -63,7 +64,7 @@ namespace Grid
             }
 
             GUILayout.Space(2);
-            GUILayout.Label("Add New Layer", EditorStyles.boldLabel);
+            GUILayout.Label("New Layer", EditorStyles.boldLabel);
             GUILayout.Space(2);
 
             GUILayout.BeginHorizontal();
@@ -76,6 +77,11 @@ namespace Grid
 
             if (GUILayout.Button(addLayerTexture, GUILayout.Height(17), GUILayout.Width(20)))
             {
+                if (newLayerName == string.Empty)
+                {
+                    Debug.LogWarning("Can't add a Layer without a name !");
+                    return;
+                }
                 layerCtrl.AddLayer(newLayerName, newLayerEditable, newLayerGizmosColor);
                 newLayerName = string.Empty;
                 newLayerEditable = false;

@@ -41,6 +41,14 @@ namespace Grid
         Cell[,,] CellsMatrix;
 
         #region API
+        public bool DoesGridExist()
+        {
+            if (CellsMatrix != null)
+                return true;
+            else
+                return false;
+        }
+
         public void CreateNewGrid(bool autoLinkCells = true)
         {
             //Reset operation
