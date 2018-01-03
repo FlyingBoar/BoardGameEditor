@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class ScanCollider : MonoBehaviour
+    public class ScannerCollider : MonoBehaviour
     {
         public ObjectType ObjType;
-        public Layer Layer;
+        public List<ScannerLayer> Layers = new List<ScannerLayer>();
 
         BoxCollider boxCollider;
 
@@ -21,6 +21,18 @@ namespace Grid
             ObjType = _objType;
             boxCollider = gameObject.AddComponent<BoxCollider>();
             boxCollider.size = _size;
+        }
+    }
+
+    public class ScannerLayer
+    {
+        public Layer Layer;
+        public bool Active;
+
+        public ScannerLayer(Layer _layer, bool _active)
+        {
+            Layer = _layer;
+            Active = _active;
         }
     }
 }

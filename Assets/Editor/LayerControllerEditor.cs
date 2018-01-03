@@ -31,6 +31,8 @@ namespace Grid
             EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((LayerController)target), typeof(LayerController), false);
             GUI.enabled = true;
 
+            GUILayout.Space(4);
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Layer", EditorStyles.boldLabel);
             GUILayout.Space(10);

@@ -278,6 +278,23 @@ namespace Grid
                 }
             }
         }
+
+        internal void RemoveLinks(Layer _layer)
+        {
+            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
+                    {
+                        if (CellsMatrix[i, j, k] == null)
+                            continue;
+                        CellsMatrix[i, j, k].UnLinkAll(_layer);
+                        CellsMatrix[i, j, k].GetCellData().LinkData.RemoveLayeredLink(_layer);
+                    }
+                }
+            }
+        }
         #endregion
 
         Vector3 CalculateOffset()
