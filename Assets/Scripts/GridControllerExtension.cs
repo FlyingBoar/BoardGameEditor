@@ -13,16 +13,18 @@ namespace Grid
         /// <returns>la cella che si trova in quella posizione</returns>
         public static Cell GetCellFromPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Cell resultant;
             int[] indexes = _gridCtrl.GetCoordinatesByPosition(_position);
             Cell[,,] matrix = _gridCtrl.GetCellsMatrix();
 
-            if (matrix.GetLength(0) > indexes[0] && matrix.GetLength(1) > indexes[1] && matrix.GetLength(2) > indexes[2])
-                resultant = matrix[indexes[0], indexes[1], indexes[2]];
-            else
-                resultant = null;
-
-            return resultant;
+            try
+            {
+                return matrix[indexes[0], indexes[1], indexes[2]];
+            }
+            catch(System.IndexOutOfRangeException e)
+            {
+                Debug.LogErrorFormat(e.Message);
+                return null;
+            }
         }
         /// <summary>
         /// Return a specific cell based on coordinates
@@ -34,9 +36,17 @@ namespace Grid
         /// <returns></returns>
         public static Cell GetCellByCoordinates(this GridController _gridCtrl, int i, int j, int k)
         {
-            Cell resultant;
-            resultant = _gridCtrl.GetCellsMatrix()[i, j, k];
-            return resultant;
+            Cell[,,] matrix = _gridCtrl.GetCellsMatrix();
+
+            try
+            {
+                return matrix[i, j, k];
+            }
+            catch (System.IndexOutOfRangeException e)
+            {
+                Debug.LogErrorFormat(e.Message);
+                return null;
+            }
         }
         /// <summary>
         /// Return the center postion of the cell
@@ -49,9 +59,11 @@ namespace Grid
         public static Vector3 GetPositionByCoordinates(this GridController _gridCtrl, int i, int j, int k)
         {
 
-            Vector3 spacePos = new Vector3(i * _gridCtrl.SectorData.Diameter.x, j * _gridCtrl.SectorData.Diameter.y, k * _gridCtrl.SectorData.Diameter.z);
-            spacePos += _gridCtrl.SectorData.Radius;
-            //spacePos -= _gridCtrl.GetOffset();
+            Vector3 spacePos = new Vector3(
+                i * (_gridCtrl.SectorData.Diameter.x + _gridCtrl.ResolutionCorrection.x),
+                j * (_gridCtrl.SectorData.Diameter.y + _gridCtrl.ResolutionCorrection.y),
+                k * (_gridCtrl.SectorData.Diameter.z + _gridCtrl.ResolutionCorrection.z));
+            spacePos += _gridCtrl.SectorData.Radius + _gridCtrl.transform.position;
 
             return spacePos;
         }
@@ -61,18 +73,13 @@ namespace Grid
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Vector3 spacePos = _position - _gridCtrl.transform.position /*+ _gridCtrl.GetOffset()*/;
-            float[] centerDis = new float[3];
-            for (int i = 0; i < 3; i++)
-            {
-                centerDis[i] = _gridCtrl.SectorData.Diameter[i] + _gridCtrl.ResolutionCorrection[i];
-            }
+            Vector3 spacePos = _position - _gridCtrl.transform.position - _gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
             {
-                centerDis[0] != 0 ?(int)(spacePos.y/centerDis[0]): 0,
-                centerDis[1] != 0 ?(int)(spacePos.x/centerDis[1]): 0,
-                centerDis[2] != 0 ?(int)(spacePos.x/centerDis[2]): 0,
+                _gridCtrl.SectorData.Radius.x != 0 ?(int)(spacePos.y/_gridCtrl.SectorData.Radius.x): 0,
+                _gridCtrl.SectorData.Radius.y != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.y): 0,
+                _gridCtrl.SectorData.Radius.z != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.z): 0,
             };
 
             return coordinates;

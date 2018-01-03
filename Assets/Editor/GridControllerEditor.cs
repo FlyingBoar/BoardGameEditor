@@ -8,7 +8,6 @@ using Grid;
 public class GridControllerEditor : Editor
 {
     GridController gridCtrl;
-    Rect rect;
 
     List<Vector3> corners = new List<Vector3>();
 
@@ -17,7 +16,6 @@ public class GridControllerEditor : Editor
     private void OnEnable()
     {
         gridCtrl = (GridController)target;
-        rect = new Rect(0, 0, 50, 50);
     }
 
     private void OnSceneGUI()
@@ -59,22 +57,20 @@ public class GridControllerEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
         if (GUILayout.Button("Make Grid"))
         {
             gridCtrl.CreateNewGrid();
             //SaveCornersPosition();
         }
-        if (GUILayout.Button("Reset Grid"))
-            gridCtrl.ClearGrid();
 
-        GUILayout.Space(10);
+        GUILayout.Space(5);
 
         if (GUILayout.Button("Save Grid"))
             gridCtrl.SaveCurrent();
         if (GUILayout.Button("Load Grid"))
             gridCtrl.Load();
-
-        base.OnInspectorGUI();
     }
 
     /// <summary>
