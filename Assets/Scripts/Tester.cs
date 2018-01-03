@@ -11,20 +11,12 @@ public class Tester : MonoBehaviour
 	void Update ()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        {
             GridCtrl.CreateNewGrid();
-        }
         if (Input.GetKeyDown(KeyCode.D))
             GridCtrl.ClearGrid();
         if (Input.GetKeyDown(KeyCode.S))
             GridCtrl.SaveCurrent();
         if (Input.GetKeyDown(KeyCode.L))
             GridCtrl.Load();
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            GridScanner scanner = GridCtrl.GetComponent<GridScanner>();
-            if(scanner != null)
-                scanner.ScanGrid(GridCtrl.GetListOfCells(), GridCtrl.SectorData);
-        }
     }
 }
