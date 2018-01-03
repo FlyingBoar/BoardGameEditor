@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Grid
 {
     [ExecuteInEditMode]
-    [RequireComponent(typeof(LayerController))]
+    [RequireComponent(typeof(LayerController), typeof(GridControllerVisualizer))]
     public class GridController : MonoBehaviour
     {
         public NodeNetworkData NetworkData;
@@ -24,6 +24,17 @@ namespace Grid
                     _layerCtrl = GetComponent<LayerController>();
 
                 return _layerCtrl;
+            }
+        }
+        GridControllerVisualizer _gridVisualizer;
+        public GridControllerVisualizer GridVisualizer
+        {
+            get
+            {
+                if (!_gridVisualizer)
+                    _gridVisualizer = GetComponent<GridControllerVisualizer>();
+
+                return _gridVisualizer;
             }
         }
 

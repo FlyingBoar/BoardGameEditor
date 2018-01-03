@@ -16,7 +16,11 @@ public class GridControllerEditor : Editor
     public Cell SelectedCell
     {
         get { return _selectedCell; }
-        private set { _selectedCell = value; }
+        private set
+        {
+            _selectedCell = value;
+            gridCtrl.GridVisualizer.SelectedCell = _selectedCell;
+        }
     }
 
     private void OnEnable()
@@ -26,7 +30,6 @@ public class GridControllerEditor : Editor
 
     private void OnSceneGUI()
     {
-
         if(Event.current.type == EventType.MouseDown)
         {
             if(Event.current.button == 1)

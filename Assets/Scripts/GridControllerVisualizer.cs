@@ -27,6 +27,8 @@ namespace Grid
         public bool[] LinkArray;
         public bool ShowMousePosition;
         public bool ShowMouseCell;
+        [HideInInspector]
+        public Cell SelectedCell;
 
         private void OnDrawGizmos()
         {
@@ -56,7 +58,14 @@ namespace Grid
 
         void DisplayCell(Cell _cell, Color color)
         {
-            Gizmos.color = color;
+            if (_cell == null)
+                return;
+
+            if (_cell == SelectedCell)
+                Gizmos.color = Color.red;
+            else
+                Gizmos.color = color;
+
             Gizmos.DrawWireCube(_cell.GetCenter(), _cell.GetRadius() * 2);
             Gizmos.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
         }
