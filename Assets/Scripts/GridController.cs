@@ -29,16 +29,6 @@ namespace Grid
 
         Cell[,,] CellsMatrix;
 
-        Vector3 offSet;
-
-        private Cell _selectedCell;
-
-        public Cell SelectedCell
-        {
-            get { return _selectedCell; }
-            private set { _selectedCell = value; }
-        }
-
         #region API
         public void CreateNewGrid(bool autoLinkCells = true)
         {
@@ -51,7 +41,6 @@ namespace Grid
             if (SectorData.Radius.z == 0)
                 SectorData.Radius.z = float.Epsilon;
 
-            offSet = CalculateOffset();
             //New grid creation
             CreateGrid();
             //Linking process
@@ -81,27 +70,15 @@ namespace Grid
         }
 
         /// <summary>
-        /// Salva la cella che si trova nella posizione del mouse in una variabile
-        /// </summary>
-        public void SelectCell()
-        {
-            SelectedCell = this.GetCellFromPosition(InputAdapter_Tester.PointerPosition);
-        }
-
-        /// <summary>
-        /// svuota la variabile utilizzata per salvare la cella
-        /// </summary>
-        public void DeselectCell()
-        {
-            SelectedCell = null;
-        }
-
-        /// <summary>
         ///Chiama la funzione Link alla cella selezionata passando la cella su cui si trova il cursore
         /// </summary>
-        public void LinkSelectedCell()
+        public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
         {
-            SelectedCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
+            //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
+            startingCell.Link(endingCell, LayerCtrl.GetLayerAtIndex(0));
+
+            if (mutualLink)
+                endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
         }
         #region Getter
         public Cell GetCentralCell()
@@ -142,14 +119,7 @@ namespace Grid
 
             return cellsList;
         }
-        /// <summary>
-        /// Return the Grid Offset
-        /// </summary>
-        /// <returns></returns>
-        public Vector3 GetOffset()
-        {
-            return offSet;
-        }
+
         /// <summary>
         /// Return the Matrix of the grid
         /// </summary>

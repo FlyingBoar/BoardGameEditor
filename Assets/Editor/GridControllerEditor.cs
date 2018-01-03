@@ -10,9 +10,15 @@ public class GridControllerEditor : Editor
     GridController gridCtrl;
 
     List<Vector3> corners = new List<Vector3>();
-
     List<Vector3> handles = new List<Vector3>();
-        
+
+    private Cell _selectedCell;
+    public Cell SelectedCell
+    {
+        get { return _selectedCell; }
+        private set { _selectedCell = value; }
+    }
+
     private void OnEnable()
     {
         gridCtrl = (GridController)target;
@@ -73,28 +79,23 @@ public class GridControllerEditor : Editor
             gridCtrl.Load();
     }
 
-    /// <summary>
-    /// Chiama la funzione SelectCell in GridController
-    /// </summary>
     void SelectCell()
     {
         Debug.Log("Select Cell");
-        gridCtrl.SelectCell();
+        SelectedCell = gridCtrl.GetCellFromPosition(InputAdapter_Tester.PointerPosition);
     }
-    /// <summary>
-    /// Chiama Deselect in GridController
-    /// </summary>
+
     void DeselectCell()
     {
         Debug.Log("Deselect Cell");
-        gridCtrl.DeselectCell();
+        SelectedCell = null;
     }
     /// <summary>
     /// Chiama la funzione link della cella salvata in precedenza
     /// </summary>
     void LinkSelectedCell()
     {
-        gridCtrl.LinkSelectedCell();
+        gridCtrl.LinkCells(SelectedCell, gridCtrl.GetCellFromPosition(InputAdapter_Tester.PointerPosition));
     }
 
     void SaveCornersPosition()
