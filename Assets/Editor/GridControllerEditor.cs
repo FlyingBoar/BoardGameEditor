@@ -33,7 +33,7 @@ public class GridControllerEditor : Editor
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Select Cell"), false, SelectCell);
-                if(gridCtrl.SelectedCell != null)
+                if(SelectedCell != null)
                     menu.AddItem(new GUIContent("Link Cell"), false, LinkSelectedCell);
                 menu.AddItem(new GUIContent("Deselect Cell"), false, DeselectCell);
                 menu.ShowAsContext();
