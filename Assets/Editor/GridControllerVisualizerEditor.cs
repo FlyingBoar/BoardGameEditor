@@ -23,6 +23,8 @@ namespace Grid
             EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridControllerVisualizer)target), typeof(GridControllerVisualizer), false);
             GUI.enabled = true;
 
+            GUILayout.Space(4);
+
             EditorGUILayout.BeginHorizontal();
             visualizer.ShowGrid = EditorGUILayout.Toggle("ShowGrid", visualizer.ShowGrid);
             if(visualizer.ShowGrid)

@@ -75,6 +75,18 @@ namespace Grid
                     return layeredLink.LinkedNodes;
             return null;
         }
+
+        internal void RemoveLayeredLink(Layer _layer)
+        {
+            for (int i = 0; i < LayeredLinkedNodes.Count; i++)
+            {
+                if(LayeredLinkedNodes[i].Layer == _layer)
+                {
+                    LayeredLinkedNodes.Remove(LayeredLinkedNodes[i]);
+                    return;
+                }
+            }
+        }
     }
 
     [System.Serializable]

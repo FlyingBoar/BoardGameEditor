@@ -54,6 +54,7 @@ namespace Grid
         public void RemoveLayer(Layer _layer)
         {
             Layers.Remove(_layer);
+            gridCtrl.RemoveLinks(_layer);
         }
         #endregion
     }

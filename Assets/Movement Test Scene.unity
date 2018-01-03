@@ -214,7 +214,7 @@ MonoBehaviour:
   ShowGrid: 1
   GridGizmosColor: {r: 0, g: 1, b: 0.048275948, a: 1}
   ShowLayersLink: 1
-  LinkArray: 010000
+  LinkArray: 0000
   ShowMousePosition: 1
   ShowMouseCell: 0
 --- !u!114 &195073408
@@ -228,16 +228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 403dd45b3a935484db77a8f5b3385d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Layers:
-  - Name: Base
-    IsEditable: 0
-    GizmosColor: {r: 0, g: 0, b: 0, a: 1}
-  - Name: Test
-    IsEditable: 1
-    GizmosColor: {r: 1, g: 0, b: 0, a: 1}
-  - Name: Test2
-    IsEditable: 1
-    GizmosColor: {r: 0.94482756, g: 1, b: 0, a: 1}
 --- !u!1001 &310909082
 Prefab:
   m_ObjectHideFlags: 0
@@ -544,6 +534,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1573547110}
+  - component: {fileID: 1573547111}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -567,6 +558,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1573547111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1573547109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfbbdc8fc481c234e8498f801ee1fa1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1839428068
 GameObject:
   m_ObjectHideFlags: 0
