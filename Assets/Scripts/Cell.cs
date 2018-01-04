@@ -60,7 +60,7 @@ namespace Grid
                 Vector3 centerPos;
                 centerPos = new Vector3(gridPosition.x * distance.x, gridPosition.y * distance.y, gridPosition.z * distance.z);
                 //centerPos -= cellData.SectorData.Radius;
-                centerPos += gridCtrl.transform.position;
+                centerPos += gridCtrl.Origin;
                 return centerPos;
             }
         }

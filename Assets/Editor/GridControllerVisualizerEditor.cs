@@ -1,61 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using UnityEditor;
 
-namespace Grid
-{
-    [CustomEditor(typeof(GridControllerVisualizer)), CanEditMultipleObjects]
-    public class GridControllerVisualizerEditor : Editor
-    {
-        GridControllerVisualizer visualizer;
+//namespace Grid
+//{
+//    [CustomEditor(typeof(GridControllerVisualizer)), CanEditMultipleObjects]
+//    public class GridControllerVisualizerEditor : Editor
+//    {
+//        GridControllerVisualizer visualizer;
 
-        private void OnEnable()
-        {
-            visualizer = (GridControllerVisualizer)target;
-        }
+//        private void OnEnable()
+//        {
+//            visualizer = (GridControllerVisualizer)target;
+//        }
 
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.BeginVertical();
+//        public override void OnInspectorGUI()
+//        {
+//            EditorGUILayout.BeginVertical();
 
-            GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridControllerVisualizer)target), typeof(GridControllerVisualizer), false);
-            GUI.enabled = true;
+//            GUI.enabled = false;
+//            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridControllerVisualizer)target), typeof(GridControllerVisualizer), false);
+//            GUI.enabled = true;
 
-            GUILayout.Space(4);
+//            GUILayout.Space(4);
 
-            EditorGUILayout.BeginHorizontal();
-            visualizer.ShowGrid = EditorGUILayout.Toggle("ShowGrid", visualizer.ShowGrid);
-            if(visualizer.ShowGrid)
-            {
-                visualizer.GridGizmosColor = EditorGUILayout.ColorField(visualizer.GridGizmosColor);
-                if (visualizer.GridGizmosColor.a == 0)
-                    visualizer.GridGizmosColor.a = 100;
-            }
-            EditorGUILayout.EndHorizontal();
+//            EditorGUILayout.BeginHorizontal();
+//            visualizer.ShowGrid = EditorGUILayout.Toggle("ShowGrid", visualizer.ShowGrid);
+//            if(visualizer.ShowGrid)
+//            {
+//                visualizer.GridGizmosColor = EditorGUILayout.ColorField(visualizer.GridGizmosColor);
+//                if (visualizer.GridGizmosColor.a == 0)
+//                    visualizer.GridGizmosColor.a = 100;
+//            }
+//            EditorGUILayout.EndHorizontal();
 
-            visualizer.ShowLayersLink = EditorGUILayout.BeginToggleGroup("ShowLayersLink :", visualizer.ShowLayersLink);
-            if (visualizer.ShowLayersLink)
-            {
-                EditorGUI.indentLevel = 1;
-                if(visualizer.LinkArray == null || visualizer.LinkArray.Length != visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers())
-                {
-                    visualizer.LinkArray = new bool[visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers()];
-                }
-                for (int i = 0; i < visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers(); i++)
-                {
-                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
-                }
+//            visualizer.ShowLayersLink = EditorGUILayout.BeginToggleGroup("ShowLayersLink :", visualizer.ShowLayersLink);
+//            if (visualizer.ShowLayersLink)
+//            {
+//                EditorGUI.indentLevel = 1;
+//                if(visualizer.LinkArray == null || visualizer.LinkArray.Length != visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers())
+//                {
+//                    visualizer.LinkArray = new bool[visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers()];
+//                }
+//                for (int i = 0; i < visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers(); i++)
+//                {
+//                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
+//                }
 
-                EditorGUI.indentLevel = 0;
-            }
-            EditorGUILayout.EndToggleGroup();
+//                EditorGUI.indentLevel = 0;
+//            }
+//            EditorGUILayout.EndToggleGroup();
 
-            visualizer.ShowMousePosition = EditorGUILayout.Toggle("ShowMousePosition", visualizer.ShowMousePosition);
+//            visualizer.ShowMousePosition = EditorGUILayout.Toggle("ShowMousePosition", visualizer.ShowMousePosition);
 
-            visualizer.ShowMouseCell = EditorGUILayout.Toggle("ShowMouseCell", visualizer.ShowMouseCell);
-            EditorGUILayout.EndVertical();
-        }
-    }
-}
+//            visualizer.ShowMouseCell = EditorGUILayout.Toggle("ShowMouseCell", visualizer.ShowMouseCell);
+//            EditorGUILayout.EndVertical();
+//        }
+//    }
+//}

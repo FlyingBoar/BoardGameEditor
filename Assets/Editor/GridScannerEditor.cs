@@ -1,33 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using UnityEditor;
 
-namespace Grid
-{
-    [CustomEditor(typeof(GridScanner)), CanEditMultipleObjects]
-    public class GridScannerEditor : Editor
-    {
-        GridScanner scanner;
+//namespace Grid
+//{
+//    [CustomEditor(typeof(GridScanner)), CanEditMultipleObjects]
+//    public class GridScannerEditor : Editor
+//    {
+//        GridScanner scanner;
 
-        private void OnEnable()
-        {
-            scanner = (GridScanner)target;
-        }
+//        private void OnEnable()
+//        {
+//            scanner = (GridScanner)target;
+//        }
 
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-            if (GUILayout.Button("Scan Grid"))
-                ScanGrid();
-        }
+//        public override void OnInspectorGUI()
+//        {
+//            base.OnInspectorGUI();
+//            if (GUILayout.Button("Scan Grid"))
+//                ScanGrid();
+//        }
 
-        void ScanGrid()
-        {
-            GridController gridCtrl = scanner.GetComponent<GridController>();
-            if (gridCtrl != null)
-                scanner.ScanGrid(gridCtrl.GetListOfCells(), gridCtrl.SectorData);
-        }
-    }
-}
+//        void ScanGrid()
+//        {
+//            GridController gridCtrl = scanner.GetComponent<GridController>();
+//            if (gridCtrl != null)
+//                scanner.ScanGrid(gridCtrl.GetListOfCells(), gridCtrl.SectorData);
+//        }
+//    }
+//}
 

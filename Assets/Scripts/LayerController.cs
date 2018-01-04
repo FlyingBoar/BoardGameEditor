@@ -4,22 +4,15 @@ using UnityEngine;
 
 namespace Grid
 {
-    [ExecuteInEditMode]
-    [RequireComponent(typeof(GridController))]
     public class LayerController : MonoBehaviour
     {
         List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
 
-        GridController _gridCtrl;
-        GridController gridCtrl
-        {
-            get
-            {
-                if (!_gridCtrl)
-                    _gridCtrl = GetComponent<GridController>();
+        GridController gridCtrl;
 
-                return _gridCtrl;
-            }
+        public LayerController(GridController _gridCtrl)
+        {
+            gridCtrl = _gridCtrl;
         }
 
         #region API

@@ -4,20 +4,10 @@ using UnityEngine;
 
 namespace Grid
 {
-    [RequireComponent(typeof(GridController))]
-    public class GridControllerVisualizer : MonoBehaviour
+    public class GridControllerVisualizer
     {
-        GridController _gridCtrl;
-        public GridController GridCtrl
-        {
-            get
-            {
-                if (!_gridCtrl)
-                    _gridCtrl = GetComponent<GridController>();
+        GridController gridCtrl;
 
-                return _gridCtrl;
-            }
-        }
         //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
         Vector3 MousePos { get { return InputAdapter_Tester.Test_FindMousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
@@ -30,9 +20,14 @@ namespace Grid
         [HideInInspector]
         public Cell SelectedCell;
 
+        public GridControllerVisualizer(GridController _gridCtrl)
+        {
+            gridCtrl = _gridCtrl;
+        }
+
         private void OnDrawGizmos()
         {
-            List<Cell> cellList = GridCtrl.GetListOfCells();
+            List<Cell> cellList = gridCtrl.GetListOfCells();
             if (cellList.Count <= 0)
                 return;
 
@@ -45,7 +40,7 @@ namespace Grid
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])
-                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(i));
+                            DisplayLayerLink(cell, MasterGrid.GridLayerCtrl.GetLayerAtIndex(i));
                     }
                 }
             }
@@ -89,7 +84,7 @@ namespace Grid
         void DisplayMouseCell(Color _color)
         {
             Gizmos.color = _color;
-            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
+            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
                 Gizmos.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);

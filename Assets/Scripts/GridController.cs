@@ -5,40 +5,27 @@ using UnityEngine;
 
 namespace Grid
 {
-    [ExecuteInEditMode]
-    [RequireComponent(typeof(LayerController), typeof(GridControllerVisualizer))]
-    public class GridController : MonoBehaviour
+    public class GridController
     {
         public NodeNetworkData NetworkData;
         public SectorData SectorData;
 
+        public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        LayerController _layerCtrl;
-        public LayerController LayerCtrl
-        {
-            get
-            {
-                if (!_layerCtrl)
-                    _layerCtrl = GetComponent<LayerController>();
-
-                return _layerCtrl;
-            }
-        }
-        GridControllerVisualizer _gridVisualizer;
-        public GridControllerVisualizer GridVisualizer
-        {
-            get
-            {
-                if (!_gridVisualizer)
-                    _gridVisualizer = GetComponent<GridControllerVisualizer>();
-
-                return _gridVisualizer;
-            }
-        }
+        GridControllerVisualizer gridVisualizer;
+        LayerController layerCtrl;
 
         Cell[,,] CellsMatrix;
+
+        public GridController() { }
+
+        public void Init(GridControllerVisualizer _gridVisualizer, LayerController _layerCtrl)
+        {
+            gridVisualizer = _gridVisualizer;
+            layerCtrl = _layerCtrl;
+        }
 
         #region API
         public bool DoesGridExist()
@@ -65,9 +52,9 @@ namespace Grid
             //Linking process
             if (autoLinkCells)
             {
-                for (int i = 0; i < LayerCtrl.GetNumberOfLayers(); i++)
+                for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
                 {
-                    LinkCells(LayerCtrl.GetLayerAtIndex(i));
+                    LinkCells(layerCtrl.GetLayerAtIndex(i));
                 }
             }
         }
@@ -94,15 +81,15 @@ namespace Grid
         public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
         {
             //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
-            startingCell.Link(endingCell, LayerCtrl.GetLayerAtIndex(0));
+            startingCell.Link(endingCell, layerCtrl.GetLayerAtIndex(0));
 
             if (mutualLink)
-                endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
+                endingCell.Link(startingCell, layerCtrl.GetLayerAtIndex(0));
         }
         #region Getter
         public Cell GetCentralCell()
         {
-            return this.GetCellFromPosition(transform.position);
+            return this.GetCellFromPosition(Origin);
         }
 
         public List<Cell> GetGridCorners()

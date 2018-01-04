@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Grid
 {
-    [ExecuteInEditMode]
-    public class GridScanner : MonoBehaviour
+    public class GridScanner
     {
         ScannerCollider scanCollider;
+
+        public GridScanner() { }
 
         public void ScanGrid(List<Cell> _gridCells, SectorData _sectorData)
         {
