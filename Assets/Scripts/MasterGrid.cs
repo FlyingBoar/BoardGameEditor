@@ -23,8 +23,6 @@ namespace Grid {
             GridScanner = new GridScanner();
 
             GridCtrl.Init(GridVisualizer, GridLayerCtrl);
-
-
         }
 
         private void OnGUI()
