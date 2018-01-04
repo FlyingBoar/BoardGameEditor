@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class LayerController : MonoBehaviour
+    public class LayerController
     {
         List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
 

@@ -23,6 +23,8 @@ namespace Grid
             }
         }
 
+        Vector2 scrollPosition;
+
         public GridControllerWindow(GridController _gridCtrl)
         {
             gridCtrl = _gridCtrl;
@@ -66,6 +68,26 @@ namespace Grid
 
         public void Show()
         {
+            EditorGUILayout.BeginVertical("Box");
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+
+            EditorGUILayout.BeginVertical("Box");
+            GUILayout.Label("Sector Data", EditorStyles.boldLabel);
+            EditorGUI.indentLevel = 1;
+            gridCtrl.SectorData.Shape = (SectorData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
+            gridCtrl.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
+            EditorGUI.indentLevel = 0;
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical("Box");
+            GUILayout.Label("Grid Data", EditorStyles.boldLabel);
+            EditorGUI.indentLevel = 1;
+            gridCtrl.Origin = EditorGUILayout.Vector3Field("Origin", gridCtrl.Origin);
+            gridCtrl.Size = EditorGUILayout.Vector3IntField("Size", gridCtrl.Size);
+            gridCtrl.ResolutionCorrection = EditorGUILayout.Vector3Field("Resolution Correction", gridCtrl.ResolutionCorrection);
+            EditorGUI.indentLevel = 0;
+            EditorGUILayout.EndVertical();
+
             if (GUILayout.Button("Make Grid"))
             {
                 gridCtrl.CreateNewGrid();
@@ -75,9 +97,12 @@ namespace Grid
             GUILayout.Space(5);
 
             if (GUILayout.Button("Save Grid"))
-                gridCtrl.SaveCurrent();
+                gridCtrl.Save();
             if (GUILayout.Button("Load Grid"))
                 gridCtrl.Load();
+
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
         }
 
         void SelectCell()
