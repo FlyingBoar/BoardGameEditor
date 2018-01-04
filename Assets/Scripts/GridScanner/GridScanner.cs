@@ -10,7 +10,7 @@ namespace Grid
 
         public GridScanner() { }
 
-        public void ScanGrid(List<Cell> _gridCells, SectorData _sectorData)
+        public void ScanGrid(List<Cell> _gridCells, CellData.SectorData _sectorData)
         {
             if (scanCollider == null)
                 CreateScannerCollider(_sectorData);
@@ -35,7 +35,7 @@ namespace Grid
             GameObject.DestroyImmediate(scanCollider.gameObject);
         }
 
-        void CreateScannerCollider(SectorData _sectorData)
+        void CreateScannerCollider(CellData.SectorData _sectorData)
         {
             GameObject scannerObj = new GameObject("ScannerCollider");
             scanCollider = scannerObj.AddComponent<ScannerCollider>();

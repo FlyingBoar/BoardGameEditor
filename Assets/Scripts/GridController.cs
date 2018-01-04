@@ -7,7 +7,7 @@ namespace Grid
 {
     public class GridController
     {
-        public SectorData SectorData;
+        public CellData.SectorData SectorData;
 
         public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
@@ -24,7 +24,7 @@ namespace Grid
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
-            SectorData = new SectorData(SectorData.AreaShape.Square, Vector3.zero);
+            SectorData = new CellData.SectorData();
         }
 
         #region API
@@ -64,16 +64,14 @@ namespace Grid
             CellsMatrix = null;
         }
 
-        public void Load()
+        public void Load(GridData _gridData)
         {
-            Debug.LogWarning("Scollegata !");
-            //LoadFromNetworkData
+            LoadFromNetworkData(_gridData);
         }
 
         public void Save()
         {
-            Debug.LogWarning("Scollegata !");
-            //SaveCurrent
+            SaveCurrent();
         }
 
         /// <summary>
@@ -139,45 +137,43 @@ namespace Grid
         #endregion
 
         #region GridData Management
-        void LoadFromNetworkData(NodeNetworkData _networkData)
+        void LoadFromNetworkData(GridData _gridData)
         {
-            if (_networkData == null)
+            if (_gridData == null)
             {
                 Debug.LogWarning("GridController -- No data to load !");
                 return;
             }
 
-            ClearGrid();
+            CellsMatrix = _gridData.CellsMatrix;
 
-            CellsMatrix = _networkData.CellsMatrix;
+            SectorData = _gridData.SectorData;
 
-            Size = _networkData.Size;
-            SectorData = GetListOfCells().Where(c => c != null).First().GetCellData().SectorData;
+            Size = _gridData.Size;
+            Origin = _gridData.Origin;
+            ResolutionCorrection = _gridData.ResolutionCorrection;
         }
 
-        NodeNetworkData SaveCurrent(List<Cell> _cells)
+        GridData SaveCurrent()
         {
-            NodeNetworkData asset = null;
+            GridData newGridData = null;
 
-            List<CellData> cellsData = new List<CellData>();
-            foreach (Cell cell in _cells)
-            {
-                cellsData.Add(cell.GetCellData());
-            }
+            newGridData = ScriptableObject.CreateInstance<GridData>();
+            newGridData.CellsMatrix = CellsMatrix;
+            newGridData.Size = Size;
+            newGridData.Origin = Origin;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
+            newGridData.SectorData = SectorData;
 
-            asset = ScriptableObject.CreateInstance<NodeNetworkData>();
-            asset.CellsMatrix = CellsMatrix;
-            asset.Size = Size;
-
-            string assetName = "NodeNetworkData.asset";
-            asset.name = assetName;
+            string assetName = "GridData.asset";
+            newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
 
-            AssetDatabase.CreateAsset(asset, completePath);
+            AssetDatabase.CreateAsset(newGridData, completePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            return asset;
+            return newGridData;
         }
 
         string CheckFolder()
@@ -218,11 +214,7 @@ namespace Grid
 
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
-            NodeData nodeD = new NodeData(nodePos);
-            LinkData linkD = new LinkData();
-            SectorData sectorD = SectorData;
-
-            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD), this, new Vector3Int(i,j,k));
+            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this, new Vector3Int(i,j,k));
         }
 
         /// <summary>
@@ -267,7 +259,7 @@ namespace Grid
                         if (CellsMatrix[i, j, k] == null)
                             continue;
                         CellsMatrix[i, j, k].UnLinkAll(_layer);
-                        CellsMatrix[i, j, k].GetCellData().LinkData.RemoveLayeredLink(_layer);
+                        CellsMatrix[i, j, k].GetCellData().RemoveLayeredLink(_layer);
                     }
                 }
             }

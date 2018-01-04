@@ -14,7 +14,7 @@ public class MovementController : MonoBehaviour {
     public List<Cell> EvaluateMovementPown()
     {
         List<Cell> possibleMovement = new List<Cell>();
-        List<INode> tempList = new List<INode>();
+        List<Cell> tempList = new List<Cell>();
 
         Cell startCell = TESTController.GetCellFromPosition(transform.position);
         if (PointsOfMovement >= 0)

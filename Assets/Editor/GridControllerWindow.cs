@@ -8,6 +8,7 @@ namespace Grid
     public class GridControllerWindow
     {
         GridController gridCtrl;
+        GridData gridData;
 
         List<Vector3> corners = new List<Vector3>();
         List<Vector3> handles = new List<Vector3>();
@@ -74,7 +75,7 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sector Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;
-            gridCtrl.SectorData.Shape = (SectorData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
+            gridCtrl.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
             gridCtrl.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
@@ -99,7 +100,9 @@ namespace Grid
             if (GUILayout.Button("Save Grid"))
                 gridCtrl.Save();
             if (GUILayout.Button("Load Grid"))
-                gridCtrl.Load();
+                gridCtrl.Load(gridData);
+
+            gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData));
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
@@ -128,7 +131,7 @@ namespace Grid
         {
             foreach (Cell cell in gridCtrl.GetGridCorners())
             {
-                corners.Add(cell.GetCenter());
+                corners.Add(cell.GetPosition());
             }
         }
     }

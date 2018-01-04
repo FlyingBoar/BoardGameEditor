@@ -64,17 +64,17 @@ namespace Grid
             else
                 Handles.color = color;
 
-            Handles.DrawWireCube(_cell.GetCenter(), _cell.GetRadius() * 2);
-            Handles.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
+            Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 2);
+            Handles.DrawWireCube(_cell.GetPosition(), (_cell.GetRadius() / 25f));
         }
 
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
             Handles.color = _layer.HandlesColor;
-            foreach (ILayeredLink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
+            foreach (Cell link in _cell.GetCellData().GetLayeredLink(_layer))
             {
-                Vector3 line = link.GetPosition() - _cell.GetCenter();
-                Handles.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
+                Vector3 line = link.GetPosition() - _cell.GetPosition();
+                Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Grid
             Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
-                Handles.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);
+                Handles.DrawWireCube(_mouseCell.GetPosition(), _mouseCell.GetRadius() * 2.01f);
         }
     }
 }

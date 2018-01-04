@@ -107,7 +107,7 @@ public class PrototypeInteractionController : MonoBehaviour
     void DropAttempt(Cell _cell)
     {
         if (possibleCellOfMovement.Contains(_cell))
-            movementCtrl.Drop(_cell.GetCenter());
+            movementCtrl.Drop(_cell.GetPosition());
         else
         {
             if (CurrentMovementMode == MovementMode.Click)
