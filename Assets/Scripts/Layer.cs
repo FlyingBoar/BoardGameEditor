@@ -9,25 +9,25 @@ namespace Grid
     {
         public string Name;
         public bool IsEditable;
-        public Color GizmosColor;
+        public Color HandlesColor;
 
         public Layer()
         {
-            GizmosColor.a = 100;
+            HandlesColor.a = 100;
         }
 
         public Layer(string _name, bool _isEditable)
         {
             Name = _name;
             IsEditable = _isEditable;
-            GizmosColor.a = 100;
+            HandlesColor.a = 100;
         }
 
         public Layer(string _name, bool _isEditable, Color _gizmosColor)
         {
             Name = _name;
             IsEditable = _isEditable;
-            GizmosColor = _gizmosColor;
+            HandlesColor = _gizmosColor;
         }
 
         public static bool operator ==(Layer l1, Layer l2)

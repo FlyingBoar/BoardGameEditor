@@ -24,9 +24,9 @@ namespace Grid
             visualizer.ShowGrid = EditorGUILayout.Toggle("ShowGrid", visualizer.ShowGrid);
             if (visualizer.ShowGrid)
             {
-                visualizer.GridGizmosColor = EditorGUILayout.ColorField(visualizer.GridGizmosColor);
-                if (visualizer.GridGizmosColor.a == 0)
-                    visualizer.GridGizmosColor.a = 100;
+                visualizer.GridHandlesColor = EditorGUILayout.ColorField(visualizer.GridHandlesColor);
+                if (visualizer.GridHandlesColor.a == 0)
+                    visualizer.GridHandlesColor.a = 100;
             }
             EditorGUILayout.EndHorizontal();
 

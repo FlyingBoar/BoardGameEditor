@@ -46,7 +46,7 @@ namespace Grid
 
                 layerCtrl.GetLayerAtIndex(i).Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Name);
                 layerCtrl.GetLayerAtIndex(i).IsEditable = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).IsEditable);
-                layerCtrl.GetLayerAtIndex(i).GizmosColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).GizmosColor);
+                layerCtrl.GetLayerAtIndex(i).HandlesColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).HandlesColor);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {

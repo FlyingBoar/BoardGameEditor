@@ -24,8 +24,8 @@ namespace Grid
 
         [MenuItem("Window/Master Grid _%g")]
         static void Init()
-        {
-            MasterGrid masterGrid = (MasterGrid)EditorWindow.GetWindow(typeof(MasterGrid));
+        {            
+            MasterGrid masterGrid = (MasterGrid)GetWindow(typeof(MasterGrid));
             masterGrid.titleContent = new GUIContent("Master Grid");
             masterGrid.Show();
 
@@ -45,6 +45,8 @@ namespace Grid
             toolbarEntries.Add("Grid Visualizer");
             toolbarEntries.Add("Layer Controller");
             toolbarEntries.Add("Grid Scanner");
+
+            SceneView.onSceneGUIDelegate += DrawCall;
         }
 
         private void OnGUI()
@@ -65,6 +67,16 @@ namespace Grid
                     GridScannerWindow.Show();
                     break;
             }
+        }
+       
+        static void DrawCall(SceneView _sceneView)
+        {
+            GridVisualizer.DrawHandles();
+        }
+
+        private void OnDestroy()
+        {
+            SceneView.onSceneGUIDelegate -= DrawCall;
         }
     }
 }
