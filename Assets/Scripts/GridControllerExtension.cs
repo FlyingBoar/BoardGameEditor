@@ -77,9 +77,9 @@ namespace Grid
 
             int[] coordinates = new int[]
             {
-                _gridCtrl.SectorData.Radius.x != 0 ?(int)(spacePos.y/_gridCtrl.SectorData.Radius.x): 0,
-                _gridCtrl.SectorData.Radius.y != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.y): 0,
-                _gridCtrl.SectorData.Radius.z != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.z): 0,
+                _gridCtrl.SectorData.Radius.x != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Radius.x): 0,
+                _gridCtrl.SectorData.Radius.y != 0 ?(int)(spacePos.y/_gridCtrl.SectorData.Radius.y): 0,
+                _gridCtrl.SectorData.Radius.z != 0 ?(int)(spacePos.z/_gridCtrl.SectorData.Radius.z): 0,
             };
 
             return coordinates;

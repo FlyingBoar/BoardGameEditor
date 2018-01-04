@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class InputAdapter_Tester : MonoBehaviour{
 
@@ -10,7 +11,9 @@ public class InputAdapter_Tester : MonoBehaviour{
 
     public static Vector3 Test_FindMousePositionOnGridPlane()
     {
-        Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return Vector3.zero;
+
+        Vector3 currentMousePosition = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(Input.mousePosition);
 
         mouseProjection = Camera.main.ScreenPointToRay(Input.mousePosition);
         float distance;
