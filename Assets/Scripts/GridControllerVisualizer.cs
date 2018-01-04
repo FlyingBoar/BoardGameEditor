@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Grid
 {
@@ -12,7 +15,7 @@ namespace Grid
         Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
         public bool ShowGrid;
-        public Color GridGizmosColor;
+        public Color GridHandlesColor;
         public bool ShowLayersLink;
         public bool[] LinkArray;
         public bool ShowMousePosition;
@@ -25,7 +28,7 @@ namespace Grid
             gridCtrl = _gridCtrl;
         }
 
-        private void OnDrawGizmos()
+        public void DrawHandles()
         {
             List<Cell> cellList = gridCtrl.GetListOfCells();
             if (cellList.Count <= 0)
@@ -34,13 +37,13 @@ namespace Grid
             foreach (Cell cell in cellList)
             {
                 if (ShowGrid)
-                    DisplayCell(cell, GridGizmosColor);
+                    DisplayCell(cell, GridHandlesColor);
                 if (ShowLayersLink)
                 {
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])
-                            DisplayLayerLink(cell, MasterGrid.GridLayerCtrl.GetLayerAtIndex(i));
+                            DisplayLayerLink(cell, gridCtrl.LayerCtrl.GetLayerAtIndex(i));
                     }
                 }
             }
@@ -57,37 +60,37 @@ namespace Grid
                 return;
 
             if (_cell == SelectedCell)
-                Gizmos.color = Color.red;
+                Handles.color = Color.red;
             else
-                Gizmos.color = color;
+                Handles.color = color;
 
-            Gizmos.DrawWireCube(_cell.GetCenter(), _cell.GetRadius() * 2);
-            Gizmos.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
+            Handles.DrawWireCube(_cell.GetCenter(), _cell.GetRadius() * 2);
+            Handles.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
         }
 
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
-            Gizmos.color = _layer.GizmosColor;
+            Handles.color = _layer.HandlesColor;
             foreach (ILayeredLink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
             {
                 Vector3 line = link.GetPosition() - _cell.GetCenter();
-                Gizmos.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
+                Handles.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
             }
         }
 
         void DisplayMousePosition(Color _color)
         {
-            Gizmos.color = _color;
-            Gizmos.DrawSphere(MousePos, .5f);
+            Handles.color = _color;
+            Handles.DrawWireDisc(MousePos, Vector3.up, .5f);
         }
 
         void DisplayMouseCell(Color _color)
         {
-            Gizmos.color = _color;
+            Handles.color = _color;
             Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
-                Gizmos.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);
+                Handles.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);
         }
     }
 }

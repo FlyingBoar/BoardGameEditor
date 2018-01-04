@@ -7,15 +7,14 @@ namespace Grid
 {
     public class GridController
     {
-        public NodeNetworkData NetworkData;
         public SectorData SectorData;
 
         public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        GridControllerVisualizer gridVisualizer;
-        LayerController layerCtrl;
+        public GridControllerVisualizer GridVisualizer;
+        public LayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
@@ -23,8 +22,9 @@ namespace Grid
 
         public void Init(GridControllerVisualizer _gridVisualizer, LayerController _layerCtrl)
         {
-            gridVisualizer = _gridVisualizer;
-            layerCtrl = _layerCtrl;
+            GridVisualizer = _gridVisualizer;
+            LayerCtrl = _layerCtrl;
+            SectorData = new SectorData(SectorData.AreaShape.Square, Vector3.zero);
         }
 
         #region API
@@ -52,9 +52,9 @@ namespace Grid
             //Linking process
             if (autoLinkCells)
             {
-                for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
+                for (int i = 0; i < LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    LinkCells(layerCtrl.GetLayerAtIndex(i));
+                    LinkCells(LayerCtrl.GetLayerAtIndex(i));
                 }
             }
         }
@@ -66,13 +66,14 @@ namespace Grid
 
         public void Load()
         {
-            if(NetworkData != null)
-                LoadFromNetworkData(NetworkData);
+            Debug.LogWarning("Scollegata !");
+            //LoadFromNetworkData
         }
 
-        public void SaveCurrent()
+        public void Save()
         {
-            Save(GetListOfCells());
+            Debug.LogWarning("Scollegata !");
+            //SaveCurrent
         }
 
         /// <summary>
@@ -81,10 +82,10 @@ namespace Grid
         public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
         {
             //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
-            startingCell.Link(endingCell, layerCtrl.GetLayerAtIndex(0));
+            startingCell.Link(endingCell, LayerCtrl.GetLayerAtIndex(0));
 
             if (mutualLink)
-                endingCell.Link(startingCell, layerCtrl.GetLayerAtIndex(0));
+                endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
         }
         #region Getter
         public Cell GetCentralCell()
@@ -154,7 +155,7 @@ namespace Grid
             SectorData = GetListOfCells().Where(c => c != null).First().GetCellData().SectorData;
         }
 
-        NodeNetworkData Save(List<Cell> _cells)
+        NodeNetworkData SaveCurrent(List<Cell> _cells)
         {
             NodeNetworkData asset = null;
 

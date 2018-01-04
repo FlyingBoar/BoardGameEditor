@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -165,10 +165,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1101473308}
   - component: {fileID: 195073406}
-  - component: {fileID: 195073407}
-  - component: {fileID: 1101473309}
-  - component: {fileID: 195073408}
-  - component: {fileID: 195073405}
   m_Layer: 0
   m_Name: GridController
   m_TagString: Untagged
@@ -176,17 +172,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &195073405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 195073404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1977fc70a0b0c24aade7b9f1caf5cde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &195073406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,35 +182,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bd93dfc9825c98438fcde70afe5178e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridCtrl: {fileID: 1101473309}
---- !u!114 &195073407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 195073404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89b76cbf6b718ef478fd8cfe039b3718, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowGrid: 1
-  GridGizmosColor: {r: 0, g: 1, b: 0.048275948, a: 1}
-  ShowLayersLink: 1
-  LinkArray: 00
-  ShowMousePosition: 1
-  ShowMouseCell: 0
---- !u!114 &195073408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 195073404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 403dd45b3a935484db77a8f5b3385d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &310909082
@@ -297,12 +253,12 @@ Prefab:
         type: 2}
       propertyPath: TESTController
       value: 
-      objectReference: {fileID: 1101473309}
+      objectReference: {fileID: 0}
     - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
         type: 2}
       propertyPath: TESTGridController
       value: 
-      objectReference: {fileID: 1101473309}
+      objectReference: {fileID: 0}
     - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
         type: 2}
       propertyPath: InputTester
@@ -508,24 +464,6 @@ Transform:
   m_Father: {fileID: 1573547110}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1101473309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114007491828289930, guid: 907d00b0d8106634aaea465abc8361c9,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 195073404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3397c4d68f8a8b24fb3ee417b8e287aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkData: {fileID: 11400000, guid: a15d4a9dc6155ac428ad7afdd4652916, type: 2}
-  SectorData:
-    Shape: 1
-    Radius: {x: 1, y: 1e-45, z: 1}
-  Size: {x: 10, y: 1, z: 10}
-  ResolutionCorrection: {x: 0, y: 0, z: 0}
 --- !u!1 &1573547109
 GameObject:
   m_ObjectHideFlags: 0

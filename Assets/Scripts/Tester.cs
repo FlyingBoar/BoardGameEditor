@@ -15,7 +15,7 @@ public class Tester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
             GridCtrl.ClearGrid();
         if (Input.GetKeyDown(KeyCode.S))
-            GridCtrl.SaveCurrent();
+            GridCtrl.Save();
         if (Input.GetKeyDown(KeyCode.L))
             GridCtrl.Load();
     }
