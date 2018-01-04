@@ -19,7 +19,9 @@ namespace Grid
         public static GridScanner GridScanner { get; private set; }
         public static GridScannerWindow GridScannerWindow { get; private set; }
 
+        [SerializeField]
         static int selectedToolbarItem;
+        [SerializeField]
         static List<string> toolbarEntries = new List<string>();
 
         [MenuItem("Window/Master Grid _%g")]
@@ -41,10 +43,13 @@ namespace Grid
             LayerCtrlWindow = new LayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
-            toolbarEntries.Add("Grid Controller");
-            toolbarEntries.Add("Grid Visualizer");
-            toolbarEntries.Add("Layer Controller");
-            toolbarEntries.Add("Grid Scanner");
+            if(toolbarEntries.Count == 0)
+            {
+                toolbarEntries.Add("Grid Controller");
+                toolbarEntries.Add("Grid Visualizer");
+                toolbarEntries.Add("Layer Controller");
+                toolbarEntries.Add("Grid Scanner");
+            }
 
             SceneView.onSceneGUIDelegate += DrawCall;
         }
@@ -72,6 +77,7 @@ namespace Grid
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
+            //SceneView.RepaintAll();
         }
 
         private void OnDestroy()

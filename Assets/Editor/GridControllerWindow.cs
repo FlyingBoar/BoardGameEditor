@@ -99,10 +99,14 @@ namespace Grid
 
             if (GUILayout.Button("Save Grid"))
                 gridCtrl.Save();
+
+            GUILayout.Space(5);
+
             if (GUILayout.Button("Load Grid"))
                 gridCtrl.Load(gridData);
 
-            gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData));
+
+            gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData), false);
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();

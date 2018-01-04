@@ -22,6 +22,7 @@ namespace Grid
             else
                 AddLinkList(new List<Cell>(), _layer);
         }
+
         public CellData(AreaShape _shape, Vector3 _position, Vector3 _radius, Layer _layer, List<Cell> _nodes = null)
         {
             Sector.Shape = _shape;
@@ -34,6 +35,7 @@ namespace Grid
                 AddLinkList(new List<Cell>(), _layer);
         }
 
+        #region API
         public void AddLinkList(List<Cell> _nodes, Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
@@ -89,6 +91,7 @@ namespace Grid
                     return layeredLink.LinkedNodes;
             return null;
         }
+        #endregion
 
         internal void RemoveLayeredLink(Layer _layer)
         {
@@ -134,7 +137,4 @@ namespace Grid
             }
         }
     }
-
-
-
 }

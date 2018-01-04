@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Grid
 {
+    [System.Serializable]
     public class GridData : ScriptableObject
     {
         public CellData.SectorData SectorData;

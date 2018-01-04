@@ -31,11 +31,14 @@ namespace Grid
             gridCtrl = _ctrl;
             gridPosition = _gridPos;
         }
+
         public Cell(CellData _data)
         {
             cellData = _data;
         }
 
+        #region API
+        #region Getter and Setters
         public CellData GetCellData()
         {
             return cellData;
@@ -45,6 +48,7 @@ namespace Grid
         {
             cellData.Position = _position;
         }
+
         public Vector3 GetPosition()
         {
             if(!isGridEnbedded)
@@ -62,8 +66,8 @@ namespace Grid
         public Vector3 GetRadius()
         {
             return cellData.Sector.Radius;
-        }        
-
+        }
+        #endregion
         public List<Cell> GetNeighbourgs(Layer _layer)
         {
             return cellData.GetLayeredLink(_layer);
@@ -89,5 +93,6 @@ namespace Grid
             for (int i = 0; i < linkedNodes.Count; i++)
                 cellData.RemoveLink(linkedNodes[i], _layer);
         }
+        #endregion
     }
 }
