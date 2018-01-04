@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   ShowGrid: 1
   GridGizmosColor: {r: 0, g: 1, b: 0.048275948, a: 1}
   ShowLayersLink: 1
-  LinkArray: 00
+  LinkArray: 01
   ShowMousePosition: 1
   ShowMouseCell: 0
 --- !u!114 &195073408
@@ -445,7 +445,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4144781125812420, guid: 7a319e95efda5714498564a625f4fa50, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144781125812420, guid: 7a319e95efda5714498564a625f4fa50, type: 2}
       propertyPath: m_LocalPosition.z
@@ -471,26 +471,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.x
-      value: 3.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.z
-      value: 4.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 3.72
-      objectReference: {fileID: 0}
     - target: {fileID: 114817298323287628, guid: 7a319e95efda5714498564a625f4fa50,
         type: 2}
-      propertyPath: Layer.Name
-      value: Test
-      objectReference: {fileID: 0}
+      propertyPath: gridCtrl
+      value: 
+      objectReference: {fileID: 1101473309}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7a319e95efda5714498564a625f4fa50, type: 2}
   m_IsPrefabParent: 0
