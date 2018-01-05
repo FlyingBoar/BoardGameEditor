@@ -85,8 +85,6 @@ namespace Grid
 
         public void UnLinkAll(Layer _layer)
         {
-            if (!_layer.IsEditable)
-                return;        
             List<Cell> linkedNodes = cellData.GetLayeredLink(_layer);
             for (int i = 0; i < linkedNodes.Count; i++)
                 linkedNodes[i].UnLink(this, _layer);
