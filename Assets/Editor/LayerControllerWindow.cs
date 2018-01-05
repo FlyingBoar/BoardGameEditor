@@ -5,8 +5,7 @@ using UnityEditor;
 
 namespace Grid
 {
-    [CustomEditor(typeof(LayerController)), CanEditMultipleObjects]
-    public class LayerControllerEditor : Editor
+    public class LayerControllerWindow
     {
         LayerController layerCtrl;
         Texture addLayerTexture;
@@ -16,22 +15,19 @@ namespace Grid
         bool newLayerEditable;
         Color newLayerGizmosColor;
 
-        private void OnEnable()
+        Vector2 scrollPosition;
+
+        public LayerControllerWindow(LayerController _layerCtrl)
         {
-            layerCtrl = (LayerController)target;
+            layerCtrl = _layerCtrl;
             addLayerTexture = (Texture)EditorGUIUtility.Load("Plus.png");
             removeLayerTexture = (Texture)EditorGUIUtility.Load("Minus.png");
         }
 
-        public override void OnInspectorGUI()
+        public void Show()
         {
-            GUILayout.BeginVertical();
-
-            GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((LayerController)target), typeof(LayerController), false);
-            GUI.enabled = true;
-
-            GUILayout.Space(4);
+            GUILayout.BeginVertical("Box");
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Layer", EditorStyles.boldLabel);
@@ -50,7 +46,7 @@ namespace Grid
 
                 layerCtrl.GetLayerAtIndex(i).Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Name);
                 layerCtrl.GetLayerAtIndex(i).IsEditable = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).IsEditable);
-                layerCtrl.GetLayerAtIndex(i).GizmosColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).GizmosColor);
+                layerCtrl.GetLayerAtIndex(i).HandlesColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).HandlesColor);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {
@@ -72,7 +68,7 @@ namespace Grid
             newLayerEditable = EditorGUILayout.Toggle(newLayerEditable);
             newLayerGizmosColor = EditorGUILayout.ColorField(newLayerGizmosColor);
 
-            if(newLayerGizmosColor.a == 0)
+            if (newLayerGizmosColor.a == 0)
                 newLayerGizmosColor.a = 100;
 
             if (GUILayout.Button(addLayerTexture, GUILayout.Height(17), GUILayout.Width(20)))
@@ -90,7 +86,7 @@ namespace Grid
             }
 
             GUILayout.EndHorizontal();
-
+            GUILayout.EndScrollView();
             GUILayout.EndVertical();
         }
     }

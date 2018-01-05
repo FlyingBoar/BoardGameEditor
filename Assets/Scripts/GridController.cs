@@ -5,40 +5,27 @@ using UnityEngine;
 
 namespace Grid
 {
-    [ExecuteInEditMode]
-    [RequireComponent(typeof(LayerController), typeof(GridControllerVisualizer))]
-    public class GridController : MonoBehaviour
+    public class GridController
     {
-        public NodeNetworkData NetworkData;
-        public SectorData SectorData;
+        public CellData.SectorData SectorData;
 
+        public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        LayerController _layerCtrl;
-        public LayerController LayerCtrl
-        {
-            get
-            {
-                if (!_layerCtrl)
-                    _layerCtrl = GetComponent<LayerController>();
-
-                return _layerCtrl;
-            }
-        }
-        GridControllerVisualizer _gridVisualizer;
-        public GridControllerVisualizer GridVisualizer
-        {
-            get
-            {
-                if (!_gridVisualizer)
-                    _gridVisualizer = GetComponent<GridControllerVisualizer>();
-
-                return _gridVisualizer;
-            }
-        }
+        public GridControllerVisualizer GridVisualizer;
+        public LayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
+
+        public GridController() { }
+
+        public void Init(GridControllerVisualizer _gridVisualizer, LayerController _layerCtrl)
+        {
+            GridVisualizer = _gridVisualizer;
+            LayerCtrl = _layerCtrl;
+            SectorData = new CellData.SectorData();
+        }
 
         #region API
         public bool DoesGridExist()
@@ -77,15 +64,15 @@ namespace Grid
             CellsMatrix = null;
         }
 
-        public void Load()
+        public void Load(GridData _gridData)
         {
-            if(NetworkData != null)
-                LoadFromNetworkData(NetworkData);
+            LayerCtrl.LoadFromData(_gridData);
+            LoadFromNetworkData(_gridData);
         }
 
-        public void SaveCurrent()
+        public void Save(string _name)
         {
-            Save(GetListOfCells());
+            SaveCurrent(_name);
         }
 
         /// <summary>
@@ -102,7 +89,7 @@ namespace Grid
         #region Getter
         public Cell GetCentralCell()
         {
-            return this.GetCellFromPosition(transform.position);
+            return this.GetCellFromPosition(Origin);
         }
 
         public List<Cell> GetGridCorners()
@@ -151,45 +138,49 @@ namespace Grid
         #endregion
 
         #region GridData Management
-        void LoadFromNetworkData(NodeNetworkData _networkData)
+        void LoadFromNetworkData(GridData _gridData)
         {
-            if (_networkData == null)
+            if (_gridData == null)
             {
                 Debug.LogWarning("GridController -- No data to load !");
                 return;
             }
 
-            ClearGrid();
+            CellsMatrix = _gridData.CellsMatrix;
 
-            CellsMatrix = _networkData.CellsMatrix;
+            SectorData = _gridData.SectorData;
 
-            Size = _networkData.Size;
-            SectorData = GetListOfCells().Where(c => c != null).First().GetCellData().SectorData;
+            Size = _gridData.Size;
+            Origin = _gridData.Origin;
+            ResolutionCorrection = _gridData.ResolutionCorrection;
         }
 
-        NodeNetworkData Save(List<Cell> _cells)
+        GridData SaveCurrent(string _name = null)
         {
-            NodeNetworkData asset = null;
+            GridData newGridData = null;
 
-            List<CellData> cellsData = new List<CellData>();
-            foreach (Cell cell in _cells)
-            {
-                cellsData.Add(cell.GetCellData());
-            }
+            newGridData = ScriptableObject.CreateInstance<GridData>();
+            newGridData.CellsMatrix = CellsMatrix;
+            newGridData.Layers = LayerCtrl.Layers;
+            newGridData.Size = Size;
+            newGridData.Origin = Origin;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
+            newGridData.SectorData = SectorData;
 
-            asset = ScriptableObject.CreateInstance<NodeNetworkData>();
-            asset.CellsMatrix = CellsMatrix;
-            asset.Size = Size;
+            string assetName;
+            if (_name == null)
+                assetName = "NewGridData.asset";
+            else
+                assetName = _name + ".asset";
 
-            string assetName = "NodeNetworkData.asset";
-            asset.name = assetName;
+            newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
 
-            AssetDatabase.CreateAsset(asset, completePath);
+            AssetDatabase.CreateAsset(newGridData, completePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            return asset;
+            return newGridData;
         }
 
         string CheckFolder()
@@ -230,11 +221,7 @@ namespace Grid
 
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
-            NodeData nodeD = new NodeData(nodePos);
-            LinkData linkD = new LinkData();
-            SectorData sectorD = SectorData;
-
-            CellsMatrix[i, j, k] = new Cell(new CellData(nodeD, linkD, sectorD), this, new Vector3Int(i,j,k));
+            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this, new Vector3Int(i,j,k));
         }
 
         /// <summary>
@@ -279,7 +266,7 @@ namespace Grid
                         if (CellsMatrix[i, j, k] == null)
                             continue;
                         CellsMatrix[i, j, k].UnLinkAll(_layer);
-                        CellsMatrix[i, j, k].GetCellData().LinkData.RemoveLayeredLink(_layer);
+                        CellsMatrix[i, j, k].GetCellData().RemoveLayeredLink(_layer);
                     }
                 }
             }

@@ -4,22 +4,21 @@ using UnityEngine;
 
 namespace Grid
 {
-    [ExecuteInEditMode]
-    [RequireComponent(typeof(GridController))]
-    public class LayerController : MonoBehaviour
+    public class LayerController
     {
-        List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
+        [SerializeField]
+        internal List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
 
-        GridController _gridCtrl;
-        GridController gridCtrl
+        GridController gridCtrl;
+
+        public LayerController(GridController _gridCtrl)
         {
-            get
-            {
-                if (!_gridCtrl)
-                    _gridCtrl = GetComponent<GridController>();
+            gridCtrl = _gridCtrl;
+        }
 
-                return _gridCtrl;
-            }
+        internal void LoadFromData(GridData _gridData)
+        {
+            Layers = _gridData.Layers;
         }
 
         #region API

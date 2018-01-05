@@ -1,51 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Grid
 {
-    [RequireComponent(typeof(GridController))]
-    public class GridControllerVisualizer : MonoBehaviour
+    public class GridControllerVisualizer
     {
-        GridController _gridCtrl;
-        public GridController GridCtrl
-        {
-            get
-            {
-                if (!_gridCtrl)
-                    _gridCtrl = GetComponent<GridController>();
+        GridController gridCtrl;
 
-                return _gridCtrl;
-            }
-        }
         //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
-        Vector3 MousePos { get { return InputAdapter_Tester.Test_FindMousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
+        Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
-        public bool ShowGrid;
-        public Color GridGizmosColor;
-        public bool ShowLayersLink;
+        public bool ShowGrid = true;
+        public Color GridHandlesColor = Color.cyan;
+        public bool ShowLayersLink = true;
         public bool[] LinkArray;
         public bool ShowMousePosition;
         public bool ShowMouseCell;
         [HideInInspector]
         public Cell SelectedCell;
 
-        private void OnDrawGizmos()
+        public GridControllerVisualizer(GridController _gridCtrl)
         {
-            List<Cell> cellList = GridCtrl.GetListOfCells();
+            gridCtrl = _gridCtrl;
+        }
+
+        public void DrawHandles()
+        {
+            List<Cell> cellList = gridCtrl.GetListOfCells();
             if (cellList.Count <= 0)
                 return;
 
             foreach (Cell cell in cellList)
             {
                 if (ShowGrid)
-                    DisplayCell(cell, GridGizmosColor);
+                    DisplayCell(cell, GridHandlesColor);
                 if (ShowLayersLink)
                 {
+                    if (LinkArray == null)
+                        break;
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])
-                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(i));
+                            DisplayLayerLink(cell, gridCtrl.LayerCtrl.GetLayerAtIndex(i));
                     }
                 }
             }
@@ -62,37 +62,39 @@ namespace Grid
                 return;
 
             if (_cell == SelectedCell)
-                Gizmos.color = Color.red;
-            else
-                Gizmos.color = color;
+            {
+                Handles.color = Color.red;
+                Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 1.8f);
+            }
 
-            Gizmos.DrawWireCube(_cell.GetCenter(), _cell.GetRadius() * 2);
-            Gizmos.DrawWireCube(_cell.GetCenter(), (_cell.GetRadius() / 25f));
+            Handles.color = color;
+            Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 2);
+            Handles.DrawWireCube(_cell.GetPosition(), (_cell.GetRadius() / 25f));
         }
 
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
-            Gizmos.color = _layer.GizmosColor;
-            foreach (ILayeredLink link in _cell.GetCellData().LinkData.GetLayeredLink(_layer))
+            Handles.color = _layer.HandlesColor;
+            foreach (Cell link in _cell.GetCellData().GetLayeredLink(_layer))
             {
-                Vector3 line = link.GetPosition() - _cell.GetCenter();
-                Gizmos.DrawLine(_cell.GetCenter() + line * 0.25f, _cell.GetCenter() + line * .75f);
+                Vector3 line = link.GetPosition() - _cell.GetPosition();
+                Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }
 
         void DisplayMousePosition(Color _color)
         {
-            Gizmos.color = _color;
-            Gizmos.DrawSphere(MousePos, .5f);
+            Handles.color = _color;
+            Handles.DrawWireDisc(MousePos, Vector3.up, .5f);
         }
 
         void DisplayMouseCell(Color _color)
         {
-            Gizmos.color = _color;
-            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
+            Handles.color = _color;
+            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
-                Gizmos.DrawWireCube(_mouseCell.GetCenter(), _mouseCell.GetRadius() * 2.01f);
+                Handles.DrawWireCube(_mouseCell.GetPosition(), _mouseCell.GetRadius() * 2.01f);
         }
     }
 }
