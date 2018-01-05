@@ -14,5 +14,7 @@ namespace Grid
         public Vector3 ResolutionCorrection;
 
         public Cell[,,] CellsMatrix;
+
+        public List<Layer> Layers;
     }
 }
