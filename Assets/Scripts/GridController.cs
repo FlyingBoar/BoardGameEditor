@@ -66,6 +66,7 @@ namespace Grid
 
         public void Load(GridData _gridData)
         {
+            LayerCtrl.LoadFromData(_gridData);
             LoadFromNetworkData(_gridData);
         }
 
@@ -160,6 +161,7 @@ namespace Grid
 
             newGridData = ScriptableObject.CreateInstance<GridData>();
             newGridData.CellsMatrix = CellsMatrix;
+            newGridData.Layers = LayerCtrl.Layers;
             newGridData.Size = Size;
             newGridData.Origin = Origin;
             newGridData.ResolutionCorrection = ResolutionCorrection;

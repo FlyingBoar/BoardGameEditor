@@ -89,24 +89,32 @@ namespace Grid
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
+            GUILayout.Space(5);
+
             if (GUILayout.Button("Make Grid"))
             {
                 gridCtrl.CreateNewGrid();
                 //SaveCornersPosition();
+                SceneView.RepaintAll();
             }
 
             GUILayout.Space(5);
 
             if (GUILayout.Button("Save Grid"))
+            {
                 gridCtrl.Save();
+            }
 
             GUILayout.Space(5);
 
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load Grid"))
+            {
                 gridCtrl.Load(gridData);
-
+            }
 
             gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData), false);
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();

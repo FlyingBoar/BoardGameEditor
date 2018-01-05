@@ -29,6 +29,7 @@ namespace Grid
         {            
             MasterGrid masterGrid = (MasterGrid)GetWindow(typeof(MasterGrid));
             masterGrid.titleContent = new GUIContent("Master Grid");
+            masterGrid.minSize = new Vector2(600, 330);
             masterGrid.Show();
 
             GridCtrl = new GridController();
@@ -80,15 +81,12 @@ namespace Grid
                 case 3: // grid scanner
                     GridScannerWindow.Show();
                     break;
-            }
-
-
+            }         
         }
 
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
-            //SceneView.RepaintAll();
         }
 
         static void DebugGUI(SceneView _sceneView)

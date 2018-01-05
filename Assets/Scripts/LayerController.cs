@@ -6,13 +6,19 @@ namespace Grid
 {
     public class LayerController
     {
-        List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
+        [SerializeField]
+        internal List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
 
         GridController gridCtrl;
 
         public LayerController(GridController _gridCtrl)
         {
             gridCtrl = _gridCtrl;
+        }
+
+        internal void LoadFromData(GridData _gridData)
+        {
+            Layers = _gridData.Layers;
         }
 
         #region API
