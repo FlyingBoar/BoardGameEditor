@@ -83,8 +83,8 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Grid Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;
-            gridCtrl.Origin = EditorGUILayout.Vector3Field("Origin", gridCtrl.Origin);
             gridCtrl.Size = EditorGUILayout.Vector3IntField("Size", gridCtrl.Size);
+            gridCtrl.Origin = EditorGUILayout.Vector3Field("Origin", gridCtrl.Origin);
             gridCtrl.ResolutionCorrection = EditorGUILayout.Vector3Field("Resolution Correction", gridCtrl.ResolutionCorrection);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();

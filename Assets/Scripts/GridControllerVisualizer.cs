@@ -14,12 +14,12 @@ namespace Grid
         //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
         Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
 
-        public bool ShowGrid;
-        public Color GridHandlesColor;
-        public bool ShowLayersLink;
+        public bool ShowGrid = true;
+        public Color GridHandlesColor = Color.cyan;
+        public bool ShowLayersLink = true;
         public bool[] LinkArray;
-        public bool ShowMousePosition;
-        public bool ShowMouseCell;
+        public bool ShowMousePosition = true;
+        public bool ShowMouseCell = true;
         [HideInInspector]
         public Cell SelectedCell;
 
@@ -40,6 +40,8 @@ namespace Grid
                     DisplayCell(cell, GridHandlesColor);
                 if (ShowLayersLink)
                 {
+                    if (LinkArray == null)
+                        break;
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])

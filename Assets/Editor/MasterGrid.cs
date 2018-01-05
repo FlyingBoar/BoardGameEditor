@@ -52,6 +52,15 @@ namespace Grid
             }
 
             SceneView.onSceneGUIDelegate += DrawCall;
+            SceneView.onSceneGUIDelegate += MouseInteraction;
+            SceneView.onSceneGUIDelegate += DebugGUI;
+        }
+
+        private void OnEnable()
+        {
+            //Workaround
+            if(GridCtrl == null)
+                Init();
         }
 
         private void OnGUI()
@@ -72,17 +81,39 @@ namespace Grid
                     GridScannerWindow.Show();
                     break;
             }
+
+
         }
-       
+
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
             //SceneView.RepaintAll();
         }
 
+        static void DebugGUI(SceneView _sceneView)
+        {
+            Handles.BeginGUI();
+            GUILayout.BeginVertical();
+            GUILayout.Label(Event.current.mousePosition.ToString());
+            GUILayout.Label(GridInput.PointerPosition.ToString());
+            GUILayout.EndVertical();
+            Handles.EndGUI();
+        }
+
+        static void MouseInteraction(SceneView _sceneView)
+        {
+            if (_sceneView != SceneView.currentDrawingSceneView)
+                return;
+            if (Event.current.type == EventType.MouseDown)
+                GridVisualizer.SelectedCell = GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+        }
+
         private void OnDestroy()
         {
             SceneView.onSceneGUIDelegate -= DrawCall;
+            SceneView.onSceneGUIDelegate -= MouseInteraction;
+            SceneView.onSceneGUIDelegate -= DebugGUI;
         }
     }
 }
