@@ -58,7 +58,6 @@ namespace Grid
         /// <returns></returns>
         public static Vector3 GetPositionByCoordinates(this GridController _gridCtrl, int i, int j, int k)
         {
-
             Vector3 spacePos = new Vector3(
                 i * (_gridCtrl.SectorData.Diameter.x + _gridCtrl.ResolutionCorrection.x),
                 j * (_gridCtrl.SectorData.Diameter.y + _gridCtrl.ResolutionCorrection.y),
@@ -73,13 +72,14 @@ namespace Grid
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
         {
-            Vector3 spacePos = _position + _gridCtrl.SectorData.Radius - _gridCtrl.Origin - _gridCtrl.ResolutionCorrection;
+            Vector3 spacePos = _position + _gridCtrl.SectorData.Radius - _gridCtrl.Origin;
+            Vector3 normFactor = _gridCtrl.SectorData.Diameter + _gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
             {
-                _gridCtrl.SectorData.Radius.x != 0 ?(int)(spacePos.x/_gridCtrl.SectorData.Diameter.x): 0,
-                _gridCtrl.SectorData.Radius.y != 0 ?(int)(spacePos.y/_gridCtrl.SectorData.Diameter.y): 0,
-                _gridCtrl.SectorData.Radius.z != 0 ?(int)(spacePos.z/_gridCtrl.SectorData.Diameter.z): 0,
+                normFactor.x != 0 ?(int)(spacePos.x/normFactor.x): 0,
+                normFactor.y != 0 ?(int)(spacePos.y/normFactor.y): 0,
+                normFactor.z != 0 ?(int)(spacePos.z/normFactor.z): 0,
             };
 
             return coordinates;
