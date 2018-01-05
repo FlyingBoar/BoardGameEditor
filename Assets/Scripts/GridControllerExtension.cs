@@ -22,7 +22,7 @@ namespace Grid
             }
             catch(System.IndexOutOfRangeException e)
             {
-                Debug.LogErrorFormat(e.Message);
+                Debug.LogWarning(e.Message);
                 return null;
             }
         }
@@ -44,7 +44,7 @@ namespace Grid
             }
             catch (System.IndexOutOfRangeException e)
             {
-                Debug.LogErrorFormat(e.Message);
+                Debug.LogWarning(e.Message);
                 return null;
             }
         }
