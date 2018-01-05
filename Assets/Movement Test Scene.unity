@@ -332,7 +332,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4144781125812420, guid: 7a319e95efda5714498564a625f4fa50, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144781125812420, guid: 7a319e95efda5714498564a625f4fa50, type: 2}
       propertyPath: m_LocalPosition.z
@@ -358,25 +358,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.x
-      value: 3.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.z
-      value: 4.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 65501785185613280, guid: 7a319e95efda5714498564a625f4fa50,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 3.72
-      objectReference: {fileID: 0}
     - target: {fileID: 114817298323287628, guid: 7a319e95efda5714498564a625f4fa50,
         type: 2}
-      propertyPath: Layer.Name
-      value: Test
+      propertyPath: gridCtrl
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7a319e95efda5714498564a625f4fa50, type: 2}

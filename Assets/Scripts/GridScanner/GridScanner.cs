@@ -26,10 +26,11 @@ namespace Grid
 
                 if (hitCollider != null && hitCollider.ObjType == ObjectType.Obstacle)
                 {
-                    //for (int i = 0; i < hitCollider.Layers.Count; i++)
-                    //{
-                    //    cell.UnLinkAll();                   
-                    //}
+                    for (int i = 0; i < hitCollider.ScannerLayers.Count; i++)
+                    {
+                        if(hitCollider.ScannerLayers[i].Active)
+                            cell.UnLinkAll(hitCollider.ScannerLayers[i].Layer);
+                    }
                 }
             }
             GameObject.DestroyImmediate(scanCollider.gameObject);

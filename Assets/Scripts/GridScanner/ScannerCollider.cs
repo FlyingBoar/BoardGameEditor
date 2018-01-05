@@ -7,8 +7,7 @@ namespace Grid
     public class ScannerCollider : MonoBehaviour
     {
         public ObjectType ObjType;
-        public GridController gridCtrl;
-
+        public List<ScannerLayer> ScannerLayers;
         BoxCollider boxCollider;
 
         public void Init(CellData.SectorData _sectorData, ObjectType _objType)

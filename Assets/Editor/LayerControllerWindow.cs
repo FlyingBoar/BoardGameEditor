@@ -78,6 +78,14 @@ namespace Grid
                     Debug.LogWarning("Can't add a Layer without a name !");
                     return;
                 }
+                for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
+                {
+                    if(layerCtrl.GetLayerAtIndex(i).Name == newLayerName)
+                    {
+                        Debug.LogWarning("The name of the layer already exist !");
+                        return;
+                    }
+                }
                 layerCtrl.AddLayer(newLayerName, newLayerEditable, newLayerGizmosColor);
                 newLayerName = string.Empty;
                 newLayerEditable = false;
