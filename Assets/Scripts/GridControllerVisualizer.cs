@@ -18,8 +18,8 @@ namespace Grid
         public Color GridHandlesColor = Color.cyan;
         public bool ShowLayersLink = true;
         public bool[] LinkArray;
-        public bool ShowMousePosition = true;
-        public bool ShowMouseCell = true;
+        public bool ShowMousePosition;
+        public bool ShowMouseCell;
         [HideInInspector]
         public Cell SelectedCell;
 
