@@ -12,10 +12,9 @@ namespace Grid {
 
         public static Vector3 MousePositionOnGridPlane()
         {
-            Vector3 currentMousePosition = SceneView.currentDrawingSceneView.camera.ScreenToWorldPoint(Event.current.mousePosition);
-            currentMousePosition = -(currentMousePosition - (2 * SceneView.currentDrawingSceneView.camera.transform.position));
+            Vector3 currentMousePosition = Event.current.mousePosition;
 
-            mouseProjection = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(currentMousePosition);
+            mouseProjection = Camera.current.ScreenPointToRay(new Vector3(Event.current.mousePosition.x, SceneView.currentDrawingSceneView.camera.pixelHeight - Event.current.mousePosition.y));
             float distance;
             if (gridLevel.Raycast(mouseProjection, out distance))
                 currentMousePosition = mouseProjection.GetPoint(distance);
