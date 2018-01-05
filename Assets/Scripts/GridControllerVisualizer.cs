@@ -62,10 +62,12 @@ namespace Grid
                 return;
 
             if (_cell == SelectedCell)
+            {
                 Handles.color = Color.red;
-            else
-                Handles.color = color;
+                Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 1.8f);
+            }
 
+            Handles.color = color;
             Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 2);
             Handles.DrawWireCube(_cell.GetPosition(), (_cell.GetRadius() / 25f));
         }
