@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace Grid
 {
+    [System.Serializable]
     public class MasterGrid : EditorWindow
     {
         public static GridController GridCtrl { get; private set; }
@@ -26,10 +27,10 @@ namespace Grid
 
         [MenuItem("Window/Master Grid _%g")]
         static void Init()
-        {            
+        {
             MasterGrid masterGrid = (MasterGrid)GetWindow(typeof(MasterGrid));
             masterGrid.titleContent = new GUIContent("Master Grid");
-            masterGrid.minSize = new Vector2(600, 330);
+            masterGrid.minSize = new Vector2(600, 350);
             masterGrid.Show();
 
             GridCtrl = new GridController();
@@ -54,7 +55,6 @@ namespace Grid
 
             SceneView.onSceneGUIDelegate += DrawCall;
             SceneView.onSceneGUIDelegate += MouseInteraction;
-            SceneView.onSceneGUIDelegate += DebugGUI;
         }
 
         private void OnEnable()
@@ -89,16 +89,6 @@ namespace Grid
             GridVisualizer.DrawHandles();
         }
 
-        static void DebugGUI(SceneView _sceneView)
-        {
-            Handles.BeginGUI();
-            GUILayout.BeginVertical();
-            GUILayout.Label(Event.current.mousePosition.ToString());
-            GUILayout.Label(GridInput.PointerPosition.ToString());
-            GUILayout.EndVertical();
-            Handles.EndGUI();
-        }
-
         static void MouseInteraction(SceneView _sceneView)
         {
             if (_sceneView != SceneView.currentDrawingSceneView)
@@ -111,7 +101,6 @@ namespace Grid
         {
             SceneView.onSceneGUIDelegate -= DrawCall;
             SceneView.onSceneGUIDelegate -= MouseInteraction;
-            SceneView.onSceneGUIDelegate -= DebugGUI;
         }
     }
 }

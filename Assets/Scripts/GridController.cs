@@ -70,9 +70,9 @@ namespace Grid
             LoadFromNetworkData(_gridData);
         }
 
-        public void Save()
+        public void Save(string _name)
         {
-            SaveCurrent();
+            SaveCurrent(_name);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Grid
             ResolutionCorrection = _gridData.ResolutionCorrection;
         }
 
-        GridData SaveCurrent()
+        GridData SaveCurrent(string _name = null)
         {
             GridData newGridData = null;
 
@@ -167,7 +167,12 @@ namespace Grid
             newGridData.ResolutionCorrection = ResolutionCorrection;
             newGridData.SectorData = SectorData;
 
-            string assetName = "GridData.asset";
+            string assetName;
+            if (_name == null)
+                assetName = "NewGridData.asset";
+            else
+                assetName = _name + ".asset";
+
             newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
 

@@ -24,7 +24,11 @@ namespace Grid
             }
         }
 
+        [SerializeField]
         Vector2 scrollPosition;
+
+        [SerializeField]
+        string newDataName = "NewGridData";
 
         public GridControllerWindow(GridController _gridCtrl)
         {
@@ -100,10 +104,25 @@ namespace Grid
 
             GUILayout.Space(5);
 
-            if (GUILayout.Button("Save Grid"))
+            EditorGUILayout.BeginHorizontal();
+
+            if(!gridCtrl.DoesGridExist())
+                GUI.enabled = false;
+
+            if (GUILayout.Button("Save Grid", GUILayout.Height(40)))
             {
-                gridCtrl.Save();
+                gridCtrl.Save(newDataName);
             }
+
+            if (!gridCtrl.DoesGridExist())
+                GUI.enabled = true;
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label("Asset Name", EditorStyles.boldLabel);
+            newDataName = GUILayout.TextField(newDataName);
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(5);
 
