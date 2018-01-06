@@ -104,7 +104,7 @@ namespace Grid
                     if (GridCtrlWindow.SavedCell != null)
                     {
                         menu.AddItem(new GUIContent("Link Cell"), false, GridCtrlWindow.LinkSelectedCell);
-                        menu.AddItem(new GUIContent("Unlink Cell"), false, GridCtrlWindow.LinkSelectedCell);
+                        menu.AddItem(new GUIContent("Unlink Cell"), false, GridCtrlWindow.UnlinkSelectedCell);
                     }
                     menu.AddItem(new GUIContent("Deselect Cell"), false, GridCtrlWindow.DeselectCell);
                     menu.ShowAsContext();

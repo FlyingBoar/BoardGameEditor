@@ -86,6 +86,12 @@ namespace Grid
             if (mutualLink)
                 endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
         }
+
+        public void UnlinkCells(Cell startingCell, Cell endingCell)
+        {
+            startingCell.UnLink(endingCell, LayerCtrl.GetLayerAtIndex(0));
+            endingCell.UnLink(startingCell, LayerCtrl.GetLayerAtIndex(0));
+        }
         #region Getter
         public Cell GetCentralCell()
         {
