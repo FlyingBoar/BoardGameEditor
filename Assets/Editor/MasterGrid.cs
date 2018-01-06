@@ -94,7 +94,22 @@ namespace Grid
             if (_sceneView != SceneView.currentDrawingSceneView)
                 return;
             if (Event.current.type == EventType.MouseDown)
+            {
                 GridVisualizer.SelectedCell = GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+
+                if (Event.current.button == 1 && Event.current.control)
+                {
+                    GenericMenu menu = new GenericMenu();
+                    menu.AddItem(new GUIContent("Select Cell"), false, GridCtrlWindow.SelectCell);
+                    if (GridCtrlWindow.SavedCell != null)
+                    {
+                        menu.AddItem(new GUIContent("Link Cell"), false, GridCtrlWindow.LinkSelectedCell);
+                        menu.AddItem(new GUIContent("Unlink Cell"), false, GridCtrlWindow.LinkSelectedCell);
+                    }
+                    menu.AddItem(new GUIContent("Deselect Cell"), false, GridCtrlWindow.DeselectCell);
+                    menu.ShowAsContext();
+                }
+            }
         }
 
         private void OnDestroy()

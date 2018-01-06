@@ -13,15 +13,11 @@ namespace Grid
         List<Vector3> corners = new List<Vector3>();
         List<Vector3> handles = new List<Vector3>();
 
-        private Cell _selectedCell;
-        public Cell SelectedCell
+        private Cell _savedCell;
+        public Cell SavedCell
         {
-            get { return _selectedCell; }
-            private set
-            {
-                _selectedCell = value;
-                MasterGrid.GridVisualizer.SelectedCell = _selectedCell;
-            }
+            get { return _savedCell; }
+            private set { _savedCell = value; }
         }
 
         [SerializeField]
@@ -34,42 +30,6 @@ namespace Grid
         {
             gridCtrl = _gridCtrl;
         }
-
-        //private void OnSceneGUI()
-        //{
-        //    if (Event.current.type == EventType.MouseDown)
-        //    {
-        //        if (Event.current.button == 1)
-        //        {
-        //            GenericMenu menu = new GenericMenu();
-        //            menu.AddItem(new GUIContent("Select Cell"), false, SelectCell);
-        //            if (SelectedCell != null)
-        //                menu.AddItem(new GUIContent("Link Cell"), false, LinkSelectedCell);
-        //            menu.AddItem(new GUIContent("Deselect Cell"), false, DeselectCell);
-        //            menu.ShowAsContext();
-        //        }
-        //    }
-
-
-        //    if (corners.Count > 0)
-        //    {
-        //        EditorGUI.BeginChangeCheck();
-
-        //        for (int i = 0; i < corners.Count; i++)
-        //        {
-        //            handles[i] = Handles.PositionHandle(corners[i], Quaternion.identity);
-        //        }
-
-        //        if (EditorGUI.EndChangeCheck())
-        //        {
-        //            Undo.RecordObject(maker, "Corner Changed");
-        //            for (int i = 0; i < corners.Count; i++)
-        //            {
-        //                maker.CornersPos[i] = handles[i];
-        //            }
-        //        }
-        //    }
-        //}
 
         public void Show()
         {
@@ -139,23 +99,46 @@ namespace Grid
             EditorGUILayout.EndVertical();
         }
 
-        void SelectCell()
+        public void SelectCell()
         {
-            Debug.Log("Select Cell");
-            SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            SavedCell = MasterGrid.GridVisualizer.SelectedCell;
+            if (SavedCell == null)
+                Debug.LogError("No Cell saved.");
         }
 
-        void DeselectCell()
+        public void DeselectCell()
         {
-            Debug.Log("Deselect Cell");
-            SelectedCell = null;
+            SavedCell = null;
         }
         /// <summary>
         /// Chiama la funzione link della cella salvata in precedenza
         /// </summary>
-        void LinkSelectedCell()
+        public void LinkSelectedCell()
         {
-            gridCtrl.LinkCells(SelectedCell, gridCtrl.GetCellFromPosition(GridInput.PointerPosition));
+            if (MasterGrid.GridVisualizer.SelectedCell != null)
+            {
+                gridCtrl.LinkCells(SavedCell, MasterGrid.GridVisualizer.SelectedCell);
+                DeselectCell(); 
+            }
+            else
+            {
+                DeselectCell();
+                Debug.LogError("No Cell selected.");
+            }
+        }
+
+        public void UnlinkSelectedCell()
+        {
+            if (MasterGrid.GridVisualizer.SelectedCell != null)
+            {
+                gridCtrl.UnlinkCells(SavedCell, MasterGrid.GridVisualizer.SelectedCell);
+                DeselectCell();
+            }
+            else
+            {
+                DeselectCell();
+                Debug.LogError("No Cell selected.");
+            }
         }
 
         void SaveCornersPosition()
