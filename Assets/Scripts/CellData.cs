@@ -25,8 +25,10 @@ namespace Grid
 
         public CellData(AreaShape _shape, Vector3 _position, Vector3 _radius, Layer _layer, List<Cell> _nodes = null)
         {
-            Sector.Shape = _shape;
             Position = _position;
+
+            Sector = new SectorData();
+            Sector.Shape = _shape;
             Sector.Radius = _radius;
 
             if (_nodes != null)
