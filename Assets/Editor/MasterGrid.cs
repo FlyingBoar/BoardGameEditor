@@ -64,6 +64,11 @@ namespace Grid
                 Init();
         }
 
+        private void OnDisable()
+        {
+            Tools.hidden = false;
+        }
+
         private void OnGUI()
         {
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
@@ -82,12 +87,25 @@ namespace Grid
                     GridScannerWindow.Show();
                     break;
             }
+
+            KeyboardInput();
         }
 
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
             SceneView.RepaintAll();
+        }
+
+        static void KeyboardInput()
+        {
+            if(Event.current.keyCode == (KeyCode.Return))
+            {
+                if (selectedToolbarItem == 0)
+                    GridCtrl.CreateNewGrid();
+                else if (selectedToolbarItem == 3)
+                    GridScanner.ScanGrid(GridCtrl.GetListOfCells(), GridCtrl.SectorData);
+            }
         }
 
         static void MouseInteraction(SceneView _sceneView)
@@ -98,8 +116,18 @@ namespace Grid
             {
                 if (Event.current.button == 0)
                     OnLeftClick();
-                else if(Event.current.button == 1)
+                else if (Event.current.button == 1)
                     OnRightClick();
+            }
+            else if (Event.current.type == EventType.MouseDrag)
+            {
+                if (Event.current.button == 0 && Event.current.control)
+                    DragSelection();
+            }
+            else if (Event.current.type == EventType.MouseUp)
+            {
+                if(Event.current.button == 0)
+                    Tools.hidden = false;
             }
         }
 
@@ -108,9 +136,11 @@ namespace Grid
             if (GridCtrl == null)
                 return;
             Transform selectedTransf = Selection.activeTransform;
-            if(selectedTransf == null)
-                return;
-            selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+            if (selectedTransf != null)
+            {
+                Tools.hidden = true;
+                selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+            }
         }
 
         static void OnLeftClick()

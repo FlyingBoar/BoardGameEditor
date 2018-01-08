@@ -75,7 +75,7 @@ namespace Grid
 
         public void Link(Cell _node, Layer _layer)
         {
-            if(_layer.IsEditable)
+            //if(_layer.IsEditable)
                 cellData.AddLink(_node, _layer);
         }
 
