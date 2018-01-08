@@ -64,6 +64,11 @@ namespace Grid
                 Init();
         }
 
+        private void OnDisable()
+        {
+            Tools.hidden = false;
+        }
+
         private void OnGUI()
         {
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
@@ -111,8 +116,18 @@ namespace Grid
             {
                 if (Event.current.button == 0)
                     OnLeftClick();
-                else if(Event.current.button == 1)
+                else if (Event.current.button == 1)
                     OnRightClick();
+            }
+            else if (Event.current.type == EventType.MouseDrag)
+            {
+                if (Event.current.button == 0 && Event.current.control)
+                    DragSelection();
+            }
+            else if (Event.current.type == EventType.MouseUp)
+            {
+                if(Event.current.button == 0)
+                    Tools.hidden = false;
             }
         }
 
@@ -121,9 +136,11 @@ namespace Grid
             if (GridCtrl == null)
                 return;
             Transform selectedTransf = Selection.activeTransform;
-            if(selectedTransf == null)
-                return;
-            selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+            if (selectedTransf != null)
+            {
+                Tools.hidden = true;
+                selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+            }
         }
 
         static void OnLeftClick()
