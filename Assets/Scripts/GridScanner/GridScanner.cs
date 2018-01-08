@@ -28,7 +28,7 @@ namespace Grid
                 {
                     for (int i = 0; i < hitCollider.ScannerLayers.Count; i++)
                     {
-                        if(hitCollider.ScannerLayers[i].Layer.IsEditable && hitCollider.ScannerLayers[i].Active)
+                        if(hitCollider.ScannerLayers[i].Active)
                             cell.UnLinkAll(hitCollider.ScannerLayers[i].Layer);
                     }
                 }

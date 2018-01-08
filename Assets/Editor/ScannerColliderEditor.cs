@@ -38,8 +38,7 @@ namespace Grid
             }
             for (int i = 0; i < collider.ScannerLayers.Count; i++)
             {
-                if (MasterGrid.LayerCtrl.GetLayerAtIndex(i).IsEditable)
-                    collider.ScannerLayers[i].Active = EditorGUILayout.Toggle(collider.ScannerLayers[i].Layer.Name, collider.ScannerLayers[i].Active);
+                collider.ScannerLayers[i].Active = EditorGUILayout.Toggle(collider.ScannerLayers[i].Layer.Name, collider.ScannerLayers[i].Active);
             }
 
             EditorGUILayout.EndVertical();

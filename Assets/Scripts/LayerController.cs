@@ -7,7 +7,7 @@ namespace Grid
     public class LayerController
     {
         [SerializeField]
-        internal List<Layer> Layers = new List<Layer> { new Layer("Base", false) };
+        internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
 
         GridController gridCtrl;
 
@@ -44,9 +44,9 @@ namespace Grid
                 gridCtrl.LinkCells(_layer);
         }
 
-        public void AddLayer(string _name, bool _isEditable, Color _gizmoColor)
+        public void AddLayer(string _name, Color _gizmoColor)
         {
-            Layer newLayer = new Layer(_name, _isEditable, _gizmoColor);
+            Layer newLayer = new Layer(_name, _gizmoColor);
             if (!Layers.Contains(newLayer))
                 Layers.Add(newLayer);
 
