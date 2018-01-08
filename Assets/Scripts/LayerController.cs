@@ -16,12 +16,12 @@ namespace Grid
             gridCtrl = _gridCtrl;
         }
 
-        internal void LoadFromData(GridData _gridData)
+        #region API
+        public void LoadFromData(GridData _gridData)
         {
             Layers = _gridData.Layers;
         }
 
-        #region API
         public int GetNumberOfLayers()
         {
             return Layers.Count;

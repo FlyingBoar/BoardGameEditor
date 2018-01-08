@@ -66,7 +66,6 @@ namespace Grid
 
         public void Load(GridData _gridData)
         {
-            LayerCtrl.LoadFromData(_gridData);
             LoadFromNetworkData(_gridData);
         }
 
@@ -153,13 +152,12 @@ namespace Grid
                 return;
             }
 
-            CellsMatrix = _gridData.CellsMatrix;
-
             SectorData = _gridData.SectorData;
-
             Size = _gridData.Size;
             Origin = _gridData.Origin;
             ResolutionCorrection = _gridData.ResolutionCorrection;
+
+            CellsMatrix = _gridData.CellsMatrix;
         }
 
         GridData SaveCurrent(string _name = null)

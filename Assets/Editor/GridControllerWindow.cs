@@ -95,6 +95,7 @@ namespace Grid
             if (GUILayout.Button("Load Grid"))
             {
                 gridCtrl.Load(gridData);
+                MasterGrid.LayerCtrl.LoadFromData(gridData);
             }
 
             gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData), false);

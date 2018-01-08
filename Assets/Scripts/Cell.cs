@@ -8,10 +8,12 @@ namespace Grid
     [System.Serializable]
     public class Cell
     {
+        [SerializeField]
         CellData cellData;
 
         GridController gridCtrl;
-        Vector3Int gridPosition;
+        [SerializeField]
+        public Vector3Int GridCoordinates { get; private set; }
         Vector3 distance { get { return cellData.Sector.Diameter + gridCtrl.ResolutionCorrection; } }
         bool isGridEnbedded
         {
@@ -29,7 +31,7 @@ namespace Grid
         {
             cellData = _data;
             gridCtrl = _ctrl;
-            gridPosition = _gridPos;
+            GridCoordinates = _gridPos;
         }
 
         public Cell(CellData _data)
@@ -56,7 +58,7 @@ namespace Grid
             else
             {
                 Vector3 centerPos;
-                centerPos = new Vector3(gridPosition.x * distance.x, gridPosition.y * distance.y, gridPosition.z * distance.z);
+                centerPos = new Vector3(GridCoordinates.x * distance.x, GridCoordinates.y * distance.y, GridCoordinates.z * distance.z);
                 //centerPos -= cellData.SectorData.Radius;
                 centerPos += gridCtrl.Origin;
                 return centerPos;
