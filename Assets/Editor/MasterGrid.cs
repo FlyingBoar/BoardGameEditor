@@ -102,6 +102,16 @@ namespace Grid
             }
         }
 
+        static void DragSelection()
+        {
+            if (GridCtrl == null)
+                return;
+            Transform selectedTransf = Selection.activeTransform;
+            if(selectedTransf == null)
+                return;
+            selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+        }
+
         static void OnLeftClick()
         {
             if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
