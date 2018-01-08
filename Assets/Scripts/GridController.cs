@@ -92,6 +92,7 @@ namespace Grid
             startingCell.UnLink(endingCell, LayerCtrl.GetLayerAtIndex(0));
             endingCell.UnLink(startingCell, LayerCtrl.GetLayerAtIndex(0));
         }
+
         #region Getter
         public Cell GetCentralCell()
         {

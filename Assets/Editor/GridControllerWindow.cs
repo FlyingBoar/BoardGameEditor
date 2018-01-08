@@ -13,12 +13,18 @@ namespace Grid
         List<Vector3> corners = new List<Vector3>();
         List<Vector3> handles = new List<Vector3>();
 
-        private Cell _savedCell;
-        public Cell SavedCell
+        private Cell _selectedCell;
+        public Cell SelectedCell
         {
-            get { return _savedCell; }
-            private set { _savedCell = value; }
+            get { return _selectedCell; }
+            private set
+            {
+                _selectedCell = value;
+                gridCtrl.GridVisualizer.SelectedCell = _selectedCell;
+            }
         }
+
+        public MouseActions CurrentMouseAction { get; private set; }
 
         [SerializeField]
         Vector2 scrollPosition;
@@ -101,43 +107,46 @@ namespace Grid
 
         public void SelectCell()
         {
-            SavedCell = MasterGrid.GridVisualizer.SelectedCell;
-            if (SavedCell == null)
-                Debug.LogError("No Cell saved.");
+            SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
         }
 
         public void DeselectCell()
         {
-            SavedCell = null;
+            SelectedCell = null;
         }
+
+        public void StartMouseAction(MouseActions _mouseActions)
+        {
+            CurrentMouseAction = _mouseActions;
+            MasterGrid.GridVisualizer.ShowMouseAction = true;
+        }
+
+        public void EndMouseAction()
+        {
+            CurrentMouseAction = MouseActions.None;
+            MasterGrid.GridVisualizer.ShowMouseAction = false;
+        }
+
         /// <summary>
         /// Chiama la funzione link della cella salvata in precedenza
         /// </summary>
-        public void LinkSelectedCell()
+        public void LinkSelectedCell(bool _mutualLink = false)
         {
-            if (MasterGrid.GridVisualizer.SelectedCell != null)
+            if (SelectedCell != null)
             {
-                gridCtrl.LinkCells(SavedCell, MasterGrid.GridVisualizer.SelectedCell);
-                DeselectCell(); 
-            }
-            else
-            {
+                gridCtrl.LinkCells(SelectedCell, gridCtrl.GetCellFromPosition(GridInput.PointerPosition), _mutualLink);
+                EndMouseAction();
                 DeselectCell();
-                Debug.LogError("No Cell selected.");
             }
         }
 
         public void UnlinkSelectedCell()
         {
-            if (MasterGrid.GridVisualizer.SelectedCell != null)
+            if (SelectedCell != null)
             {
-                gridCtrl.UnlinkCells(SavedCell, MasterGrid.GridVisualizer.SelectedCell);
+                gridCtrl.UnlinkCells(SelectedCell, gridCtrl.GetCellFromPosition(GridInput.PointerPosition));
+                EndMouseAction();
                 DeselectCell();
-            }
-            else
-            {
-                DeselectCell();
-                Debug.LogError("No Cell selected.");
             }
         }
 
@@ -147,6 +156,11 @@ namespace Grid
             {
                 corners.Add(cell.GetPosition());
             }
+        }
+
+        public enum MouseActions
+        {
+            None, Link, LinkMutual, Unlink
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 namespace Grid
 {
@@ -22,6 +21,8 @@ namespace Grid
         public bool ShowMouseCell;
         [HideInInspector]
         public Cell SelectedCell;
+
+        public bool ShowMouseAction;
 
         public GridControllerVisualizer(GridController _gridCtrl)
         {
@@ -49,6 +50,9 @@ namespace Grid
                     }
                 }
             }
+
+            if(ShowMouseAction)
+                DisplayLinkPreview(Color.red);
 
             if (ShowMousePosition)
                 DisplayMousePosition(Color.red);
@@ -95,6 +99,15 @@ namespace Grid
 
             if(_mouseCell != null)
                 Handles.DrawWireCube(_mouseCell.GetPosition(), _mouseCell.GetRadius() * 2.01f);
+        }
+
+        void DisplayLinkPreview(Color _color)
+        {
+            Handles.color = _color;
+            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
+
+            if (_mouseCell != null)
+                Handles.DrawLine(SelectedCell.GetPosition(), _mouseCell.GetPosition());
         }
     }
 }

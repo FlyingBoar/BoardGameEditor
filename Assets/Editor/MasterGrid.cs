@@ -95,21 +95,41 @@ namespace Grid
                 return;
             if (Event.current.type == EventType.MouseDown)
             {
-                GridVisualizer.SelectedCell = GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
-
-                if (Event.current.button == 1 && Event.current.control)
+                if (Event.current.button == 0)
                 {
-                    GenericMenu menu = new GenericMenu();
-                    menu.AddItem(new GUIContent("Select Cell"), false, GridCtrlWindow.SelectCell);
-                    if (GridCtrlWindow.SavedCell != null)
-                    {
-                        menu.AddItem(new GUIContent("Link Cell"), false, GridCtrlWindow.LinkSelectedCell);
-                        menu.AddItem(new GUIContent("Unlink Cell"), false, GridCtrlWindow.UnlinkSelectedCell);
-                    }
-                    menu.AddItem(new GUIContent("Deselect Cell"), false, GridCtrlWindow.DeselectCell);
-                    menu.ShowAsContext();
+                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
+                        GridCtrlWindow.LinkSelectedCell();
+                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
+                        GridCtrlWindow.LinkSelectedCell(true);
+                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
+                        GridCtrlWindow.UnlinkSelectedCell();
+                    else
+                        OnLeftClick();
+                }
+                if (Event.current.button == 1 && GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition))
+                {
+                    OnRightClick();
                 }
             }
+        }
+        
+        static void OnLeftClick()
+        {
+            GridCtrlWindow.SelectCell();
+        }
+
+        static void OnRightClick()
+        {
+            GenericMenu menu = new GenericMenu();
+            if (GridCtrlWindow.SelectedCell != null)
+            {
+                menu.AddItem(new GUIContent("Link Cell"), false, () => {
+                    GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link);
+                });
+                menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
+                menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
+            }
+            menu.ShowAsContext();
         }
 
         private void OnDestroy()
