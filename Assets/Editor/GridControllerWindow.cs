@@ -65,7 +65,6 @@ namespace Grid
             {
                 gridCtrl.CreateNewGrid();
                 //SaveCornersPosition();
-                SceneView.RepaintAll();
             }
 
             GUILayout.Space(5);

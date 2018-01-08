@@ -12,7 +12,7 @@ namespace Grid
         Texture removeLayerTexture;
 
         string newLayerName;
-        bool newLayerEditable;
+        bool newLayerEditable = true;
         Color newLayerGizmosColor;
 
         Vector2 scrollPosition;
@@ -88,7 +88,7 @@ namespace Grid
                 }
                 layerCtrl.AddLayer(newLayerName, newLayerEditable, newLayerGizmosColor);
                 newLayerName = string.Empty;
-                newLayerEditable = false;
+                newLayerEditable = true;
                 newLayerGizmosColor = Color.black;
                 newLayerGizmosColor.a = 100;
             }

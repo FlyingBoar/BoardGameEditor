@@ -87,6 +87,7 @@ namespace Grid
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
+            SceneView.RepaintAll();
         }
 
         static void MouseInteraction(SceneView _sceneView)
@@ -97,7 +98,7 @@ namespace Grid
             {
                 if (Event.current.button == 0)
                     OnLeftClick();
-                if (Event.current.button == 1)
+                else if(Event.current.button == 1)
                     OnRightClick();
             }
         }
@@ -106,9 +107,9 @@ namespace Grid
         {
             if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
                 GridCtrlWindow.LinkSelectedCell();
-            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
+            else if(GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
                 GridCtrlWindow.LinkSelectedCell(true);
-            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
+            else if(GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
                 GridCtrlWindow.UnlinkSelectedCell();
             else
                 GridCtrlWindow.SelectCell();
@@ -121,14 +122,15 @@ namespace Grid
                 GenericMenu menu = new GenericMenu();
                 if (GridCtrlWindow.SelectedCell != null)
                 {
-                    menu.AddItem(new GUIContent("Link Cell"), false, () =>
-                    {
-                        GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link);
-                    });
+                    menu.AddItem(new GUIContent("Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link); });
                     menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
                     menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
                 }
                 menu.ShowAsContext();
+            }
+            else if (GridCtrlWindow.CurrentMouseAction != GridControllerWindow.MouseActions.None)
+            {
+                GridCtrlWindow.EndMouseAction();
             }
         }
 
