@@ -134,7 +134,11 @@ namespace Grid
             if (selectedTransf != null)
             {
                 Tools.hidden = true;
-                selectedTransf.position = GridCtrl.GetCellFromPosition(GridInput.PointerPosition).GetPosition();
+                Cell cell = GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+                if(cell != null)
+                    selectedTransf.position = cell.GetPosition();
+                else
+                    Tools.hidden = false;
             }
         }
 
