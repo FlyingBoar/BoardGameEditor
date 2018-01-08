@@ -123,9 +123,7 @@ namespace Grid
             GenericMenu menu = new GenericMenu();
             if (GridCtrlWindow.SelectedCell != null)
             {
-                menu.AddItem(new GUIContent("Link Cell"), false, () => {
-                    GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link);
-                });
+                menu.AddItem(new GUIContent("Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link); });
                 menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
                 menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
             }
