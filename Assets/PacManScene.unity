@@ -1149,6 +1149,48 @@ Transform:
   m_PrefabParentObject: {fileID: 4121036835941320, guid: 399d6efacaea43d4a904550325772494,
     type: 2}
   m_PrefabInternal: {fileID: 322455058}
+--- !u!1 &357249840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 357249842}
+  - component: {fileID: 357249841}
+  m_Layer: 0
+  m_Name: UBERAMANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &357249841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 357249840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452531271f7aa344a829c5d56850bba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Datas: {fileID: 11400000, guid: ee5d97da17976b3458f513f0cda0ef9d, type: 2}
+  PacMan: {fileID: 819741055}
+--- !u!4 &357249842
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 357249840}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.799555, y: -2.8875265, z: 8.854702}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &358486985
 Prefab:
   m_ObjectHideFlags: 0
@@ -3424,7 +3466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1265899772
 Transform:
   m_ObjectHideFlags: 0
