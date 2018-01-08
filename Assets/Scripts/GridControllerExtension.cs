@@ -62,7 +62,7 @@ namespace Grid
                 i * (_gridCtrl.SectorData.Diameter.x + _gridCtrl.ResolutionCorrection.x),
                 j * (_gridCtrl.SectorData.Diameter.y + _gridCtrl.ResolutionCorrection.y),
                 k * (_gridCtrl.SectorData.Diameter.z + _gridCtrl.ResolutionCorrection.z));
-            spacePos += _gridCtrl.SectorData.Radius + _gridCtrl.Origin;
+            spacePos += _gridCtrl.SectorData.Radius + _gridCtrl.ResolutionCorrection * .5f + _gridCtrl.Origin;
 
             return spacePos;
         }
@@ -70,9 +70,9 @@ namespace Grid
         //to the position vector
         //By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
         //the int cast on the normalized position
-        public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position)
+        public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position, bool isInRadius = false)
         {
-            Vector3 spacePos = _position + _gridCtrl.SectorData.Radius - _gridCtrl.Origin;
+            Vector3 spacePos = _position + _gridCtrl.SectorData.Radius + _gridCtrl.ResolutionCorrection*.5f - _gridCtrl.Origin;
             Vector3 normFactor = _gridCtrl.SectorData.Diameter + _gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
@@ -81,6 +81,17 @@ namespace Grid
                 normFactor.y != 0 ?(int)(spacePos.y/normFactor.y): 0,
                 normFactor.z != 0 ?(int)(spacePos.z/normFactor.z): 0,
             };
+
+            if(isInRadius)
+            {
+                Vector3 centerPos = _gridCtrl.GetPositionByCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+                if (Mathf.Abs(centerPos.x - _position.x) > _gridCtrl.SectorData.Radius.x)
+                    return null;
+                if (Mathf.Abs(centerPos.y - _position.y) > _gridCtrl.SectorData.Radius.y)
+                    return null;
+                if (Mathf.Abs(centerPos.z - _position.z) > _gridCtrl.SectorData.Radius.z)
+                    return null;
+            }
 
             return coordinates;
         }
