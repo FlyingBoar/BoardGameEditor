@@ -75,26 +75,21 @@ namespace Grid
 
         public void Link(Cell _node, Layer _layer)
         {
-            //if(_layer.IsEditable)
                 cellData.AddLink(_node, _layer);
         }
 
         public void UnLink(Cell _node, Layer _layer)
         {
-            if(_layer.IsEditable)
                 cellData.RemoveLink(_node, _layer);
         }
 
         public void UnLinkAll(Layer _layer)
         {
-            if (_layer.IsEditable)
-            {
-                List<Cell> linkedNodes = cellData.GetLayeredLink(_layer);
-                for (int i = 0; i < linkedNodes.Count; i++)
-                    linkedNodes[i].UnLink(this, _layer);
-                for (int i = 0; i < linkedNodes.Count; i++)
-                    cellData.RemoveLink(linkedNodes[i], _layer);
-            }
+            List<Cell> linkedNodes = cellData.GetLayeredLink(_layer);
+            for (int i = 0; i < linkedNodes.Count; i++)
+                linkedNodes[i].UnLink(this, _layer);
+            for (int i = 0; i < linkedNodes.Count; i++)
+                cellData.RemoveLink(linkedNodes[i], _layer);
         }
         #endregion
     }

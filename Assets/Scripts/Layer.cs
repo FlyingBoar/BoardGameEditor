@@ -8,7 +8,6 @@ namespace Grid
     public class Layer
     {
         public string Name;
-        public bool IsEditable;
         public Color HandlesColor;
 
         public Layer()
@@ -16,17 +15,15 @@ namespace Grid
             HandlesColor.a = 100;
         }
 
-        public Layer(string _name, bool _isEditable)
+        public Layer(string _name)
         {
             Name = _name;
-            IsEditable = _isEditable;
             HandlesColor.a = 100;
         }
 
-        public Layer(string _name, bool _isEditable, Color _gizmosColor)
+        public Layer(string _name, Color _gizmosColor)
         {
             Name = _name;
-            IsEditable = _isEditable;
             HandlesColor = _gizmosColor;
         }
 

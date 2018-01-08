@@ -12,7 +12,6 @@ namespace Grid
         Texture removeLayerTexture;
 
         string newLayerName;
-        bool newLayerEditable = true;
         Color newLayerGizmosColor;
 
         Vector2 scrollPosition;
@@ -45,7 +44,6 @@ namespace Grid
                     GUI.enabled = false;
 
                 layerCtrl.GetLayerAtIndex(i).Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Name);
-                layerCtrl.GetLayerAtIndex(i).IsEditable = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).IsEditable);
                 layerCtrl.GetLayerAtIndex(i).HandlesColor = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).HandlesColor);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
@@ -65,7 +63,6 @@ namespace Grid
 
             GUILayout.BeginHorizontal();
             newLayerName = EditorGUILayout.TextField(newLayerName);
-            newLayerEditable = EditorGUILayout.Toggle(newLayerEditable);
             newLayerGizmosColor = EditorGUILayout.ColorField(newLayerGizmosColor);
 
             if (newLayerGizmosColor.a == 0)
@@ -86,9 +83,8 @@ namespace Grid
                         return;
                     }
                 }
-                layerCtrl.AddLayer(newLayerName, newLayerEditable, newLayerGizmosColor);
+                layerCtrl.AddLayer(newLayerName, newLayerGizmosColor);
                 newLayerName = string.Empty;
-                newLayerEditable = true;
                 newLayerGizmosColor = Color.black;
                 newLayerGizmosColor.a = 100;
             }
