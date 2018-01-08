@@ -82,12 +82,25 @@ namespace Grid
                     GridScannerWindow.Show();
                     break;
             }
+
+            KeyboardInput();
         }
 
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
             SceneView.RepaintAll();
+        }
+
+        static void KeyboardInput()
+        {
+            if(Event.current.keyCode == (KeyCode.Return))
+            {
+                if (selectedToolbarItem == 0)
+                    GridCtrl.CreateNewGrid();
+                else if (selectedToolbarItem == 3)
+                    GridScanner.ScanGrid(GridCtrl.GetListOfCells(), GridCtrl.SectorData);
+            }
         }
 
         static void MouseInteraction(SceneView _sceneView)
