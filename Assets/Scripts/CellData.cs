@@ -73,9 +73,6 @@ namespace Grid
 
         public void RemoveLink(Cell _node, Layer _layer)
         {
-            if (!_layer.IsEditable)
-                return;
-
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
             {
                 if (layeredLink.Layer == _layer)

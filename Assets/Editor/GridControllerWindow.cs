@@ -65,7 +65,6 @@ namespace Grid
             {
                 gridCtrl.CreateNewGrid();
                 //SaveCornersPosition();
-                SceneView.RepaintAll();
             }
 
             GUILayout.Space(5);
@@ -132,9 +131,10 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell(bool _mutualLink = false)
         {
-            if (SelectedCell != null)
+            Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            if (SelectedCell != null && cellToLink != null)
             {
-                gridCtrl.LinkCells(SelectedCell, gridCtrl.GetCellFromPosition(GridInput.PointerPosition), _mutualLink);
+                gridCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
@@ -142,9 +142,10 @@ namespace Grid
 
         public void UnlinkSelectedCell()
         {
-            if (SelectedCell != null)
+            Cell cellToUnlink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            if (SelectedCell != null && cellToUnlink != null)
             {
-                gridCtrl.UnlinkCells(SelectedCell, gridCtrl.GetCellFromPosition(GridInput.PointerPosition));
+                gridCtrl.UnlinkCells(SelectedCell, cellToUnlink);
                 EndMouseAction();
                 DeselectCell();
             }
