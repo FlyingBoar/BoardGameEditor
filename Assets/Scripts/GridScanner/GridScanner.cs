@@ -1,48 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Grid
 {
     public class GridScanner
     {
-        ScannerCollider scanCollider;
-
         public GridScanner() { }
 
-        public void ScanGrid(List<Cell> _gridCells, CellData.SectorData _sectorData)
+        public void ScanGrid(GridController _gridCtrl)
         {
-            if (scanCollider == null)
-                CreateScannerCollider(_sectorData);
+            List<GridTags> gridTagsList = GameObject.FindObjectsOfType<GridTags>().ToList();
 
-            RaycastHit hit = new RaycastHit();
-
-            foreach (Cell cell in _gridCells)
+            foreach (GridTags tag in gridTagsList)
             {
-                scanCollider.transform.position = cell.GetPosition();
-
-                Physics.Raycast((cell.GetPosition() + new Vector3(0, 1000, 0)), -Vector3.up, out hit);
-                ScannerCollider hitCollider = hit.transform.gameObject.GetComponent<ScannerCollider>();
-
-                if (hitCollider != null && hitCollider.ObjType == ObjectType.Obstacle)
+                Cell cell = _gridCtrl.GetCellFromPosition(tag.transform.position);
+                foreach (ScannerLayer layer in tag.ScannerLayers)
                 {
-                    for (int i = 0; i < hitCollider.ScannerLayers.Count; i++)
-                    {
-                        if(hitCollider.ScannerLayers[i].Active)
-                            cell.UnLinkAll(hitCollider.ScannerLayers[i].Layer);
-                    }
-                }
+                    if(layer.Active)
+                        cell.UnLinkAll(layer.Layer);
+                }             
             }
-            GameObject.DestroyImmediate(scanCollider.gameObject);
-        }
-
-        void CreateScannerCollider(CellData.SectorData _sectorData)
-        {
-            GameObject scannerObj = new GameObject("ScannerCollider");
-            scanCollider = scannerObj.AddComponent<ScannerCollider>();
-            scanCollider.Init(_sectorData, ObjectType.Cell, new Vector3(_sectorData.Radius.x * 2, _sectorData.Radius.y * 2, _sectorData.Radius.z * 2));
         }
     }
-
-    public enum ObjectType { Cell, Ignorable, Obstacle }
 }

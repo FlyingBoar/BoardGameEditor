@@ -64,11 +64,6 @@ namespace Grid
                 Init();
         }
 
-        private void OnDisable()
-        {
-            Tools.hidden = false;
-        }
-
         private void OnGUI()
         {
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
@@ -88,7 +83,7 @@ namespace Grid
                     break;
             }
 
-            KeyboardInput();
+            //KeyboardInput();
         }
 
         static void DrawCall(SceneView _sceneView)
@@ -104,7 +99,7 @@ namespace Grid
                 if (selectedToolbarItem == 0)
                     GridCtrl.CreateNewGrid();
                 else if (selectedToolbarItem == 3)
-                    GridScanner.ScanGrid(GridCtrl.GetListOfCells(), GridCtrl.SectorData);
+                    GridScanner.ScanGrid(GridCtrl);
             }
         }
 

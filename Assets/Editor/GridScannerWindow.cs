@@ -21,7 +21,7 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
 
             if (GUILayout.Button("Scan Grid"))
-                scanner.ScanGrid(gridCtrl.GetListOfCells(), gridCtrl.SectorData);
+                scanner.ScanGrid(gridCtrl);
 
             EditorGUILayout.EndVertical();
         }

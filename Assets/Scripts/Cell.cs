@@ -75,21 +75,22 @@ namespace Grid
 
         public void Link(Cell _node, Layer _layer)
         {
-                cellData.AddLink(_node, _layer);
+            cellData.AddLink(_node, _layer);
         }
 
         public void UnLink(Cell _node, Layer _layer)
         {
-                cellData.RemoveLink(_node, _layer);
+            cellData.RemoveLink(_node, _layer);
         }
 
         public void UnLinkAll(Layer _layer)
         {
             List<Cell> linkedNodes = cellData.GetLayeredLink(_layer);
             for (int i = 0; i < linkedNodes.Count; i++)
+            {
                 linkedNodes[i].UnLink(this, _layer);
-            for (int i = 0; i < linkedNodes.Count; i++)
-                cellData.RemoveLink(linkedNodes[i], _layer);
+            }
+            linkedNodes.Clear();
         }
         #endregion
     }

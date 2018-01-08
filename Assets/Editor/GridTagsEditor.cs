@@ -5,22 +5,19 @@ using UnityEditor;
 
 namespace Grid
 {
-    [CustomEditor(typeof(ScannerCollider)), CanEditMultipleObjects]
-    public class ScannerColliderEditor : Editor
+    [CustomEditor(typeof(GridTags)), CanEditMultipleObjects]
+    public class GridTagsEditor : Editor
     {
-        ScannerCollider collider;
+        GridTags collider;
 
         private void OnEnable()
         {
-            collider = (ScannerCollider)target;
+            collider = (GridTags)target;
         }
 
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical();
-
-            collider.ObjType = (ObjectType)EditorGUILayout.EnumPopup("Object Type", collider.ObjType);
-
             EditorGUILayout.LabelField("Active Layers", EditorStyles.boldLabel);
 
             EditorGUI.indentLevel = 1;
