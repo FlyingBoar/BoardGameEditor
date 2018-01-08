@@ -15,7 +15,7 @@ namespace Grid
 
             foreach (GridTags tag in gridTagsList)
             {
-                Cell cell = _gridCtrl.GetCellFromPosition(tag.transform.position);
+                Cell cell = _gridCtrl.GetCellFromPosition(tag.transform.position, true);
                 foreach (ScannerLayer layer in tag.ScannerLayers)
                 {
                     if(layer.Active)

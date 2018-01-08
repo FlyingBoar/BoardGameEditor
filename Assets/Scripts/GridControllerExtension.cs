@@ -11,9 +11,11 @@ namespace Grid
         /// </summary>
         /// <param name="_position">la posizione da controllare</param>
         /// <returns>la cella che si trova in quella posizione</returns>
-        public static Cell GetCellFromPosition(this GridController _gridCtrl, Vector3 _position)
+        public static Cell GetCellFromPosition(this GridController _gridCtrl, Vector3 _position, bool isInRadius = false)
         {
-            int[] indexes = _gridCtrl.GetCoordinatesByPosition(_position);
+            int[] indexes = _gridCtrl.GetCoordinatesByPosition(_position, isInRadius);
+            if (indexes == null)
+                return null;
             Cell[,,] matrix = _gridCtrl.GetCellsMatrix();
 
             try

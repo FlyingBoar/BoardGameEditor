@@ -5,7 +5,8 @@ using UnityEditor;
 
 namespace Grid
 {
-    [CustomEditor(typeof(GridTags)), CanEditMultipleObjects]
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(GridTags))]
     public class GridTagsEditor : Editor
     {
         GridTags collider;

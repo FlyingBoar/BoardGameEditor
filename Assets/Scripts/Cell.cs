@@ -68,6 +68,7 @@ namespace Grid
             return cellData.Sector.Radius;
         }
         #endregion
+
         public List<Cell> GetNeighbourgs(Layer _layer)
         {
             return cellData.GetLayeredLink(_layer);
