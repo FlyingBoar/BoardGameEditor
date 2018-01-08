@@ -45,7 +45,7 @@ namespace Grid
             LayerCtrlWindow = new LayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
-            if(toolbarEntries.Count == 0)
+            if (toolbarEntries.Count == 0)
             {
                 toolbarEntries.Add("Grid Controller");
                 toolbarEntries.Add("Grid Visualizer");
@@ -60,7 +60,7 @@ namespace Grid
         private void OnEnable()
         {
             //Workaround
-            if(GridCtrl == null)
+            if (GridCtrl == null)
                 Init();
         }
 
@@ -81,7 +81,7 @@ namespace Grid
                 case 3: // grid scanner
                     GridScannerWindow.Show();
                     break;
-            }         
+            }
         }
 
         static void DrawCall(SceneView _sceneView)
@@ -96,40 +96,40 @@ namespace Grid
             if (Event.current.type == EventType.MouseDown)
             {
                 if (Event.current.button == 0)
-                {
-                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
-                        GridCtrlWindow.LinkSelectedCell();
-                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
-                        GridCtrlWindow.LinkSelectedCell(true);
-                    if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
-                        GridCtrlWindow.UnlinkSelectedCell();
-                    else
-                        OnLeftClick();
-                }
-                if (Event.current.button == 1 && GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition))
-                {
+                    OnLeftClick();
+                if (Event.current.button == 1)
                     OnRightClick();
-                }
             }
         }
-        
+
         static void OnLeftClick()
         {
-            GridCtrlWindow.SelectCell();
+            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
+                GridCtrlWindow.LinkSelectedCell();
+            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
+                GridCtrlWindow.LinkSelectedCell(true);
+            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
+                GridCtrlWindow.UnlinkSelectedCell();
+            else
+                GridCtrlWindow.SelectCell();
         }
 
         static void OnRightClick()
         {
-            GenericMenu menu = new GenericMenu();
-            if (GridCtrlWindow.SelectedCell != null)
+            if (GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition))
             {
-                menu.AddItem(new GUIContent("Link Cell"), false, () => {
-                    GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link);
-                });
-                menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
-                menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
+                GenericMenu menu = new GenericMenu();
+                if (GridCtrlWindow.SelectedCell != null)
+                {
+                    menu.AddItem(new GUIContent("Link Cell"), false, () =>
+                    {
+                        GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link);
+                    });
+                    menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
+                    menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
+                }
+                menu.ShowAsContext();
             }
-            menu.ShowAsContext();
         }
 
         private void OnDestroy()
