@@ -38,10 +38,13 @@ namespace Grid
             {
                 //if (targets.Length > 1)
                 //{
-                //    foreach (GridTags _target in targets)
-                //    {
+                //    bool tempBool = (targets[0] as GridTags).ScannerLayers[i].Active;
 
-                //    } 
+                //    for (int j = 1; j < targets.Length; j++)
+                //    {
+                //        if ((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
+                //            EditorGUI.showMixedValue = true;
+                //    }
                 //}
 
                 EditorGUI.BeginChangeCheck();
