@@ -24,7 +24,6 @@ namespace Grid
             }
             catch(System.IndexOutOfRangeException e)
             {
-                Debug.LogWarning(e.Message);
                 return null;
             }
         }
@@ -46,7 +45,6 @@ namespace Grid
             }
             catch (System.IndexOutOfRangeException e)
             {
-                Debug.LogWarning(e.Message);
                 return null;
             }
         }
@@ -64,7 +62,7 @@ namespace Grid
                 i * (_gridCtrl.SectorData.Diameter.x + _gridCtrl.ResolutionCorrection.x),
                 j * (_gridCtrl.SectorData.Diameter.y + _gridCtrl.ResolutionCorrection.y),
                 k * (_gridCtrl.SectorData.Diameter.z + _gridCtrl.ResolutionCorrection.z));
-            spacePos += _gridCtrl.SectorData.Radius + _gridCtrl.ResolutionCorrection * .5f + _gridCtrl.Origin;
+            spacePos += _gridCtrl.SectorData.Radius + _gridCtrl.ResolutionCorrection *.5f + _gridCtrl.Origin;
 
             return spacePos;
         }
@@ -74,7 +72,7 @@ namespace Grid
         //the int cast on the normalized position
         public static int[] GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position, bool isInRadius = false)
         {
-            Vector3 spacePos = _position + _gridCtrl.SectorData.Radius + _gridCtrl.ResolutionCorrection*.5f - _gridCtrl.Origin;
+            Vector3 spacePos = _position - _gridCtrl.Origin;
             Vector3 normFactor = _gridCtrl.SectorData.Diameter + _gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
