@@ -7,10 +7,10 @@ namespace Grid
 {
     public class GridVisualizerWindow
     {
-        LayerController layerCtrl;
+        GridLayerController layerCtrl;
         GridControllerVisualizer visualizer;
 
-        public GridVisualizerWindow(GridControllerVisualizer _visualizer, LayerController _layerCtrl)
+        public GridVisualizerWindow(GridControllerVisualizer _visualizer, GridLayerController _layerCtrl)
         {
             visualizer = _visualizer;
             layerCtrl = _layerCtrl;

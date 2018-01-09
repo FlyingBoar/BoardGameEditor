@@ -5,16 +5,16 @@ public class UBER_Manager : MonoBehaviour {
 
     public GridData Datas;
     GridController gridCtrl;
-    LayerController gridLayerCtrl;
+    GridLayerController gridLayerCtrl;
     public GameObject PacMan;
     Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
 
     private void Start()
     {
         gridCtrl = new GridController();
-        gridLayerCtrl = new LayerController(gridCtrl);
-        gridCtrl.Load(Datas);
-        gridLayerCtrl.Layers = Datas.Layers;
+        gridLayerCtrl = new GridLayerController(gridCtrl);
+        gridCtrl.CreateNewGrid(Datas);
+
     }
 
     private void Update()
@@ -38,8 +38,9 @@ public class UBER_Manager : MonoBehaviour {
             coordinatesOfNext -= Vector3Int.up;
         }
 
-        if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z)))
-            Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z));
+        // TODO : controllare
+        //if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z)))
+        //    Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z));
     }
 
     void Snap(Vector3 _target)

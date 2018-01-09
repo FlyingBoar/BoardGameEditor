@@ -10,6 +10,7 @@ namespace Grid
         public Vector3 Position;
         public SectorData Sector;
 
+        [SerializeField]
         List<LayeredLink> LayeredLinkedNodes = new List<LayeredLink>();
 
         public CellData(SectorData _sector, Vector3 _position, Layer _layer, List<Cell> _nodes = null)
@@ -46,14 +47,15 @@ namespace Grid
                 {
                     foreach (Cell node in _nodes)
                     {
-                        if (!layeredLink.LinkedNodes.Contains(node))
-                            layeredLink.LinkedNodes.Add(node);
+                        if (!layeredLink.LinkedNodes.Contains(node.GetPosition()))
+                            layeredLink.LinkedNodes.Add(node.GetPosition());
                     }
                     return;
                 }
             }
 
-            LayeredLinkedNodes.Add(new LayeredLink(_nodes, _layer));
+            LayeredLinkedNodes.Add(new LayeredLink(_layer));
+            AddLinkList(_nodes, _layer);
         }
 
         public void AddLink(Cell _node, Layer _layer)
@@ -62,13 +64,14 @@ namespace Grid
             {
                 if (layeredLink.Layer == _layer)
                 {
-                    if (!layeredLink.LinkedNodes.Contains(_node))
-                        layeredLink.LinkedNodes.Add(_node);
+                    if (!layeredLink.LinkedNodes.Contains(_node.GetPosition()))
+                        layeredLink.LinkedNodes.Add(_node.GetPosition());
                     return;
                 }
             }
 
-            LayeredLinkedNodes.Add(new LayeredLink(_node, _layer));
+            LayeredLinkedNodes.Add(new LayeredLink(_layer));
+            AddLink(_node, _layer);
         }
 
         public void RemoveLink(Cell _node, Layer _layer)
@@ -77,13 +80,13 @@ namespace Grid
             {
                 if (layeredLink.Layer == _layer)
                 {
-                    layeredLink.LinkedNodes.Remove(_node);
+                    layeredLink.LinkedNodes.Remove(_node.GetPosition());
                     return;
                 }
             }
         }
 
-        public List<Cell> GetLayeredLink(Layer _layer)
+        public List<Vector3> GetLayeredLink(Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
                 if (layeredLink.Layer == _layer)
@@ -120,19 +123,25 @@ namespace Grid
         [System.Serializable]
         struct LayeredLink
         {
-            public List<Cell> LinkedNodes;
             public Layer Layer;
+            public List<Vector3> LinkedNodes;
 
-            public LayeredLink(List<Cell> _linkedNodes, Layer _layer)
+            public LayeredLink(Layer _layer)
+            {
+                Layer = _layer;
+                LinkedNodes = new List<Vector3>();
+            }
+
+            public LayeredLink(List<Vector3> _linkedNodes, Layer _layer)
             {
                 Layer = _layer;
                 LinkedNodes = _linkedNodes;
             }
 
-            public LayeredLink(Cell _linkedNode, Layer _layer)
+            public LayeredLink(Vector3 _linkedNode, Layer _layer)
             {
                 Layer = _layer;
-                LinkedNodes = new List<Cell>() { _linkedNode };
+                LinkedNodes = new List<Vector3>() { _linkedNode };
             }
         }
     }

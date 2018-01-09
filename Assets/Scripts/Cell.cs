@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace Grid
 {
-    [System.Serializable]
     public class Cell
     {
-        [SerializeField]
         CellData cellData;
-
         GridController gridCtrl;
-        [SerializeField]
+
         public Vector3Int GridCoordinates { get; private set; }
         Vector3 distance { get { return cellData.Sector.Diameter + gridCtrl.ResolutionCorrection; } }
         bool isGridEnbedded
@@ -71,7 +68,7 @@ namespace Grid
         }
         #endregion
 
-        public List<Cell> GetNeighbourgs(Layer _layer)
+        public List<Vector3> GetNeighbourgs(Layer _layer)
         {
             return cellData.GetLayeredLink(_layer);
         }
@@ -88,10 +85,17 @@ namespace Grid
 
         public void UnLinkAll(Layer _layer)
         {
-            List<Cell> linkedNodes = cellData.GetLayeredLink(_layer);
+            List<Vector3> linkedNodes = cellData.GetLayeredLink(_layer);
+
+            List<Cell> relativeCell = new List<Cell>();
             for (int i = 0; i < linkedNodes.Count; i++)
             {
-                linkedNodes[i].UnLink(this, _layer);
+                relativeCell.Add(gridCtrl.GetCellFromPosition(linkedNodes[i]));
+            }
+
+            for (int i = 0; i < relativeCell.Count; i++)
+            {
+                relativeCell[i].UnLink(this, _layer);
             }
             linkedNodes.Clear();
         }

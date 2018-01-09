@@ -14,13 +14,13 @@ namespace Grid
         public Vector3 ResolutionCorrection;
 
         public GridControllerVisualizer GridVisualizer;
-        public LayerController LayerCtrl;
+        public GridLayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
         public GridController() { }
 
-        public void Init(GridControllerVisualizer _gridVisualizer, LayerController _layerCtrl)
+        public void Init(GridControllerVisualizer _gridVisualizer, GridLayerController _layerCtrl)
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
@@ -59,19 +59,64 @@ namespace Grid
             }
         }
 
+        public void CreateNewGrid(GridData _gridData)
+        {
+            if (_gridData == null)
+            {
+                Debug.LogWarning("No data to load !");
+                return;
+            }
+
+            ClearGrid();
+            SectorData = _gridData.SectorData;
+
+            Size = _gridData.Size;
+            Origin = _gridData.Origin;
+            ResolutionCorrection = _gridData.ResolutionCorrection;
+
+            CreateGridByData(_gridData.CellsData);
+        }
+
         public void ClearGrid()
         {
             CellsMatrix = null;
         }
 
-        public void Load(GridData _gridData)
+        public GridData Save(string _name = null)
         {
-            LoadFromNetworkData(_gridData);
-        }
+            GridData newGridData = null;
 
-        public void Save(string _name)
-        {
-            SaveCurrent(_name);
+            newGridData = ScriptableObject.CreateInstance<GridData>();
+            newGridData.Size = Size;
+            newGridData.Origin = Origin;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
+            newGridData.SectorData = SectorData;
+
+            newGridData.Layers = LayerCtrl.Layers;
+
+            List<CellData> cellsData = new List<CellData>();
+            foreach (Cell cell in CellsMatrix)
+            {
+                if (cell != null)
+                    cellsData.Add(cell.GetCellData());
+            }
+
+            newGridData.CellsData = cellsData;
+
+            string assetName;
+            if (_name == null)
+                assetName = "NewGridData.asset";
+            else
+                assetName = _name + ".asset";
+
+            newGridData.name = assetName;
+            string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
+
+            AssetDatabase.CreateAsset(newGridData, completePath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            return newGridData;
         }
 
         /// <summary>
@@ -143,51 +188,6 @@ namespace Grid
         #endregion
         #endregion
 
-        #region GridData Management
-        void LoadFromNetworkData(GridData _gridData)
-        {
-            if (_gridData == null)
-            {
-                Debug.LogWarning("GridController -- No data to load !");
-                return;
-            }
-
-            SectorData = _gridData.SectorData;
-            Size = _gridData.Size;
-            Origin = _gridData.Origin;
-            ResolutionCorrection = _gridData.ResolutionCorrection;
-
-            CellsMatrix = _gridData.CellsMatrix;
-        }
-
-        GridData SaveCurrent(string _name = null)
-        {
-            GridData newGridData = null;
-
-            newGridData = ScriptableObject.CreateInstance<GridData>();
-            newGridData.CellsMatrix = CellsMatrix;
-            newGridData.Layers = LayerCtrl.Layers;
-            newGridData.Size = Size;
-            newGridData.Origin = Origin;
-            newGridData.ResolutionCorrection = ResolutionCorrection;
-            newGridData.SectorData = SectorData;
-
-            string assetName;
-            if (_name == null)
-                assetName = "NewGridData.asset";
-            else
-                assetName = _name + ".asset";
-
-            newGridData.name = assetName;
-            string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
-
-            AssetDatabase.CreateAsset(newGridData, completePath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            return newGridData;
-        }
-
         string CheckFolder()
         {
 #if UNITY_EDITOR
@@ -197,7 +197,6 @@ namespace Grid
 
             return "Assets/GridData/";
         }
-        #endregion
 
         #region Grid Creation
         void CreateGrid()
@@ -218,6 +217,18 @@ namespace Grid
             }
         }
 
+        void CreateGridByData(List<CellData> _cellsData)
+        {
+            int maxSize = Size.x >= Size.y ? Size.x : Size.y;
+            maxSize = maxSize >= Size.z ? maxSize : Size.z;
+
+            CellsMatrix = new Cell[maxSize, maxSize, maxSize];
+            foreach (CellData cellData in _cellsData)
+            {
+                CreateCell(cellData);
+            }
+        }
+
         void CreateCell(int _i, int _j, int _k)
         {
             int i = _i < Size.x ? _i : 0;
@@ -227,6 +238,13 @@ namespace Grid
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
             CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this, new Vector3Int(i,j,k));
+        }
+
+        void CreateCell(CellData _cellData)
+        {
+            int[] coordinates = this.GetCoordinatesByPosition(_cellData.Position);
+
+            CellsMatrix[coordinates[0] - 1, coordinates[1] - 1, coordinates[2] - 1] = new Cell(_cellData, this, new Vector3Int(coordinates[0] - 1, coordinates[1] - 1, coordinates[2] - 1));
         }
 
         /// <summary>

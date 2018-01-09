@@ -94,7 +94,7 @@ namespace Grid
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load Grid"))
             {
-                gridCtrl.Load(gridData);
+                gridCtrl.CreateNewGrid(gridData);
                 MasterGrid.LayerCtrl.LoadFromData(gridData);
             }
 

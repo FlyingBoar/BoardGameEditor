@@ -13,7 +13,7 @@ namespace Grid
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        public Cell[,,] CellsMatrix;
+        public List<CellData> CellsData;
 
         public List<Layer> Layers;
     }

@@ -79,9 +79,10 @@ namespace Grid
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
             Handles.color = _layer.HandlesColor;
-            foreach (Cell link in _cell.GetCellData().GetLayeredLink(_layer))
+
+            foreach (Vector3 link in _cell.GetCellData().GetLayeredLink(_layer))
             {
-                Vector3 line = link.GetPosition() - _cell.GetPosition();
+                Vector3 line = link - _cell.GetPosition();
                 Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }

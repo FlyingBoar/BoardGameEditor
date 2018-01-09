@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class LayerController
+    public class GridLayerController
     {
         [SerializeField]
         internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
 
         GridController gridCtrl;
 
-        public LayerController(GridController _gridCtrl)
+        public GridLayerController(GridController _gridCtrl)
         {
             gridCtrl = _gridCtrl;
         }
