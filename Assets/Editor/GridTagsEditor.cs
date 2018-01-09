@@ -9,11 +9,11 @@ namespace Grid
     [CustomEditor(typeof(GridTags))]
     public class GridTagsEditor : Editor
     {
-        GridTags collider;
+        GridTags gridTags;
 
         private void OnEnable()
         {
-            collider = (GridTags)target;
+            gridTags = (GridTags)target;
         }
 
         public override void OnInspectorGUI()
@@ -26,17 +26,37 @@ namespace Grid
 
             if (MasterGrid.LayerCtrl == null)
                 return; //WORKAROUND !!
-            if (collider.ScannerLayers == null || collider.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
+            if (gridTags.ScannerLayers == null || gridTags.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
             {
-                collider.ScannerLayers = new List<ScannerLayer>();
+                gridTags.ScannerLayers = new List<ScannerLayer>();
                 for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    collider.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
+                    gridTags.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
                 }
             }
-            for (int i = 0; i < collider.ScannerLayers.Count; i++)
+            for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
             {
-                collider.ScannerLayers[i].Active = EditorGUILayout.Toggle(collider.ScannerLayers[i].Layer.Name, collider.ScannerLayers[i].Active);
+                //if (targets.Length > 1)
+                //{
+                //    foreach (GridTags _target in targets)
+                //    {
+
+                //    } 
+                //}
+
+                EditorGUI.BeginChangeCheck();
+                bool changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (targets.Length > 1)
+                    {
+                        foreach (GridTags script in targets)
+                        {
+                            script.ScannerLayers[i].Active = changedBool;
+                        }
+                    }
+                }
             }
 
             EditorGUILayout.EndVertical();
