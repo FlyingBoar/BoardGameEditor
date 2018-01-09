@@ -19,8 +19,7 @@ namespace Grid
                 if (gridCtrl != null)
                     return true;
                 else
-                    return
-                        false;
+                    return false;
             }
         }
 
@@ -54,10 +53,10 @@ namespace Grid
                 return cellData.Position;
             else
             {
-                Vector3 centerPos;
-                centerPos = new Vector3(GridCoordinates.x * distance.x, GridCoordinates.y * distance.y, GridCoordinates.z * distance.z);
+                Vector3 centerPos = gridCtrl.GetPositionByCoordinates(GridCoordinates[0], GridCoordinates[1], GridCoordinates[2]);
+                //centerPos = new Vector3(GridCoordinates.x * distance.x, GridCoordinates.y * distance.y, GridCoordinates.z * distance.z);
                 //centerPos -= cellData.SectorData.Radius;
-                centerPos += gridCtrl.Origin;
+                //centerPos += gridCtrl.Origin;
                 return centerPos;
             }
         }

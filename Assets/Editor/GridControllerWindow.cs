@@ -108,6 +108,7 @@ namespace Grid
         public void SelectCell()
         {
             SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            Debug.Log(SelectedCell.GridCoordinates);
         }
 
         public void DeselectCell()

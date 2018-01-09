@@ -30,7 +30,7 @@ namespace Grid
         {
             MasterGrid masterGrid = (MasterGrid)GetWindow(typeof(MasterGrid));
             masterGrid.titleContent = new GUIContent("Master Grid");
-            masterGrid.minSize = new Vector2(600, 350);
+            //masterGrid.minSize = new Vector2(600, 350);
             masterGrid.Show();
 
             GridCtrl = new GridController();
