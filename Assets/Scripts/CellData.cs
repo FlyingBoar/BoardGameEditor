@@ -9,10 +9,10 @@ namespace Grid
     {
         public Vector3 Position;
         public SectorData Sector;
-
+        [SerializeField]
         List<LayeredLink> LayeredLinkedNodes = new List<LayeredLink>();
 
-        public CellData(SectorData _sector, Vector3 _position, Layer _layer, List<Cell> _nodes = null)
+        public CellData(SectorData _sector, Vector3 _position, Layer _layer, List<Vector3Int> _nodes = null)
         {
             Sector = _sector;
             Position = _position;
@@ -20,10 +20,10 @@ namespace Grid
             if (_nodes != null)
                 AddLinkList(_nodes, _layer);
             else
-                AddLinkList(new List<Cell>(), _layer);
+                AddLinkList(new List<Vector3Int>(), _layer);
         }
 
-        public CellData(AreaShape _shape, Vector3 _position, Vector3 _radius, Layer _layer, List<Cell> _nodes = null)
+        public CellData(AreaShape _shape, Vector3 _position, Vector3 _radius, Layer _layer, List<Vector3Int> _nodes = null)
         {
             Position = _position;
 
@@ -34,20 +34,20 @@ namespace Grid
             if (_nodes != null)
                 AddLinkList(_nodes, _layer);
             else
-                AddLinkList(new List<Cell>(), _layer);
+                AddLinkList(new List<Vector3Int>(), _layer);
         }
 
         #region API
-        public void AddLinkList(List<Cell> _nodes, Layer _layer)
+        public void AddLinkList(List<Vector3Int> _nodes, Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
             {
                 if (layeredLink.Layer == _layer)
                 {
-                    foreach (Cell node in _nodes)
+                    foreach (Vector3Int node in _nodes)
                     {
-                        if (!layeredLink.LinkedNodes.Contains(node))
-                            layeredLink.LinkedNodes.Add(node);
+                        if (!layeredLink.LinkedCoordinates.Contains(node))
+                            layeredLink.LinkedCoordinates.Add(node);
                     }
                     return;
                 }
@@ -56,14 +56,14 @@ namespace Grid
             LayeredLinkedNodes.Add(new LayeredLink(_nodes, _layer));
         }
 
-        public void AddLink(Cell _node, Layer _layer)
+        public void AddLink(Vector3Int _node, Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
             {
                 if (layeredLink.Layer == _layer)
                 {
-                    if (!layeredLink.LinkedNodes.Contains(_node))
-                        layeredLink.LinkedNodes.Add(_node);
+                    if (!layeredLink.LinkedCoordinates.Contains(_node))
+                        layeredLink.LinkedCoordinates.Add(_node);
                     return;
                 }
             }
@@ -71,23 +71,23 @@ namespace Grid
             LayeredLinkedNodes.Add(new LayeredLink(_node, _layer));
         }
 
-        public void RemoveLink(Cell _node, Layer _layer)
+        public void RemoveLink(Vector3Int _node, Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
             {
                 if (layeredLink.Layer == _layer)
                 {
-                    layeredLink.LinkedNodes.Remove(_node);
+                    layeredLink.LinkedCoordinates.Remove(_node);
                     return;
                 }
             }
         }
 
-        public List<Cell> GetLayeredLink(Layer _layer)
+        public List<Vector3Int> GetLinkCoordinates(Layer _layer)
         {
             foreach (LayeredLink layeredLink in LayeredLinkedNodes)
                 if (layeredLink.Layer == _layer)
-                    return layeredLink.LinkedNodes;
+                    return layeredLink.LinkedCoordinates;
             return null;
         }
         #endregion
@@ -120,19 +120,19 @@ namespace Grid
         [System.Serializable]
         struct LayeredLink
         {
-            public List<Cell> LinkedNodes;
+            public List<Vector3Int> LinkedCoordinates;
             public Layer Layer;
 
-            public LayeredLink(List<Cell> _linkedNodes, Layer _layer)
+            public LayeredLink(List<Vector3Int> _linkedCoordinates, Layer _layer)
             {
                 Layer = _layer;
-                LinkedNodes = _linkedNodes;
+                LinkedCoordinates = _linkedCoordinates;
             }
 
-            public LayeredLink(Cell _linkedNode, Layer _layer)
+            public LayeredLink(Vector3Int _linkedCoordinate, Layer _layer)
             {
                 Layer = _layer;
-                LinkedNodes = new List<Cell>() { _linkedNode };
+                LinkedCoordinates = new List<Vector3Int>() { _linkedCoordinate };
             }
         }
     }

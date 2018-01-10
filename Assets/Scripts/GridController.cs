@@ -73,36 +73,22 @@ namespace Grid
         public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
         {
             //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
-            startingCell.Link(endingCell, LayerCtrl.GetLayerAtIndex(0));
+            startingCell.Link(endingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
 
             if (mutualLink)
-                endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
+                endingCell.Link(startingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
         }
 
         public void UnlinkCells(Cell startingCell, Cell endingCell)
         {
-            startingCell.UnLink(endingCell, LayerCtrl.GetLayerAtIndex(0));
-            endingCell.UnLink(startingCell, LayerCtrl.GetLayerAtIndex(0));
+            startingCell.UnLink(endingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
+            endingCell.UnLink(startingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
         }
 
         #region Getter
         public Cell GetCentralCell()
         {
             return this.GetCellFromPosition(Origin);
-        }
-
-        public List<Cell> GetGridCorners()
-        {
-            List<Cell> tempList = new List<Cell>();
-            tempList.Add(this.GetCellByCoordinates(0, 0, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x -1, 0, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x -1, Size.y - 1, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x - 1, Size.y - 1, Size.z - 1));
-            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, 0));
-            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, Size.z - 1));
-            tempList.Add(this.GetCellByCoordinates(0, 0, Size.z - 1));
-
-            return tempList;
         }
 
         /// <summary>
@@ -219,7 +205,7 @@ namespace Grid
 
             Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
 
-            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this, new Vector3Int(i,j,k));
+            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this);
         }
 
         /// <summary>
@@ -237,17 +223,17 @@ namespace Grid
                             continue;
 
                         //Link of the next and previus cell along all directions
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k], _layer);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k].GridCoordinates, _layer);
                         if (i < Size.x - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k], _layer);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k].GridCoordinates, _layer);
 
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k], _layer);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k].GridCoordinates, _layer);
                         if(j < Size.y - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k], _layer);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k].GridCoordinates, _layer);
 
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0], _layer);
+                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0].GridCoordinates, _layer);
                         if(k < Size.z - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1], _layer);
+                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1].GridCoordinates, _layer);
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace Grid
 {
     public class GridControllerVisualizer
     {
-        GridController gridCtrl;
+        public GridController GridCtrl;
 
         //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
         Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
@@ -26,12 +26,12 @@ namespace Grid
 
         public GridControllerVisualizer(GridController _gridCtrl)
         {
-            gridCtrl = _gridCtrl;
+            GridCtrl = _gridCtrl;
         }
 
         public void DrawHandles()
         {
-            List<Cell> cellList = gridCtrl.GetListOfCells();
+            List<Cell> cellList = GridCtrl.GetListOfCells();
             if (cellList.Count <= 0)
                 return;
 
@@ -46,7 +46,7 @@ namespace Grid
                     for (int i = 0; i < LinkArray.Length; i++)
                     {
                         if(LinkArray[i])
-                            DisplayLayerLink(cell, gridCtrl.LayerCtrl.GetLayerAtIndex(i));
+                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(i));
                     }
                 }
             }
@@ -79,9 +79,9 @@ namespace Grid
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
             Handles.color = _layer.HandlesColor;
-            foreach (Cell link in _cell.GetCellData().GetLayeredLink(_layer))
+            foreach (Vector3Int link in _cell.GetCellData().GetLinkCoordinates(_layer))
             {
-                Vector3 line = link.GetPosition() - _cell.GetPosition();
+                Vector3 line = GridCtrl.GetPositionByCoordinates(link.x, link.y, link.z) - _cell.GetPosition();
                 Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }
@@ -95,7 +95,7 @@ namespace Grid
         void DisplayMouseCell(Color _color)
         {
             Handles.color = _color;
-            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
+            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
 
             if(_mouseCell != null)
                 Handles.DrawWireCube(_mouseCell.GetPosition(), _mouseCell.GetRadius() * 2.01f);
@@ -104,7 +104,7 @@ namespace Grid
         void DisplayLinkPreview(Color _color)
         {
             Handles.color = _color;
-            Cell _mouseCell = gridCtrl.GetCellFromPosition(MousePos);
+            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
 
             if (_mouseCell != null)
                 Handles.DrawLine(SelectedCell.GetPosition(), _mouseCell.GetPosition());

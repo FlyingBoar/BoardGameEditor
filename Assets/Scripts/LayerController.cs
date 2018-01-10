@@ -6,7 +6,6 @@ namespace Grid
 {
     public class LayerController
     {
-        [SerializeField]
         internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
 
         GridController gridCtrl;

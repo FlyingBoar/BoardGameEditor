@@ -22,7 +22,7 @@ namespace Grid
             {
                 return matrix[indexes[0], indexes[1], indexes[2]];
             }
-            catch(System.IndexOutOfRangeException e)
+            catch(System.IndexOutOfRangeException)
             {
                 return null;
             }
@@ -43,7 +43,7 @@ namespace Grid
             {
                 return matrix[i, j, k];
             }
-            catch (System.IndexOutOfRangeException e)
+            catch (System.IndexOutOfRangeException)
             {
                 return null;
             }
