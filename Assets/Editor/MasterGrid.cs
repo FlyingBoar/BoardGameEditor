@@ -11,7 +11,7 @@ namespace Grid
         public static GridController GridCtrl { get; private set; }
         public static GridControllerWindow GridCtrlWindow { get; private set; }
 
-        public static GridControllerVisualizer GridVisualizer { get; private set; }
+        public static GridVisualizer GridVisualizer { get; private set; }
         public static GridVisualizerWindow GridVisualizerWindow { get; private set; }
 
         public static LayerController LayerCtrl { get; private set; }
@@ -34,7 +34,7 @@ namespace Grid
             masterGrid.Show();
 
             GridCtrl = new GridController();
-            GridVisualizer = new GridControllerVisualizer(GridCtrl);
+            GridVisualizer = new GridVisualizer(GridCtrl);
             LayerCtrl = new LayerController(GridCtrl);
             GridScanner = new GridScanner();
 

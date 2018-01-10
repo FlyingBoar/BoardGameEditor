@@ -14,6 +14,17 @@ namespace Grid
         private void OnEnable()
         {
             gridTags = (GridTags)target;
+
+            //if (targets.Length > 1)
+            //{
+            //    bool tempBool = (targets[0] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
+
+            //    for (int j = 1; j < targets.Length; j++)
+            //    {
+            //        if ((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
+            //            EditorGUI.showMixedValue = true;
+            //    }
+            //}
         }
 
         public override void OnInspectorGUI()
@@ -36,16 +47,7 @@ namespace Grid
             }
             for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
             {
-                //if (targets.Length > 1)
-                //{
-                //    bool tempBool = (targets[0] as GridTags).ScannerLayers[i].Active;
-
-                //    for (int j = 1; j < targets.Length; j++)
-                //    {
-                //        if ((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
-                //            EditorGUI.showMixedValue = true;
-                //    }
-                //}
+                
 
                 EditorGUI.BeginChangeCheck();
                 bool changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);

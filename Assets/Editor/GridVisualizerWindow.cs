@@ -8,9 +8,9 @@ namespace Grid
     public class GridVisualizerWindow
     {
         LayerController layerCtrl;
-        GridControllerVisualizer visualizer;
+        GridVisualizer visualizer;
 
-        public GridVisualizerWindow(GridControllerVisualizer _visualizer, LayerController _layerCtrl)
+        public GridVisualizerWindow(GridVisualizer _visualizer, LayerController _layerCtrl)
         {
             visualizer = _visualizer;
             layerCtrl = _layerCtrl;

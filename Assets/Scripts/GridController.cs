@@ -13,14 +13,14 @@ namespace Grid
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        public GridControllerVisualizer GridVisualizer;
+        public GridVisualizer GridVisualizer;
         public LayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
         public GridController() { }
 
-        public void Init(GridControllerVisualizer _gridVisualizer, LayerController _layerCtrl)
+        public void Init(GridVisualizer _gridVisualizer, LayerController _layerCtrl)
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
@@ -203,7 +203,7 @@ namespace Grid
             int j = _j < Size.y ? _j : 0;
             int k = _k < Size.z ? _k : 0;
 
-            Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
+            Vector3 nodePos = this.GetPositionByCoordinates(new Vector3Int(i, j, k));
 
             CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this);
         }

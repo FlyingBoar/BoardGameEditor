@@ -38,8 +38,8 @@ public class UBER_Manager : MonoBehaviour {
             coordinatesOfNext -= Vector3Int.up;
         }
 
-        if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z).GridCoordinates))
-            Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z));
+        if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext).GridCoordinates))
+            Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext));
     }
 
     void Snap(Vector3 _target)

@@ -7,7 +7,7 @@ namespace Grid
 {
     public class GridControllerWindow
     {
-        GridControllerVisualizer gridVisualizer;
+        GridVisualizer gridVisualizer;
         GridData gridData;
 
         private Cell _selectedCell;
@@ -29,7 +29,7 @@ namespace Grid
         [SerializeField]
         string newDataName = "NewGridData";
 
-        public GridControllerWindow(GridControllerVisualizer _gridVisualizer)
+        public GridControllerWindow(GridVisualizer _gridVisualizer)
         {
             gridVisualizer = _gridVisualizer;
         }
@@ -105,7 +105,6 @@ namespace Grid
         public void SelectCell()
         {
             SelectedCell = gridVisualizer.GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
-            Debug.Log(SelectedCell.GridCoordinates);
         }
 
         public void DeselectCell()

@@ -31,7 +31,7 @@ public class MovementController : MonoBehaviour {
                 List<Cell> cells = new List<Cell>();
                 foreach (var item in possibleMovement[j].GetNeighbourgs(TESTController.LayerCtrl.GetLayerAtIndex(0)))
                 {
-                    cells.Add(TESTController.GetCellByCoordinates(item.x, item.y, item.z));
+                    cells.Add(TESTController.GetCellByCoordinates(item));
                 }
                 tempList.AddRange(cells);
             }
