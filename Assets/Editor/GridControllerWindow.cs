@@ -7,8 +7,7 @@ namespace Grid
 {
     public class GridControllerWindow
     {
-        GridVisualizer gridVisualizer;
-        GridData gridData;
+        GridController gridCtrl;
 
         private Cell _selectedCell;
         public Cell SelectedCell
@@ -17,7 +16,7 @@ namespace Grid
             private set
             {
                 _selectedCell = value;
-                gridVisualizer.SelectedCell = _selectedCell;
+                gridCtrl.GridVisualizer.SelectedCell = _selectedCell;
             }
         }
 
@@ -29,9 +28,9 @@ namespace Grid
         [SerializeField]
         string newDataName = "NewGridData";
 
-        public GridControllerWindow(GridVisualizer _gridVisualizer)
+        public GridControllerWindow(GridController _gridCtrl)
         {
-            gridVisualizer = _gridVisualizer;
+            gridCtrl = _gridCtrl;
         }
 
         public void Show()
@@ -42,17 +41,17 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sector Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;
-            gridVisualizer.GridCtrl.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridVisualizer.GridCtrl.SectorData.Shape);
-            gridVisualizer.GridCtrl.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridVisualizer.GridCtrl.SectorData.Radius);
+            gridCtrl.GridData.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
+            gridCtrl.GridData.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Grid Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;
-            gridVisualizer.GridCtrl.Size = EditorGUILayout.Vector3IntField("Size", gridVisualizer.GridCtrl.Size);
-            gridVisualizer.GridCtrl.Origin = EditorGUILayout.Vector3Field("Origin", gridVisualizer.GridCtrl.Origin);
-            gridVisualizer.GridCtrl.ResolutionCorrection = EditorGUILayout.Vector3Field("Resolution Correction", gridVisualizer.GridCtrl.ResolutionCorrection);
+            gridCtrl.Size = EditorGUILayout.Vector3IntField("Size", gridCtrl.Size);
+            gridCtrl.Origin = EditorGUILayout.Vector3Field("Origin", gridCtrl.Origin);
+            gridCtrl.ResolutionCorrection = EditorGUILayout.Vector3Field("Resolution Correction", gridCtrl.ResolutionCorrection);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
@@ -60,7 +59,7 @@ namespace Grid
 
             if (GUILayout.Button("Make Grid"))
             {
-                gridVisualizer.GridCtrl.CreateNewGrid();
+                gridCtrl.CreateNewGrid();
                 //SaveCornersPosition();
             }
 
@@ -68,15 +67,15 @@ namespace Grid
 
             EditorGUILayout.BeginHorizontal();
 
-            if(!gridVisualizer.GridCtrl.DoesGridExist())
+            if(!gridCtrl.DoesGridExist())
                 GUI.enabled = false;
 
             if (GUILayout.Button("Save Grid", GUILayout.Height(40)))
             {
-                gridVisualizer.GridCtrl.Save(newDataName);
+                gridCtrl.Save(newDataName);
             }
 
-            if (!gridVisualizer.GridCtrl.DoesGridExist())
+            if (!gridCtrl.DoesGridExist())
                 GUI.enabled = true;
 
             EditorGUILayout.BeginVertical();
@@ -91,11 +90,11 @@ namespace Grid
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load Grid"))
             {
-                gridVisualizer.GridCtrl.Load(gridData);
-                MasterGrid.LayerCtrl.LoadFromData(gridData);
+                gridCtrl.Load(gridCtrl.GridData);
+                MasterGrid.LayerCtrl.LoadFromData(gridCtrl.GridData);
             }
 
-            gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData), false);
+            gridCtrl.GridData = (GridData)EditorGUILayout.ObjectField(gridCtrl.GridData, typeof(GridData), false);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();
@@ -104,7 +103,7 @@ namespace Grid
 
         public void SelectCell()
         {
-            SelectedCell = gridVisualizer.GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
         }
 
         public void DeselectCell()
@@ -129,10 +128,10 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell(bool _mutualLink = false)
         {
-            Cell cellToLink = gridVisualizer.GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToLink != null)
             {
-                gridVisualizer.GridCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
+                gridCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
@@ -140,10 +139,10 @@ namespace Grid
 
         public void UnlinkSelectedCell()
         {
-            Cell cellToUnlink = gridVisualizer.GridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            Cell cellToUnlink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToUnlink != null)
             {
-                gridVisualizer.GridCtrl.UnlinkCells(SelectedCell, cellToUnlink);
+                gridCtrl.UnlinkCells(SelectedCell, cellToUnlink);
                 EndMouseAction();
                 DeselectCell();
             }

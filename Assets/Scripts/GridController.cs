@@ -7,7 +7,8 @@ namespace Grid
 {
     public class GridController
     {
-        public CellData.SectorData SectorData;
+        public GridData GridData;
+        public CellData.SectorData SectorData { get { return GridData.SectorData; } }
 
         public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
@@ -24,7 +25,7 @@ namespace Grid
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
-            SectorData = new CellData.SectorData();
+            GridData = new GridData();
         }
 
         #region API
@@ -131,7 +132,7 @@ namespace Grid
                 return;
             }
 
-            SectorData = _gridData.SectorData;
+            GridData = _gridData;
             Size = _gridData.Size;
             Origin = _gridData.Origin;
             ResolutionCorrection = _gridData.ResolutionCorrection;

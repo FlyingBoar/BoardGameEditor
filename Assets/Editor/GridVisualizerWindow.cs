@@ -7,13 +7,11 @@ namespace Grid
 {
     public class GridVisualizerWindow
     {
-        LayerController layerCtrl;
         GridVisualizer visualizer;
 
-        public GridVisualizerWindow(GridVisualizer _visualizer, LayerController _layerCtrl)
+        public GridVisualizerWindow(GridVisualizer _visualizer)
         {
             visualizer = _visualizer;
-            layerCtrl = _layerCtrl;
         }
 
         public void Show()
@@ -34,13 +32,13 @@ namespace Grid
             if (visualizer.ShowLayersLink)
             {
                 EditorGUI.indentLevel = 1;
-                if (visualizer.LinkArray == null || visualizer.LinkArray.Length != layerCtrl.GetNumberOfLayers())
+                if (visualizer.LinkArray == null || visualizer.LinkArray.Length != visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers())
                 {
-                    visualizer.LinkArray = new bool[layerCtrl.GetNumberOfLayers()];
+                    visualizer.LinkArray = new bool[visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers()];
                 }
-                for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
+                for (int i = 0; i < visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
+                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
                 }
 
                 EditorGUI.indentLevel = 0;

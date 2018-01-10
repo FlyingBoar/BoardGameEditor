@@ -47,8 +47,6 @@ namespace Grid
             }
             for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
             {
-                
-
                 EditorGUI.BeginChangeCheck();
                 bool changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);
 

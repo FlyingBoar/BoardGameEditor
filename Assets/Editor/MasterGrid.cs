@@ -40,8 +40,8 @@ namespace Grid
 
             GridCtrl.Init(GridVisualizer, LayerCtrl);
 
-            GridCtrlWindow = new GridControllerWindow(GridVisualizer);
-            GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer, LayerCtrl);
+            GridCtrlWindow = new GridControllerWindow(GridCtrl);
+            GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer);
             LayerCtrlWindow = new LayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
