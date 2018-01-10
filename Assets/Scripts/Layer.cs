@@ -29,12 +29,18 @@ namespace Grid
 
         public static bool operator ==(Layer l1, Layer l2)
         {
-            return l1.Equals(l2);
+            if (l1.Name == l2.Name)
+                return true;
+            else
+                return false;
         }
 
         public static bool operator !=(Layer l1, Layer l2)
         {
-            return !(l1 == l2);
+            if (l1.Name == l2.Name)
+                return false;
+            else
+                return true;
         }
 
         public override bool Equals(object obj)

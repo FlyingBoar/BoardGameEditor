@@ -85,7 +85,8 @@ namespace Grid
 
         public void Link(Vector3Int _node, Layer _layer)
         {
-            cellData.AddLink(_node, _layer);
+            if(_node != GridCoordinates)
+                cellData.AddLink(_node, _layer);
         }
 
         public void UnLink(Vector3Int _node, Layer _layer)

@@ -40,7 +40,7 @@ namespace Grid
                 Layers.Add(_layer);
 
             if(gridCtrl.DoesGridExist())
-                gridCtrl.LinkCells(_layer);
+                LinkAllCells(_layer);
         }
 
         public void AddLayer(string _name, Color _gizmoColor)
@@ -50,7 +50,7 @@ namespace Grid
                 Layers.Add(newLayer);
 
             if (gridCtrl.DoesGridExist())
-                gridCtrl.LinkCells(newLayer);
+                LinkAllCells(newLayer);
         }
 
         public void RemoveLayer(Layer _layer)
@@ -58,7 +58,69 @@ namespace Grid
             Layers.Remove(_layer);
 
             if (gridCtrl.DoesGridExist())
-                gridCtrl.RemoveLinks(_layer);
+                RemoveAllLinks(_layer);
+        }
+
+        public void LinkCells(Cell _cellOrigin, List<Vector3Int> _cellsCoordinates, Layer _layer, bool _mutualLink = false)
+        {
+            foreach (Vector3Int _coordinate in _cellsCoordinates)
+            {
+                _cellOrigin.Link(_coordinate, _layer);
+                if(_mutualLink)
+                    gridCtrl.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
+            }
+        }
+
+        /// <summary>
+        /// Crea i collegamenti alle celle
+        /// </summary>
+        internal void LinkAllCells(Layer _layer)
+        {
+            Cell[,,] cellsMatrix = gridCtrl.GetCellsMatrix();
+
+            for (int i = 0; i < cellsMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < cellsMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < cellsMatrix.GetLength(2); k++)
+                    {
+                        if (cellsMatrix[i, j, k] == null)
+                            continue;
+
+                        //Link of the next and previus cell along all directions
+                        cellsMatrix[i, j, k].Link(cellsMatrix[i != 0 ? i - 1 : 0, j, k].GridCoordinates, _layer);
+                        if (i < gridCtrl.Size.x - 1)
+                            cellsMatrix[i, j, k].Link(cellsMatrix[i + 1, j, k].GridCoordinates, _layer);
+
+                        cellsMatrix[i, j, k].Link(cellsMatrix[i, j != 0 ? j - 1 : 0, k].GridCoordinates, _layer);
+                        if (j < gridCtrl.Size.y - 1)
+                            cellsMatrix[i, j, k].Link(cellsMatrix[i, j + 1, k].GridCoordinates, _layer);
+
+                        cellsMatrix[i, j, k].Link(cellsMatrix[i, j, k != 0 ? k - 1 : 0].GridCoordinates, _layer);
+                        if (k < gridCtrl.Size.z - 1)
+                            cellsMatrix[i, j, k].Link(cellsMatrix[i, j, k + 1].GridCoordinates, _layer);
+                    }
+                }
+            }
+        }
+
+        internal void RemoveAllLinks(Layer _layer)
+        {
+            Cell[,,] cellsMatrix = gridCtrl.GetCellsMatrix();
+
+            for (int i = 0; i < cellsMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < cellsMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < cellsMatrix.GetLength(2); k++)
+                    {
+                        if (cellsMatrix[i, j, k] == null)
+                            continue;
+                        cellsMatrix[i, j, k].UnLinkAll(_layer);
+                        cellsMatrix[i, j, k].GetCellData().RemoveLayeredLink(_layer);
+                    }
+                }
+            }
         }
         #endregion
     }

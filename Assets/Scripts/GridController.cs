@@ -49,7 +49,7 @@ namespace Grid
             {
                 for (int i = 0; i < LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    LinkCells(LayerCtrl.GetLayerAtIndex(i));
+                    LayerCtrl.LinkAllCells(LayerCtrl.GetLayerAtIndex(i));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace Grid
         {
             List<Cell> cellsList = new List<Cell>();
 
-            if(CellsMatrix != null)
+            if (CellsMatrix != null)
             {
                 for (int i = 0; i < CellsMatrix.GetLength(0); i++)
                     for (int j = 0; j < CellsMatrix.GetLength(1); j++)
@@ -141,19 +141,31 @@ namespace Grid
             Origin = GridData.Origin;
             ResolutionCorrection = GridData.ResolutionCorrection;
 
-            CellsMatrix = GridData.CellsMatrix;
+            
+            LayerCtrl.LoadFromData(GridData);
+            CreateNewGrid(false);
+
+            foreach (CellData _data in GridData.GetCellDatas())
+            {
+                Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_data.Position);
+                Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_data, this);
+                foreach (var item in _data.GetLayeredLinks())
+                {
+                    LayerCtrl.LinkCells(_newCell, _data.GetLinkCoordinates(item.Layer), item.Layer);
+                }
+            }
         }
 
         GridData SaveCurrent(string _name = null)
         {
             GridData newGridData = new GridData();
 
+            newGridData.SectorData = SectorData;
+            newGridData.Origin = Origin;
+            newGridData.Size = Size;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
             newGridData.CellsMatrix = CellsMatrix;
             newGridData.Layers = LayerCtrl.Layers;
-            newGridData.Size = Size;
-            newGridData.Origin = Origin;
-            newGridData.ResolutionCorrection = ResolutionCorrection;
-            newGridData.SectorData = SectorData;
 
             string assetName;
             if (_name == null)
@@ -196,7 +208,7 @@ namespace Grid
                 for (int j = 0; j < maxSize; j++)
                 {
                     for (int k = 0; k < maxSize; k++)
-                    {                  
+                    {
                         CreateCell(i, j, k);
                     }
                 }
@@ -214,53 +226,7 @@ namespace Grid
             CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this);
         }
 
-        /// <summary>
-        /// Crea i collegamenti alle celle
-        /// </summary>
-        internal void LinkCells(Layer _layer)
-        {
-            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
-                {
-                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
-                    {
-                        if (CellsMatrix[i, j, k] == null)
-                            continue;
-
-                        //Link of the next and previus cell along all directions
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k].GridCoordinates, _layer);
-                        if (i < Size.x - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k].GridCoordinates, _layer);
-
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k].GridCoordinates, _layer);
-                        if(j < Size.y - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k].GridCoordinates, _layer);
-
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0].GridCoordinates, _layer);
-                        if(k < Size.z - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1].GridCoordinates, _layer);
-                    }
-                }
-            }
-        }
-
-        internal void RemoveLinks(Layer _layer)
-        {
-            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
-                {
-                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
-                    {
-                        if (CellsMatrix[i, j, k] == null)
-                            continue;
-                        CellsMatrix[i, j, k].UnLinkAll(_layer);
-                        CellsMatrix[i, j, k].GetCellData().RemoveLayeredLink(_layer);
-                    }
-                }
-            }
-        }
+        
         #endregion
     }
 }

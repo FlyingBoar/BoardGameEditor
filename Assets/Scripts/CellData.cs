@@ -90,6 +90,11 @@ namespace Grid
                     return layeredLink.LinkedCoordinates;
             return null;
         }
+
+        public List<LayeredLink> GetLayeredLinks()
+        {
+            return LayeredLinkedNodes;
+        }
         #endregion
 
         internal void RemoveLayeredLink(Layer _layer)
@@ -118,7 +123,7 @@ namespace Grid
         }
 
         [System.Serializable]
-        struct LayeredLink
+        public struct LayeredLink
         {
             public List<Vector3Int> LinkedCoordinates;
             public Layer Layer;
