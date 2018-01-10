@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System;
 using UnityEngine;
 
 namespace Grid
@@ -58,9 +59,9 @@ namespace Grid
             CellsMatrix = null;
         }
 
-        public void Load(GridData _gridData)
+        public void Load(string _gridDataPath)
         {
-            LoadFromNetworkData(_gridData);
+            LoadFromJSON(_gridDataPath);
         }
 
         public void Save(string _name)
@@ -124,27 +125,29 @@ namespace Grid
         #endregion
 
         #region GridData Management
-        void LoadFromNetworkData(GridData _gridData)
+        void LoadFromJSON(string _jsonGridDataPath)
         {
-            if (_gridData == null)
+            string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
+            GridData _newGridData = JsonUtility.FromJson<GridData>(_jsonGridData);
+
+            if (_jsonGridData == null)
             {
                 Debug.LogWarning("GridController -- No data to load !");
                 return;
             }
 
-            GridData = _gridData;
-            Size = _gridData.Size;
-            Origin = _gridData.Origin;
-            ResolutionCorrection = _gridData.ResolutionCorrection;
+            GridData = _newGridData;
+            Size = GridData.Size;
+            Origin = GridData.Origin;
+            ResolutionCorrection = GridData.ResolutionCorrection;
 
-            CellsMatrix = _gridData.CellsMatrix;
+            CellsMatrix = GridData.CellsMatrix;
         }
 
         GridData SaveCurrent(string _name = null)
         {
-            GridData newGridData = null;
+            GridData newGridData = new GridData();
 
-            newGridData = ScriptableObject.CreateInstance<GridData>();
             newGridData.CellsMatrix = CellsMatrix;
             newGridData.Layers = LayerCtrl.Layers;
             newGridData.Size = Size;
@@ -154,14 +157,16 @@ namespace Grid
 
             string assetName;
             if (_name == null)
-                assetName = "NewGridData.asset";
+                assetName = "NewGridData.txt";
             else
-                assetName = _name + ".asset";
+                assetName = _name + ".txt";
 
-            newGridData.name = assetName;
+            //newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
 
-            AssetDatabase.CreateAsset(newGridData, completePath);
+            string jasonData = JsonUtility.ToJson(newGridData);
+
+            File.WriteAllText(completePath, jasonData);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 

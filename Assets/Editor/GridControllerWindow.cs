@@ -8,6 +8,7 @@ namespace Grid
     public class GridControllerWindow
     {
         GridController gridCtrl;
+        TextAsset fileToLoad;
 
         private Cell _selectedCell;
         public Cell SelectedCell
@@ -90,11 +91,11 @@ namespace Grid
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load Grid"))
             {
-                gridCtrl.Load(gridCtrl.GridData);
+                gridCtrl.Load(AssetDatabase.GetAssetPath(fileToLoad));
                 MasterGrid.LayerCtrl.LoadFromData(gridCtrl.GridData);
             }
 
-            gridCtrl.GridData = (GridData)EditorGUILayout.ObjectField(gridCtrl.GridData, typeof(GridData), false);
+            fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();

@@ -1,0 +1,1 @@
+{"SectorData":{"Shape":0,"Radius":{"x":1.0,"y":0.0,"z":1.0}},"Origin":{"x":0.0,"y":0.0,"z":0.0},"Size":{"x":5,"y":0,"z":5},"ResolutionCorrection":{"x":0.0,"y":0.0,"z":0.0},"Layers":[{"Name":"Base","HandlesColor":{"r":0.0,"g":0.0,"b":0.0,"a":100.0}}]}

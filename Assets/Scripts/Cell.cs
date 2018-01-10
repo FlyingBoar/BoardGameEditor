@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace Grid
 {
+    [System.Serializable]
     public class Cell
     {
+        [SerializeField]
         CellData cellData;
 
         GridController gridCtrl;
