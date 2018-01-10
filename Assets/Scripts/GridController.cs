@@ -40,13 +40,6 @@ namespace Grid
         {
             //Reset operation
             ClearGrid();
-            if (SectorData.Radius.x == 0)
-                SectorData.Radius.x = float.Epsilon;
-            if (SectorData.Radius.y == 0)
-                SectorData.Radius.y = float.Epsilon;
-            if (SectorData.Radius.z == 0)
-                SectorData.Radius.z = float.Epsilon;
-
             //New grid creation
             CreateGrid();
             //Linking process
@@ -277,14 +270,5 @@ namespace Grid
             }
         }
         #endregion
-
-        Vector3 CalculateOffset()
-        {
-            Vector3 offset = new Vector3(Size.x * SectorData.Diameter.x, Size.y * SectorData.Diameter.y, Size.z * SectorData.Diameter.z);
-
-            offset /= 2;
-            offset -= SectorData.Radius;
-            return offset;
-        }
     }
 }
