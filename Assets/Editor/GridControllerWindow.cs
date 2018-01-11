@@ -132,7 +132,7 @@ namespace Grid
             Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToLink != null)
             {
-                gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
+                gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
