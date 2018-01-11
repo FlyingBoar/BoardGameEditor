@@ -66,6 +66,13 @@ namespace Grid
 
             GUILayout.Space(5);
 
+            if (GUILayout.Button("Clear Grid"))
+            {
+                gridCtrl.ClearGrid();
+            }
+
+            GUILayout.Space(5);
+
             EditorGUILayout.BeginHorizontal();
 
             if(!gridCtrl.DoesGridExist())
@@ -89,7 +96,7 @@ namespace Grid
             GUILayout.Space(5);
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Load Grid"))
+            if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
                 gridCtrl.Load(AssetDatabase.GetAssetPath(fileToLoad));
                 MasterGrid.LayerCtrl.LoadFromData(gridCtrl.GridData);
