@@ -132,7 +132,7 @@ namespace Grid
             Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToLink != null)
             {
-                gridCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
+                gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
@@ -143,7 +143,7 @@ namespace Grid
             Cell cellToUnlink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToUnlink != null)
             {
-                gridCtrl.UnlinkCells(SelectedCell, cellToUnlink);
+                gridCtrl.LayerCtrl.UnlinkCells(SelectedCell, cellToUnlink);
                 EndMouseAction();
                 DeselectCell();
             }

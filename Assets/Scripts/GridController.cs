@@ -69,24 +69,6 @@ namespace Grid
             SaveCurrent(_name);
         }
 
-        /// <summary>
-        ///Chiama la funzione Link alla cella selezionata passando la cella su cui si trova il cursore
-        /// </summary>
-        public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
-        {
-            //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
-            startingCell.Link(endingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
-
-            if (mutualLink)
-                endingCell.Link(startingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
-        }
-
-        public void UnlinkCells(Cell startingCell, Cell endingCell)
-        {
-            startingCell.UnLink(endingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
-            endingCell.UnLink(startingCell.GridCoordinates, LayerCtrl.GetLayerAtIndex(0));
-        }
-
         #region Getter
         public Cell GetCentralCell()
         {
