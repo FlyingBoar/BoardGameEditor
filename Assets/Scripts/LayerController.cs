@@ -80,6 +80,24 @@ namespace Grid
         }
 
         /// <summary>
+        ///Chiama la funzione Link alla cella selezionata passando la cella su cui si trova il cursore
+        /// </summary>
+        public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
+        {
+            //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
+            startingCell.Link(endingCell.GridCoordinates, GetLayerAtIndex(0));
+
+            if (mutualLink)
+                endingCell.Link(startingCell.GridCoordinates, GetLayerAtIndex(0));
+        }
+
+        public void UnlinkCells(Cell startingCell, Cell endingCell)
+        {
+            startingCell.UnLink(endingCell.GridCoordinates, GetLayerAtIndex(0));
+            endingCell.UnLink(startingCell.GridCoordinates, GetLayerAtIndex(0));
+        }
+
+        /// <summary>
         /// Crea i collegamenti alle celle
         /// </summary>
         internal void LinkAllCells(Layer _layer)
