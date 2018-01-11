@@ -16,7 +16,6 @@ namespace Grid
         public bool ShowGrid = true;
         public Color GridHandlesColor = Color.cyan;
         public bool ShowLayersLink = true;
-        public bool[] LinkArray;
         public bool ShowMousePosition;
         public bool ShowMouseCell;
         [HideInInspector]
@@ -41,13 +40,8 @@ namespace Grid
                     DisplayCell(cell, GridHandlesColor);
                 if (ShowLayersLink)
                 {
-                    if (LinkArray == null)
-                        break;
-                    for (int i = 0; i < LinkArray.Length; i++)
-                    {
-                        if(LinkArray[i])
-                            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(i));
-                    }
+                    if (GridCtrl.LayerCtrl.SelectedLayer >= 0)
+                        DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(GridCtrl.LayerCtrl.SelectedLayer));
                 }
             }
 

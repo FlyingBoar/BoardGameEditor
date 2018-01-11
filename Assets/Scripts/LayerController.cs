@@ -8,6 +8,14 @@ namespace Grid
     {
         internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
 
+        int _selectedLayer = -1;
+        public int SelectedLayer
+        {
+            get { return _selectedLayer; }
+            set { _selectedLayer = value; }
+        }
+
+
         GridController gridCtrl;
 
         public LayerController(GridController _gridCtrl)
