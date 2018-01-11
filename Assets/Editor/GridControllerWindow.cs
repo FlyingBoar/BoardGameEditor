@@ -61,7 +61,6 @@ namespace Grid
             if (GUILayout.Button("Make Grid"))
             {
                 gridCtrl.CreateNewGrid();
-                //SaveCornersPosition();
             }
 
             GUILayout.Space(5);
@@ -103,6 +102,16 @@ namespace Grid
             }
 
             fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
+            if(fileToLoad != null)
+            {
+                string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
+                if (!loadFilePath.Contains(".txt"))
+                {
+                    fileToLoad = null;
+                    Debug.LogWarning("File format not supported !");
+                }
+            }
+
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();
