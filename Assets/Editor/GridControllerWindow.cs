@@ -105,7 +105,7 @@ namespace Grid
             if(fileToLoad != null)
             {
                 string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
-                if (!loadFilePath.Contains(".txt"))
+                if (!loadFilePath.Contains(".json"))
                 {
                     fileToLoad = null;
                     Debug.LogWarning("File format not supported !");

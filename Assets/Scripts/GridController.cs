@@ -151,9 +151,9 @@ namespace Grid
 
             string assetName;
             if (_name == null)
-                assetName = "NewGridData.txt";
+                assetName = "NewGridData.json";
             else
-                assetName = _name + ".txt";
+                assetName = _name + ".json";
 
             //newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
