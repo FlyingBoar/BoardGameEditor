@@ -14,7 +14,7 @@ namespace Grid
         public static GridVisualizer GridVisualizer { get; private set; }
         public static GridVisualizerWindow GridVisualizerWindow { get; private set; }
 
-        public static LayerController LayerCtrl { get; private set; }
+        public static GridLayerController LayerCtrl { get; private set; }
         public static LayerControllerWindow LayerCtrlWindow { get; private set; }
 
         public static GridScanner GridScanner { get; private set; }
@@ -35,7 +35,7 @@ namespace Grid
 
             GridCtrl = new GridController();
             GridVisualizer = new GridVisualizer(GridCtrl);
-            LayerCtrl = new LayerController(GridCtrl);
+            LayerCtrl = new GridLayerController(GridCtrl);
             GridScanner = new GridScanner();
 
             GridCtrl.Init(GridVisualizer, LayerCtrl);

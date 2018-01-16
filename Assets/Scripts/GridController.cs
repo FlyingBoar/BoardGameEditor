@@ -16,13 +16,13 @@ namespace Grid
         public Vector3 ResolutionCorrection;
 
         public GridVisualizer GridVisualizer;
-        public LayerController LayerCtrl;
+        public GridLayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
         public GridController() { }
 
-        public void Init(GridVisualizer _gridVisualizer, LayerController _layerCtrl)
+        public void Init(GridVisualizer _gridVisualizer, GridLayerController _layerCtrl)
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;

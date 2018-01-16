@@ -5,7 +5,7 @@ public class UBER_Manager : MonoBehaviour {
 
     public GridData Datas;
     GridController gridCtrl;
-    LayerController gridLayerCtrl;
+    GridLayerController gridLayerCtrl;
     public GameObject PacMan;
     public string MapName;
     Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
@@ -13,7 +13,7 @@ public class UBER_Manager : MonoBehaviour {
     private void Start()
     {
         gridCtrl = new GridController();
-        gridLayerCtrl = new LayerController(gridCtrl);
+        gridLayerCtrl = new GridLayerController(gridCtrl);
         gridCtrl.LayerCtrl = gridLayerCtrl;
         MapName = "Assets/GridData/" + MapName + ".json";
         gridCtrl.Load(MapName);
