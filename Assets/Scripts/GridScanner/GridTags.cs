@@ -6,7 +6,7 @@ namespace Grid
 {
     public class GridTags : MonoBehaviour
     {
-        public List<ScannerLayer> ScannerLayers;
+        public List<ScannerLayer> ScannerLayers = new List<ScannerLayer>();
     }
 
     public class ScannerLayer
