@@ -8,10 +8,7 @@ namespace Grid
     public class GridControllerWindow
     {
         GridController gridCtrl;
-        GridData gridData;
-
-        List<Vector3> corners = new List<Vector3>();
-        List<Vector3> handles = new List<Vector3>();
+        TextAsset fileToLoad;
 
         private Cell _selectedCell;
         public Cell SelectedCell
@@ -45,8 +42,8 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sector Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;
-            gridCtrl.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
-            gridCtrl.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
+            gridCtrl.GridData.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
+            gridCtrl.GridData.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
@@ -64,7 +61,13 @@ namespace Grid
             if (GUILayout.Button("Make Grid"))
             {
                 gridCtrl.CreateNewGrid();
-                //SaveCornersPosition();
+            }
+
+            GUILayout.Space(5);
+
+            if (GUILayout.Button("Clear Grid"))
+            {
+                gridCtrl.ClearGrid();
             }
 
             GUILayout.Space(5);
@@ -92,13 +95,23 @@ namespace Grid
             GUILayout.Space(5);
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Load Grid"))
+            if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
-                gridCtrl.CreateNewGrid(gridData);
-                MasterGrid.LayerCtrl.LoadFromData(gridData);
+                gridCtrl.Load(AssetDatabase.GetAssetPath(fileToLoad));
+                MasterGrid.LayerCtrl.LoadFromData(gridCtrl.GridData);
             }
 
-            gridData = (GridData)EditorGUILayout.ObjectField(gridData, typeof(GridData), false);
+            fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
+            if(fileToLoad != null)
+            {
+                string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
+                if (!loadFilePath.Contains(".json"))
+                {
+                    fileToLoad = null;
+                    Debug.LogWarning("File format not supported !");
+                }
+            }
+
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();
@@ -108,7 +121,6 @@ namespace Grid
         public void SelectCell()
         {
             SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
-            Debug.Log(SelectedCell.GridCoordinates);
         }
 
         public void DeselectCell()
@@ -136,7 +148,7 @@ namespace Grid
             Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToLink != null)
             {
-                gridCtrl.LinkCells(SelectedCell, cellToLink, _mutualLink);
+                gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
@@ -147,17 +159,9 @@ namespace Grid
             Cell cellToUnlink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToUnlink != null)
             {
-                gridCtrl.UnlinkCells(SelectedCell, cellToUnlink);
+                gridCtrl.LayerCtrl.UnlinkCells(SelectedCell, cellToUnlink);
                 EndMouseAction();
                 DeselectCell();
-            }
-        }
-
-        void SaveCornersPosition()
-        {
-            foreach (Cell cell in gridCtrl.GetGridCorners())
-            {
-                corners.Add(cell.GetPosition());
             }
         }
 

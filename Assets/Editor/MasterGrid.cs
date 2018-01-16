@@ -11,10 +11,10 @@ namespace Grid
         public static GridController GridCtrl { get; private set; }
         public static GridControllerWindow GridCtrlWindow { get; private set; }
 
-        public static GridControllerVisualizer GridVisualizer { get; private set; }
+        public static GridVisualizer GridVisualizer { get; private set; }
         public static GridVisualizerWindow GridVisualizerWindow { get; private set; }
 
-        public static GridLayerController LayerCtrl { get; private set; }
+        public static LayerController LayerCtrl { get; private set; }
         public static LayerControllerWindow LayerCtrlWindow { get; private set; }
 
         public static GridScanner GridScanner { get; private set; }
@@ -34,14 +34,14 @@ namespace Grid
             masterGrid.Show();
 
             GridCtrl = new GridController();
-            GridVisualizer = new GridControllerVisualizer(GridCtrl);
-            LayerCtrl = new GridLayerController(GridCtrl);
+            GridVisualizer = new GridVisualizer(GridCtrl);
+            LayerCtrl = new LayerController(GridCtrl);
             GridScanner = new GridScanner();
 
             GridCtrl.Init(GridVisualizer, LayerCtrl);
 
             GridCtrlWindow = new GridControllerWindow(GridCtrl);
-            GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer, LayerCtrl);
+            GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer);
             LayerCtrlWindow = new LayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
@@ -82,25 +82,12 @@ namespace Grid
                     GridScannerWindow.Show();
                     break;
             }
-
-            //KeyboardInput();
         }
 
         static void DrawCall(SceneView _sceneView)
         {
             GridVisualizer.DrawHandles();
             SceneView.RepaintAll();
-        }
-
-        static void KeyboardInput()
-        {
-            if(Event.current.keyCode == (KeyCode.Return))
-            {
-                if (selectedToolbarItem == 0)
-                    GridCtrl.CreateNewGrid();
-                else if (selectedToolbarItem == 3)
-                    GridScanner.ScanGrid(GridCtrl);
-            }
         }
 
         static void MouseInteraction(SceneView _sceneView)

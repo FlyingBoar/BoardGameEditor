@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace Grid
 {
     public class GridVisualizerWindow
     {
-        GridLayerController layerCtrl;
-        GridControllerVisualizer visualizer;
+        GridVisualizer visualizer;
+        bool[] tempLink;
 
-        public GridVisualizerWindow(GridControllerVisualizer _visualizer, GridLayerController _layerCtrl)
+        public GridVisualizerWindow(GridVisualizer _visualizer)
         {
             visualizer = _visualizer;
-            layerCtrl = _layerCtrl;
         }
 
         public void Show()
@@ -34,16 +34,27 @@ namespace Grid
             if (visualizer.ShowLayersLink)
             {
                 EditorGUI.indentLevel = 1;
-                if (visualizer.LinkArray == null || visualizer.LinkArray.Length != layerCtrl.GetNumberOfLayers())
+                if (tempLink == null || tempLink.Length != visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers())
                 {
-                    visualizer.LinkArray = new bool[layerCtrl.GetNumberOfLayers()];
+                    tempLink = new bool[visualizer.GridCtrl.LayerCtrl.GetNumberOfLayers()];
+                    tempLink[0] = true;
+                    visualizer.GridCtrl.LayerCtrl.SelectedLayer = 0;
                 }
-                for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
+                if (!tempLink.ToList().Contains(true))
                 {
-                    visualizer.LinkArray[i] = EditorGUILayout.Toggle(layerCtrl.GetLayerAtIndex(i).Name, visualizer.LinkArray[i]);
+                    tempLink[0] = true;
+                    visualizer.GridCtrl.LayerCtrl.SelectedLayer = 0;
+                }
+                for (int i = 0; i < tempLink.Length; i++)
+                {
+                    CheckSelectedLayer(i);
                 }
 
                 EditorGUI.indentLevel = 0;
+            }
+            else
+            {
+                visualizer.GridCtrl.LayerCtrl.SelectedLayer = -1;
             }
             EditorGUILayout.EndToggleGroup();
 
@@ -51,6 +62,36 @@ namespace Grid
 
             visualizer.ShowMouseCell = EditorGUILayout.Toggle("ShowMouseCell", visualizer.ShowMouseCell);
             EditorGUILayout.EndVertical();
+        }
+
+        void CheckSelectedLayer(int _i)
+        {
+            tempLink[_i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(_i).Name, tempLink[_i]);
+
+            if (tempLink[_i])
+            {
+                visualizer.GridCtrl.LayerCtrl.SelectedLayer = _i;
+
+                for (int i = 0; i < tempLink.Length; i++)
+                {
+                    if (i != _i)
+                    {
+                        tempLink[i] = false;
+                    }
+                }
+                return;
+            }
+
+            if (tempLink.ToList().Contains(true))
+            {
+                return;
+            }
+            else
+            {
+                if(visualizer.ShowLayersLink)
+                    visualizer.ShowLayersLink = false;
+                visualizer.GridCtrl.LayerCtrl.SelectedLayer = -1;
+            }
         }
     }
 }

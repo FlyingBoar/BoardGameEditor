@@ -5,13 +5,25 @@ using UnityEngine;
 
 namespace Grid
 {
+    [System.Serializable]
     public class Cell
     {
+        [SerializeField]
         CellData cellData;
+
         GridController gridCtrl;
 
-        public Vector3Int GridCoordinates { get; private set; }
-        Vector3 distance { get { return cellData.Sector.Diameter + gridCtrl.ResolutionCorrection; } }
+        public Vector3Int GridCoordinates
+        {
+            get
+            {
+                Vector3Int coordinates = gridCtrl.GetCoordinatesByPosition(cellData.Position);
+                return new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
+            }
+        }
+        Vector3 distance {
+            get { return cellData.Sector.Diameter + gridCtrl.ResolutionCorrection; }
+        }
         bool isGridEnbedded
         {
             get
@@ -23,11 +35,10 @@ namespace Grid
             }
         }
 
-        public Cell(CellData _data, GridController _ctrl, Vector3Int _gridPos)
+        public Cell(CellData _data, GridController _ctrl)
         {
             cellData = _data;
             gridCtrl = _ctrl;
-            GridCoordinates = _gridPos;
         }
 
         public Cell(CellData _data)
@@ -53,7 +64,7 @@ namespace Grid
                 return cellData.Position;
             else
             {
-                Vector3 centerPos = gridCtrl.GetPositionByCoordinates(GridCoordinates[0], GridCoordinates[1], GridCoordinates[2]);
+                Vector3 centerPos = gridCtrl.GetPositionByCoordinates(GridCoordinates);
                 //centerPos = new Vector3(GridCoordinates.x * distance.x, GridCoordinates.y * distance.y, GridCoordinates.z * distance.z);
                 //centerPos -= cellData.SectorData.Radius;
                 //centerPos += gridCtrl.Origin;
@@ -67,34 +78,28 @@ namespace Grid
         }
         #endregion
 
-        public List<Vector3> GetNeighbourgs(Layer _layer)
+        public List<Vector3Int> GetNeighbourgs(Layer _layer)
         {
-            return cellData.GetLayeredLink(_layer);
+            return cellData.GetLinkCoordinates(_layer);
         }
 
-        public void Link(Cell _node, Layer _layer)
+        public void Link(Vector3Int _node, Layer _layer)
         {
-            cellData.AddLink(_node, _layer);
+            if(_node != GridCoordinates)
+                cellData.AddLink(_node, _layer);
         }
 
-        public void UnLink(Cell _node, Layer _layer)
+        public void UnLink(Vector3Int _node, Layer _layer)
         {
             cellData.RemoveLink(_node, _layer);
         }
 
         public void UnLinkAll(Layer _layer)
         {
-            List<Vector3> linkedNodes = cellData.GetLayeredLink(_layer);
-
-            List<Cell> relativeCell = new List<Cell>();
+            List<Vector3Int> linkedNodes = cellData.GetLinkCoordinates(_layer);
             for (int i = 0; i < linkedNodes.Count; i++)
             {
-                relativeCell.Add(gridCtrl.GetCellFromPosition(linkedNodes[i]));
-            }
-
-            for (int i = 0; i < relativeCell.Count; i++)
-            {
-                relativeCell[i].UnLink(this, _layer);
+                gridCtrl.GetCellByCoordinates(linkedNodes[i]).UnLink(GridCoordinates, _layer);
             }
             linkedNodes.Clear();
         }

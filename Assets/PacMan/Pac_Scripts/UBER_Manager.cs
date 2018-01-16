@@ -5,16 +5,19 @@ public class UBER_Manager : MonoBehaviour {
 
     public GridData Datas;
     GridController gridCtrl;
-    GridLayerController gridLayerCtrl;
+    LayerController gridLayerCtrl;
     public GameObject PacMan;
+    public string MapName;
     Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
 
     private void Start()
     {
         gridCtrl = new GridController();
-        gridLayerCtrl = new GridLayerController(gridCtrl);
-        gridCtrl.CreateNewGrid(Datas);
-
+        gridLayerCtrl = new LayerController(gridCtrl);
+        gridCtrl.LayerCtrl = gridLayerCtrl;
+        MapName = "Assets/GridData/" + MapName + ".json";
+        gridCtrl.Load(MapName);
+        //gridLayerCtrl.Layers = Datas.Layers;
     }
 
     private void Update()
@@ -23,29 +26,29 @@ public class UBER_Manager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            coordinatesOfNext += Vector3Int.right;
+            coordinatesOfNext += new Vector3Int(0, 0, 1);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            coordinatesOfNext -= Vector3Int.right;
+            coordinatesOfNext += new Vector3Int(0, 0, -1);
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            coordinatesOfNext += Vector3Int.up;
+            coordinatesOfNext += Vector3Int.left;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            coordinatesOfNext -= Vector3Int.up;
+            coordinatesOfNext += Vector3Int.right;
         }
 
-        // TODO : controllare
-        //if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z)))
-        //    Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext.x, coordinatesOfNext.y, coordinatesOfNext.z));
+        if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext).GridCoordinates))
+            Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext));
     }
 
     void Snap(Vector3 _target)
     {
-        PacMan.transform.position = Vector3.Lerp(PacMan.transform.position, _target, Time.deltaTime);
+        //PacMan.transform.position = Vector3.Lerp(PacMan.transform.position, _target, 1);
+        PacMan.transform.position = _target;
     }
 
 }

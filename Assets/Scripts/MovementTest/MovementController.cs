@@ -28,8 +28,12 @@ public class MovementController : MonoBehaviour {
         {
             for (int j = 0; j < possibleMovement.Count; j++)
             {
-                // TODO : controllare
-                //tempList.AddRange(possibleMovement[j].GetNeighbourgs(TESTController.LayerCtrl.GetLayerAtIndex(0)));
+                List<Cell> cells = new List<Cell>();
+                foreach (var item in possibleMovement[j].GetNeighbourgs(TESTController.LayerCtrl.GetLayerAtIndex(0)))
+                {
+                    cells.Add(TESTController.GetCellByCoordinates(item));
+                }
+                tempList.AddRange(cells);
             }
 
             for (int k = 0; k < tempList.Count; k++)

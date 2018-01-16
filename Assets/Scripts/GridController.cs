@@ -1,30 +1,32 @@
 ﻿using UnityEditor;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System;
 using UnityEngine;
 
 namespace Grid
 {
     public class GridController
     {
-        public CellData.SectorData SectorData;
+        public GridData GridData;
+        public CellData.SectorData SectorData { get { return GridData.SectorData; } }
 
         public Vector3 Origin = Vector3.zero;
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        public GridControllerVisualizer GridVisualizer;
-        public GridLayerController LayerCtrl;
+        public GridVisualizer GridVisualizer;
+        public LayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
         public GridController() { }
 
-        public void Init(GridControllerVisualizer _gridVisualizer, GridLayerController _layerCtrl)
+        public void Init(GridVisualizer _gridVisualizer, LayerController _layerCtrl)
         {
             GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
-            SectorData = new CellData.SectorData();
+            GridData = new GridData();
         }
 
         #region API
@@ -40,13 +42,6 @@ namespace Grid
         {
             //Reset operation
             ClearGrid();
-            if (SectorData.Radius.x == 0)
-                SectorData.Radius.x = float.Epsilon;
-            if (SectorData.Radius.y == 0)
-                SectorData.Radius.y = float.Epsilon;
-            if (SectorData.Radius.z == 0)
-                SectorData.Radius.z = float.Epsilon;
-
             //New grid creation
             CreateGrid();
             //Linking process
@@ -54,27 +49,9 @@ namespace Grid
             {
                 for (int i = 0; i < LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    LinkCells(LayerCtrl.GetLayerAtIndex(i));
+                    LayerCtrl.LinkAllCells(LayerCtrl.GetLayerAtIndex(i));
                 }
             }
-        }
-
-        public void CreateNewGrid(GridData _gridData)
-        {
-            if (_gridData == null)
-            {
-                Debug.LogWarning("No data to load !");
-                return;
-            }
-
-            ClearGrid();
-            SectorData = _gridData.SectorData;
-
-            Size = _gridData.Size;
-            Origin = _gridData.Origin;
-            ResolutionCorrection = _gridData.ResolutionCorrection;
-
-            CreateGridByData(_gridData.CellsData);
         }
 
         public void ClearGrid()
@@ -82,79 +59,20 @@ namespace Grid
             CellsMatrix = null;
         }
 
-        public GridData Save(string _name = null)
+        public void Load(string _gridDataPath)
         {
-            GridData newGridData = null;
-
-            newGridData = ScriptableObject.CreateInstance<GridData>();
-            newGridData.Size = Size;
-            newGridData.Origin = Origin;
-            newGridData.ResolutionCorrection = ResolutionCorrection;
-            newGridData.SectorData = SectorData;
-
-            newGridData.Layers = LayerCtrl.Layers;
-
-            List<CellData> cellsData = new List<CellData>();
-            foreach (Cell cell in CellsMatrix)
-            {
-                if (cell != null)
-                    cellsData.Add(cell.GetCellData());
-            }
-
-            newGridData.CellsData = cellsData;
-
-            string assetName;
-            if (_name == null)
-                assetName = "NewGridData.asset";
-            else
-                assetName = _name + ".asset";
-
-            newGridData.name = assetName;
-            string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
-
-            AssetDatabase.CreateAsset(newGridData, completePath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            return newGridData;
+            LoadFromJSON(_gridDataPath);
         }
 
-        /// <summary>
-        ///Chiama la funzione Link alla cella selezionata passando la cella su cui si trova il cursore
-        /// </summary>
-        public void LinkCells(Cell startingCell, Cell endingCell, bool mutualLink = false)
+        public void Save(string _name)
         {
-            //startingCell.Link(this.GetCellFromPosition(InputAdapter_Tester.PointerPosition), LayerCtrl.GetLayerAtIndex(0));
-            startingCell.Link(endingCell, LayerCtrl.GetLayerAtIndex(0));
-
-            if (mutualLink)
-                endingCell.Link(startingCell, LayerCtrl.GetLayerAtIndex(0));
-        }
-
-        public void UnlinkCells(Cell startingCell, Cell endingCell)
-        {
-            startingCell.UnLink(endingCell, LayerCtrl.GetLayerAtIndex(0));
-            endingCell.UnLink(startingCell, LayerCtrl.GetLayerAtIndex(0));
+            SaveCurrent(_name);
         }
 
         #region Getter
         public Cell GetCentralCell()
         {
             return this.GetCellFromPosition(Origin);
-        }
-
-        public List<Cell> GetGridCorners()
-        {
-            List<Cell> tempList = new List<Cell>();
-            tempList.Add(this.GetCellByCoordinates(0, 0, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x -1, 0, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x -1, Size.y - 1, 0));
-            tempList.Add(this.GetCellByCoordinates(Size.x - 1, Size.y - 1, Size.z - 1));
-            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, 0));
-            tempList.Add(this.GetCellByCoordinates(0, Size.y - 1, Size.z - 1));
-            tempList.Add(this.GetCellByCoordinates(0, 0, Size.z - 1));
-
-            return tempList;
         }
 
         /// <summary>
@@ -165,7 +83,7 @@ namespace Grid
         {
             List<Cell> cellsList = new List<Cell>();
 
-            if(CellsMatrix != null)
+            if (CellsMatrix != null)
             {
                 for (int i = 0; i < CellsMatrix.GetLength(0); i++)
                     for (int j = 0; j < CellsMatrix.GetLength(1); j++)
@@ -188,6 +106,67 @@ namespace Grid
         #endregion
         #endregion
 
+        #region GridData Management
+        void LoadFromJSON(string _jsonGridDataPath)
+        {
+            string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
+            GridData _newGridData = JsonUtility.FromJson<GridData>(_jsonGridData);
+
+            if (_jsonGridData == null)
+            {
+                Debug.LogWarning("GridController -- No data to load !");
+                return;
+            }
+
+            GridData = _newGridData;
+            Size = GridData.Size;
+            Origin = GridData.Origin;
+            ResolutionCorrection = GridData.ResolutionCorrection;
+
+            
+            LayerCtrl.LoadFromData(GridData);
+            CreateNewGrid(false);
+
+            foreach (CellData _data in GridData.GetCellDatas())
+            {
+                Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_data.Position);
+                Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_data, this);
+                foreach (var item in _data.GetLayeredLinks())
+                {
+                    LayerCtrl.LinkCells(_newCell, _data.GetLinkCoordinates(item.Layer), item.Layer);
+                }
+            }
+        }
+
+        GridData SaveCurrent(string _name = null)
+        {
+            GridData newGridData = new GridData();
+
+            newGridData.SectorData = SectorData;
+            newGridData.Origin = Origin;
+            newGridData.Size = Size;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
+            newGridData.CellsMatrix = CellsMatrix;
+            newGridData.Layers = LayerCtrl.Layers;
+
+            string assetName;
+            if (_name == null)
+                assetName = "NewGridData.json";
+            else
+                assetName = _name + ".json";
+
+            //newGridData.name = assetName;
+            string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
+
+            string jasonData = JsonUtility.ToJson(newGridData);
+
+            File.WriteAllText(completePath, jasonData);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            return newGridData;
+        }
+
         string CheckFolder()
         {
 #if UNITY_EDITOR
@@ -197,6 +176,7 @@ namespace Grid
 
             return "Assets/GridData/";
         }
+        #endregion
 
         #region Grid Creation
         void CreateGrid()
@@ -210,22 +190,10 @@ namespace Grid
                 for (int j = 0; j < maxSize; j++)
                 {
                     for (int k = 0; k < maxSize; k++)
-                    {                  
+                    {
                         CreateCell(i, j, k);
                     }
                 }
-            }
-        }
-
-        void CreateGridByData(List<CellData> _cellsData)
-        {
-            int maxSize = Size.x >= Size.y ? Size.x : Size.y;
-            maxSize = maxSize >= Size.z ? maxSize : Size.z;
-
-            CellsMatrix = new Cell[maxSize, maxSize, maxSize];
-            foreach (CellData cellData in _cellsData)
-            {
-                CreateCell(cellData);
             }
         }
 
@@ -235,74 +203,12 @@ namespace Grid
             int j = _j < Size.y ? _j : 0;
             int k = _k < Size.z ? _k : 0;
 
-            Vector3 nodePos = this.GetPositionByCoordinates(i, j, k);
+            Vector3 nodePos = this.GetPositionByCoordinates(new Vector3Int(i, j, k));
 
-            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this, new Vector3Int(i,j,k));
+            CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this);
         }
 
-        void CreateCell(CellData _cellData)
-        {
-            int[] coordinates = this.GetCoordinatesByPosition(_cellData.Position);
-
-            CellsMatrix[coordinates[0] - 1, coordinates[1] - 1, coordinates[2] - 1] = new Cell(_cellData, this, new Vector3Int(coordinates[0] - 1, coordinates[1] - 1, coordinates[2] - 1));
-        }
-
-        /// <summary>
-        /// Crea i collegamenti alle celle
-        /// </summary>
-        internal void LinkCells(Layer _layer)
-        {
-            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
-                {
-                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
-                    {
-                        if (CellsMatrix[i, j, k] == null)
-                            continue;
-
-                        //Link of the next and previus cell along all directions
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i != 0 ? i - 1 : 0, j, k], _layer);
-                        if (i < Size.x - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i + 1, j, k], _layer);
-
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j != 0 ? j - 1 : 0, k], _layer);
-                        if(j < Size.y - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j + 1 , k], _layer);
-
-                        CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k != 0 ? k - 1 : 0], _layer);
-                        if(k < Size.z - 1)
-                            CellsMatrix[i,j,k].Link(CellsMatrix[i, j, k + 1], _layer);
-                    }
-                }
-            }
-        }
-
-        internal void RemoveLinks(Layer _layer)
-        {
-            for (int i = 0; i < CellsMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < CellsMatrix.GetLength(1); j++)
-                {
-                    for (int k = 0; k < CellsMatrix.GetLength(2); k++)
-                    {
-                        if (CellsMatrix[i, j, k] == null)
-                            continue;
-                        CellsMatrix[i, j, k].UnLinkAll(_layer);
-                        CellsMatrix[i, j, k].GetCellData().RemoveLayeredLink(_layer);
-                    }
-                }
-            }
-        }
+        
         #endregion
-
-        Vector3 CalculateOffset()
-        {
-            Vector3 offset = new Vector3(Size.x * SectorData.Diameter.x, Size.y * SectorData.Diameter.y, Size.z * SectorData.Diameter.z);
-
-            offset /= 2;
-            offset -= SectorData.Radius;
-            return offset;
-        }
     }
 }
