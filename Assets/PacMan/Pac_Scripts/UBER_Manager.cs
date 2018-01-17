@@ -7,7 +7,9 @@ public class UBER_Manager : MonoBehaviour {
     GridController gridCtrl;
     GridLayerController gridLayerCtrl;
     public GameObject PacMan;
-    public string MapName;
+
+    DataManager dataMng;
+    public TextAsset GridToLoad;
     Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
 
     private void Start()
@@ -15,8 +17,8 @@ public class UBER_Manager : MonoBehaviour {
         gridCtrl = new GridController();
         gridLayerCtrl = new GridLayerController(gridCtrl);
         gridCtrl.LayerCtrl = gridLayerCtrl;
-        MapName = "Assets/GridData/" + MapName + ".json";
-        gridCtrl.Load(MapName);
+        dataMng = new DataManager();
+        LoadGrid();
         Datas = gridCtrl.GridData;
         //gridLayerCtrl.Layers = Datas.Layers;
     }
@@ -44,6 +46,18 @@ public class UBER_Manager : MonoBehaviour {
 
         if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext).GridCoordinates))
             Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext));
+    }
+
+    /// <summary>
+    /// Cerca il path della griglie e lo carica
+    /// </summary>
+    void LoadGrid()
+    {
+        if(GridToLoad != null)
+        {
+            string assetPath = dataMng.GetAssetPath(GridToLoad);
+            gridCtrl.Load(assetPath);
+        }
     }
 
     void Snap(Vector3 _target)
