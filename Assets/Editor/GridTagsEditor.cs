@@ -15,16 +15,19 @@ namespace Grid
         {
             gridTags = (GridTags)target;
 
-            //if (targets.Length > 1)
-            //{
-            //    bool tempBool = (targets[0] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
 
-            //    for (int j = 1; j < targets.Length; j++)
-            //    {
-            //        if ((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
-            //            EditorGUI.showMixedValue = true;
-            //    }
-            //}
+            if (Selection.objects.Length > 1)
+            {
+
+                //CheckLenghtScannerLayers();
+                //bool tempBool = (Selection.objects[Selection.objects.Length] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
+
+                //for (int j = 1; j < targets.Length; j++)
+                //{
+                //    if ((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
+                //        EditorGUI.showMixedValue = true;
+                //}
+            }
         }
 
         public override void OnInspectorGUI()
@@ -37,14 +40,9 @@ namespace Grid
 
             if (MasterGrid.LayerCtrl == null)
                 return; //WORKAROUND !!
-            if (gridTags.ScannerLayers == null || gridTags.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
-            {
-                gridTags.ScannerLayers = new List<ScannerLayer>();
-                for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
-                {
-                    gridTags.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
-                }
-            }
+
+            CheckLenghtScannerLayers();
+
             for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
             {
                 EditorGUI.BeginChangeCheck();
@@ -65,6 +63,30 @@ namespace Grid
             EditorGUILayout.EndVertical();
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
+        }
+
+        void CheckLenghtScannerLayers()
+        {
+            if (gridTags.ScannerLayers.Count == 0 || gridTags.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
+            {
+                List<ScannerLayer> oldLayerList = gridTags.ScannerLayers;
+                gridTags.ScannerLayers = new List<ScannerLayer>();
+                for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                {
+                    gridTags.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
+                }
+                for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
+                {
+                    for (int j = 0; j < oldLayerList.Count; j++)
+                    {
+                        if (gridTags.ScannerLayers[i].Layer.Name == oldLayerList[j].Layer.Name)
+                        {
+                            gridTags.ScannerLayers[i].Active = oldLayerList[j].Active;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
