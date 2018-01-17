@@ -17,6 +17,7 @@ public class UBER_Manager : MonoBehaviour {
         gridCtrl.LayerCtrl = gridLayerCtrl;
         MapName = "Assets/GridData/" + MapName + ".json";
         gridCtrl.Load(MapName);
+        Datas = gridCtrl.GridData;
         //gridLayerCtrl.Layers = Datas.Layers;
     }
 
