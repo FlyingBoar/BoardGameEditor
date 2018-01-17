@@ -15,7 +15,7 @@ namespace Grid
         public static GridVisualizerWindow GridVisualizerWindow { get; private set; }
 
         public static GridLayerController LayerCtrl { get; private set; }
-        public static LayerControllerWindow LayerCtrlWindow { get; private set; }
+        public static GridLayerControllerWindow GridLayerCtrlWindow { get; private set; }
 
         public static GridScanner GridScanner { get; private set; }
         public static GridScannerWindow GridScannerWindow { get; private set; }
@@ -42,7 +42,7 @@ namespace Grid
 
             GridCtrlWindow = new GridControllerWindow(GridCtrl);
             GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer);
-            LayerCtrlWindow = new LayerControllerWindow(LayerCtrl);
+            GridLayerCtrlWindow = new GridLayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
             if (toolbarEntries.Count == 0)
@@ -76,7 +76,7 @@ namespace Grid
                     GridVisualizerWindow.Show();
                     break;
                 case 2: // layer controller
-                    LayerCtrlWindow.Show();
+                    GridLayerCtrlWindow.Show();
                     break;
                 case 3: // grid scanner
                     GridScannerWindow.Show();

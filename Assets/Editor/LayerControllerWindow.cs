@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Grid
 {
-    public class LayerControllerWindow
+    public class GridLayerControllerWindow
     {
         GridLayerController layerCtrl;
         Texture addLayerTexture;
@@ -16,7 +16,7 @@ namespace Grid
 
         Vector2 scrollPosition;
 
-        public LayerControllerWindow(GridLayerController _layerCtrl)
+        public GridLayerControllerWindow(GridLayerController _layerCtrl)
         {
             layerCtrl = _layerCtrl;
             addLayerTexture = (Texture)EditorGUIUtility.Load("Plus.png");
