@@ -17,7 +17,7 @@ namespace Grid
             private set
             {
                 _selectedCell = value;
-                gridCtrl.GridVisualizer.SelectedCell = _selectedCell;
+                MasterGrid.GridVisualizer.SelectedCell = _selectedCell;
             }
         }
 

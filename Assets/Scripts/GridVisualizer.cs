@@ -30,7 +30,7 @@ namespace Grid
 
         public void DrawHandles()
         {
-            List<Cell> cellList = GridCtrl.GetListOfCells();
+            List<Cell> cellList = GridCtrl.GetCellsList();
             if (cellList.Count <= 0)
                 return;
 

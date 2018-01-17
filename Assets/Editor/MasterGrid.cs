@@ -38,7 +38,7 @@ namespace Grid
             LayerCtrl = new GridLayerController(GridCtrl);
             GridScanner = new GridScanner();
 
-            GridCtrl.Init(GridVisualizer, LayerCtrl);
+            GridCtrl.Init(LayerCtrl);
 
             GridCtrlWindow = new GridControllerWindow(GridCtrl);
             GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer);

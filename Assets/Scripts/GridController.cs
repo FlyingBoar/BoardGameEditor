@@ -15,16 +15,14 @@ namespace Grid
         public Vector3Int Size;
         public Vector3 ResolutionCorrection;
 
-        public GridVisualizer GridVisualizer;
         public GridLayerController LayerCtrl;
 
         Cell[,,] CellsMatrix;
 
         public GridController() { }
 
-        public void Init(GridVisualizer _gridVisualizer, GridLayerController _layerCtrl)
+        public void Init(GridLayerController _layerCtrl)
         {
-            GridVisualizer = _gridVisualizer;
             LayerCtrl = _layerCtrl;
             GridData = new GridData();
         }
@@ -75,16 +73,11 @@ namespace Grid
         }
 
         #region Getter
-        public Cell GetCentralCell()
-        {
-            return this.GetCellFromPosition(Origin);
-        }
-
         /// <summary>
         /// Return the list of not null cell in Grid
         /// </summary>
         /// <returns></returns>
-        public List<Cell> GetListOfCells()
+        public List<Cell> GetCellsList()
         {
             List<Cell> cellsList = new List<Cell>();
 
