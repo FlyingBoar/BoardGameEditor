@@ -7,7 +7,7 @@ namespace Grid
 {
     public class LayerControllerWindow
     {
-        LayerController layerCtrl;
+        GridLayerController layerCtrl;
         Texture addLayerTexture;
         Texture removeLayerTexture;
 
@@ -16,7 +16,7 @@ namespace Grid
 
         Vector2 scrollPosition;
 
-        public LayerControllerWindow(LayerController _layerCtrl)
+        public LayerControllerWindow(GridLayerController _layerCtrl)
         {
             layerCtrl = _layerCtrl;
             addLayerTexture = (Texture)EditorGUIUtility.Load("Plus.png");
@@ -31,8 +31,7 @@ namespace Grid
             GUILayout.BeginHorizontal();
             GUILayout.Label("Layer", EditorStyles.boldLabel);
             GUILayout.Space(10);
-            GUILayout.Label("Is Editable", EditorStyles.boldLabel);
-            GUILayout.Label("Gizmos Color", EditorStyles.boldLabel);
+            GUILayout.Label("Color", EditorStyles.boldLabel);
             GUILayout.EndHorizontal();
 
             GUILayout.Space(4);

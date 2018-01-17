@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class LayerController
+    public class GridLayerController
     {
         internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
 
@@ -18,7 +18,7 @@ namespace Grid
 
         GridController gridCtrl;
 
-        public LayerController(GridController _gridCtrl)
+        public GridLayerController(GridController _gridCtrl)
         {
             gridCtrl = _gridCtrl;
         }

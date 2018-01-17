@@ -111,7 +111,7 @@ namespace Grid
 
         public enum AreaShape
         {
-            Circle, Square, Hexagon
+            Square/*, Circle, Hexagon*/
         }
 
         [System.Serializable]
