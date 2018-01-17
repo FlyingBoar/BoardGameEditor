@@ -64,9 +64,14 @@ namespace Grid
             LoadFromJSON(_gridDataPath);
         }
 
-        public void Save(string _name)
+        public void SaveAs(string _newJsonName)
         {
-            SaveCurrent(_name);
+            SaveNewGrid(_newJsonName);
+        }
+
+        public void Save(string _jsonGridDataPath)
+        {
+            OverwriteFile(_jsonGridDataPath);
         }
 
         #region Getter
@@ -138,7 +143,31 @@ namespace Grid
             }
         }
 
-        GridData SaveCurrent(string _name = null)
+        void OverwriteFile(string _jsonGridDataPath)
+        {
+            string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
+
+            GridData newGridData = new GridData();
+
+            newGridData.SectorData = SectorData;
+            newGridData.Origin = Origin;
+            newGridData.Size = Size;
+            newGridData.ResolutionCorrection = ResolutionCorrection;
+            newGridData.CellsMatrix = CellsMatrix;
+            newGridData.Layers = LayerCtrl.Layers;
+
+            string newJsonData = JsonUtility.ToJson(newGridData);
+
+            // controllo che siano state fatte delle modifiche rispetto al file caricato, altrimenti è inutile salvare lo stesso contenuto nel file
+            if(_jsonGridData != newJsonData)
+            {
+                File.WriteAllText(_jsonGridDataPath, newJsonData);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
+        }
+
+        void SaveNewGrid(string _name = null)
         {
             GridData newGridData = new GridData();
 
@@ -155,16 +184,13 @@ namespace Grid
             else
                 assetName = _name + ".json";
 
-            //newGridData.name = assetName;
             string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
 
-            string jasonData = JsonUtility.ToJson(newGridData);
+            string newJsonData = JsonUtility.ToJson(newGridData);
 
-            File.WriteAllText(completePath, jasonData);
+            File.WriteAllText(completePath, newJsonData);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-
-            return newGridData;
         }
 
         string CheckFolder()

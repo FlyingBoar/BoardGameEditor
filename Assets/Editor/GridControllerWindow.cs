@@ -41,7 +41,7 @@ namespace Grid
 
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sector Data", EditorStyles.boldLabel);
-            EditorGUI.indentLevel = 1;
+            EditorGUI.indentLevel = 1;   
             gridCtrl.GridData.SectorData.Shape = (CellData.AreaShape)EditorGUILayout.EnumPopup("Area Shape", gridCtrl.SectorData.Shape);
             gridCtrl.GridData.SectorData.Radius = EditorGUILayout.Vector3Field("Radius", gridCtrl.SectorData.Radius);
             EditorGUI.indentLevel = 0;
@@ -58,6 +58,7 @@ namespace Grid
 
             GUILayout.Space(5);
 
+            EditorGUILayout.BeginHorizontal("Box");
             if (GUILayout.Button("Make Grid"))
             {
                 gridCtrl.CreateNewGrid();
@@ -71,15 +72,26 @@ namespace Grid
             }
 
             GUILayout.Space(5);
+            EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal("Box");
 
-            if(!gridCtrl.DoesGridExist())
+            if (fileToLoad == null)
                 GUI.enabled = false;
-
-            if (GUILayout.Button("Save Grid", GUILayout.Height(40)))
+            if (GUILayout.Button("Save", GUILayout.Height(40)) && fileToLoad != null)
             {
-                gridCtrl.Save(newDataName);
+                gridCtrl.Save(AssetDatabase.GetAssetPath(fileToLoad));
+            }
+            if (fileToLoad == null)
+                GUI.enabled = true;
+
+            GUILayout.Space(5);
+
+            if (!gridCtrl.DoesGridExist())
+                GUI.enabled = false;
+            if (GUILayout.Button("Save As", GUILayout.Height(40)))
+            {
+                gridCtrl.SaveAs(newDataName);
             }
 
             if (!gridCtrl.DoesGridExist())
@@ -92,9 +104,7 @@ namespace Grid
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
 
-            GUILayout.Space(5);
-
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal("Box");
             if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
                 gridCtrl.Load(AssetDatabase.GetAssetPath(fileToLoad));

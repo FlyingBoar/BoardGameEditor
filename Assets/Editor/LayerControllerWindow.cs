@@ -31,8 +31,7 @@ namespace Grid
             GUILayout.BeginHorizontal();
             GUILayout.Label("Layer", EditorStyles.boldLabel);
             GUILayout.Space(10);
-            GUILayout.Label("Is Editable", EditorStyles.boldLabel);
-            GUILayout.Label("Gizmos Color", EditorStyles.boldLabel);
+            GUILayout.Label("Color", EditorStyles.boldLabel);
             GUILayout.EndHorizontal();
 
             GUILayout.Space(4);
