@@ -10,17 +10,30 @@ namespace Grid
     public class GridTagsEditor : Editor
     {
         GridTags gridTags;
-
+        bool isMixedValues;
         private void OnEnable()
         {
             gridTags = (GridTags)target;
 
 
-            if (Selection.objects.Length > 1)
+            if (targets.Length > 1)
             {
+                UpdateScannerLayer();
 
-                //CheckLenghtScannerLayers();
-                //bool tempBool = (Selection.objects[Selection.objects.Length] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
+                for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                {
+                    bool tempBool = (targets[targets.Length - 1] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
+
+                    for (int j = i; j < targets.Length; j++)
+                    {
+                        if((targets[j] as GridTags).ScannerLayers[i].Active != tempBool)
+                        {
+                            isMixedValues = true;
+                            break;
+                        }
+                    }
+                }
+
 
                 //for (int j = 1; j < targets.Length; j++)
                 //{
@@ -41,20 +54,44 @@ namespace Grid
             if (MasterGrid.LayerCtrl == null)
                 return; //WORKAROUND !!
 
-            CheckLenghtScannerLayers();
+            UpdateScannerLayer();
 
             for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
             {
+                bool changedBool = false;
                 EditorGUI.BeginChangeCheck();
-                bool changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);
-
-                if (EditorGUI.EndChangeCheck())
+                if (isMixedValues)
                 {
-                    if (targets.Length > 1)
+                    EditorGUI.showMixedValue = true;
+                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);
+                    EditorGUI.showMixedValue = false;
+
+                    if (EditorGUI.EndChangeCheck())
                     {
-                        foreach (GridTags script in targets)
+                        isMixedValues = false;
+
+                        if (targets.Length > 1)
                         {
-                            script.ScannerLayers[i].Active = changedBool;
+                            foreach (GridTags script in targets)
+                            {
+                                script.ScannerLayers[i].Active = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    
+                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Name, gridTags.ScannerLayers[i].Active);
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        if (targets.Length > 1)
+                        {
+                            foreach (GridTags script in targets)
+                            {
+                                script.ScannerLayers[i].Active = changedBool;
+                            }
                         }
                     }
                 }
@@ -65,7 +102,7 @@ namespace Grid
             EditorGUILayout.EndVertical();
         }
 
-        void CheckLenghtScannerLayers()
+        void UpdateScannerLayer()
         {
             if (gridTags.ScannerLayers.Count == 0 || gridTags.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
             {
@@ -75,6 +112,7 @@ namespace Grid
                 {
                     gridTags.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
                 }
+
                 for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
                 {
                     for (int j = 0; j < oldLayerList.Count; j++)
