@@ -74,56 +74,6 @@ namespace Grid
             GUILayout.Space(5);
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal("Box");
-
-            if (fileToLoad == null)
-                GUI.enabled = false;
-            if (GUILayout.Button("Save", GUILayout.Height(40)) && fileToLoad != null)
-            {
-                gridCtrl.Save(AssetDatabase.GetAssetPath(fileToLoad));
-            }
-            if (fileToLoad == null)
-                GUI.enabled = true;
-
-            GUILayout.Space(5);
-
-            if (!gridCtrl.DoesGridExist())
-                GUI.enabled = false;
-            if (GUILayout.Button("Save As", GUILayout.Height(40)))
-            {
-                gridCtrl.SaveAs(newDataName);
-            }
-
-            if (!gridCtrl.DoesGridExist())
-                GUI.enabled = true;
-
-            EditorGUILayout.BeginVertical();
-            GUILayout.Label("Asset Name", EditorStyles.boldLabel);
-            newDataName = GUILayout.TextField(newDataName);
-
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal("Box");
-            if (GUILayout.Button("Load Grid") && fileToLoad != null)
-            {
-                gridCtrl.Load(AssetDatabase.GetAssetPath(fileToLoad));
-                MasterGrid.LayerCtrl.LoadFromData(gridCtrl.GridData);
-            }
-
-            fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
-            if(fileToLoad != null)
-            {
-                string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
-                if (!loadFilePath.Contains(".json"))
-                {
-                    fileToLoad = null;
-                    Debug.LogWarning("File format not supported !");
-                }
-            }
-
-            EditorGUILayout.EndHorizontal();
-
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }

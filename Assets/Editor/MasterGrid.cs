@@ -20,6 +20,14 @@ namespace Grid
         public static GridScanner GridScanner { get; private set; }
         public static GridScannerWindow GridScannerWindow { get; private set; }
 
+        
+
+        #region Save/Load Variables
+        TextAsset fileToLoad;
+        [SerializeField]
+        string newDataName = "NewGridData";
+        #endregion
+
         [SerializeField]
         static int selectedToolbarItem;
         [SerializeField]
@@ -66,6 +74,60 @@ namespace Grid
 
         private void OnGUI()
         {
+
+            #region Save/Load Region
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+
+            if (fileToLoad == null)
+                GUI.enabled = false;
+            if (GUILayout.Button("Save", GUILayout.Height(40)))
+            {
+                GridCtrl.SaveCellMatrixInData();
+                DataManager.SaveData(AssetDatabase.GetAssetPath(fileToLoad));
+            }
+            if (fileToLoad == null)
+                GUI.enabled = true;
+
+            if (GUILayout.Button("Save as", GUILayout.Height(40)))
+            {
+                GridCtrl.SaveCellMatrixInData();
+                DataManager.SaveNewData(newDataName);
+            }
+
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label("Asset Name", EditorStyles.boldLabel);
+            newDataName = GUILayout.TextField(newDataName);
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal("Box");
+            if (GUILayout.Button("Load Grid") && fileToLoad != null)
+            {
+                DataManager.LoadDataFromJson(AssetDatabase.GetAssetPath(fileToLoad));
+                GridCtrl.ReInitVariables();
+            }
+
+            fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
+            if (fileToLoad != null)
+            {
+                string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
+                if (!loadFilePath.Contains(".json"))
+                {
+                    fileToLoad = null;
+                    Debug.LogWarning("File format not supported !");
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+            #endregion
+
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
             switch (selectedToolbarItem)
             {

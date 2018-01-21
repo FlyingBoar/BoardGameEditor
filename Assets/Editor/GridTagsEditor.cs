@@ -22,7 +22,7 @@ namespace Grid
 
                 for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    bool tempBool = (targets[targets.Length - 1] as GridTags).ScannerLayers[i].Active;  // lo 0 è l'ultimo elemento aggiunto all'array, da rivedere
+                    bool tempBool = (targets[targets.Length - 1] as GridTags).ScannerLayers[i].Active;  // TODO: i Layer non vengono inizializzati in tempo se vengono selezionati più targets
 
                     for (int j = i; j < targets.Length; j++)
                     {

@@ -29,6 +29,11 @@ namespace Grid
             Layers = _gridData.Layers;
         }
 
+        public List<Layer> GetLayers()
+        {
+            return Layers;
+        }
+
         public int GetNumberOfLayers()
         {
             return Layers.Count;

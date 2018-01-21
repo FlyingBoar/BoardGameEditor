@@ -8,7 +8,6 @@ public class UBER_Manager : MonoBehaviour {
     GridLayerController gridLayerCtrl;
     public GameObject PacMan;
 
-    DataManager dataMng;
     public TextAsset GridToLoad;
     Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
 
@@ -17,7 +16,6 @@ public class UBER_Manager : MonoBehaviour {
         gridCtrl = new GridController();
         gridLayerCtrl = new GridLayerController(gridCtrl);
         gridCtrl.LayerCtrl = gridLayerCtrl;
-        dataMng = new DataManager();
         LoadGrid();
         Datas = gridCtrl.GridData;
         //gridLayerCtrl.Layers = Datas.Layers;
@@ -55,8 +53,9 @@ public class UBER_Manager : MonoBehaviour {
     {
         if(GridToLoad != null)
         {
-            string assetPath = dataMng.GetAssetPath(GridToLoad);
-            gridCtrl.Load(assetPath);
+            string assetPath = DataManager.GetAssetPath(GridToLoad);
+            DataManager.LoadDataFromJson(assetPath);
+            gridCtrl.ReInitVariables();
         }
     }
 

@@ -8,12 +8,25 @@ namespace Grid
 {
     public class GridController
     {
-        public GridData GridData;
+        public GridData GridData
+        {
+            get { return DataManager.GridDataInstance; }
+            set { DataManager.GridDataInstance = value; }
+        }
         public CellData.SectorData SectorData { get { return GridData.SectorData; } }
 
-        public Vector3 Origin = Vector3.zero;
-        public Vector3Int Size;
-        public Vector3 ResolutionCorrection;
+        public Vector3 Origin {
+            get { return GridData.Origin; }
+            set { GridData.Origin = value; }
+        }
+        public Vector3Int Size {
+            get { return GridData.Size; }
+            set { GridData.Size = value; }
+        }
+        public Vector3 ResolutionCorrection {
+            get { return GridData.ResolutionCorrection; }
+            set { GridData.ResolutionCorrection = value; }
+        }
 
         public GridLayerController LayerCtrl;
 
@@ -57,19 +70,26 @@ namespace Grid
             CellsMatrix = null;
         }
 
-        public void Load(string _gridDataPath)
+        public void ReInitVariables()
         {
-            LoadFromJSON(_gridDataPath);
+            LayerCtrl.LoadFromData(GridData);
+            CreateNewGrid(false);
+
+            foreach (CellData _cellData in GridData.GetCellDatas())
+            {
+                Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_cellData.Position);
+                Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_cellData, this);
+                foreach (var item in _cellData.GetLayeredLinks())
+                {
+                    LayerCtrl.LinkCells(_newCell, _cellData.GetLinkCoordinates(item.Layer), item.Layer);
+                }
+            }
         }
 
-        public void SaveAs(string _newJsonName)
+        public void SaveCellMatrixInData()
         {
-            SaveNewGrid(_newJsonName);
-        }
-
-        public void Save(string _jsonGridDataPath)
-        {
-            OverwriteFile(_jsonGridDataPath);
+            GridData.CellsMatrix = CellsMatrix;
+            GridData.Layers = LayerCtrl.Layers;
         }
 
         #region Getter
@@ -105,86 +125,60 @@ namespace Grid
         #endregion
 
         #region GridData Management
-        void LoadFromJSON(string _jsonGridDataPath)
-        {
-            string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
-            GridData _newGridData = JsonUtility.FromJson<GridData>(_jsonGridData);
+        //void LoadFromJSON(string _jsonGridDataPath)
+        //{
+        //    string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
+        //    GridData _newGridData = JsonUtility.FromJson<GridData>(_jsonGridData);
 
-            if (_jsonGridData == null)
-            {
-                Debug.LogWarning("GridController -- No data to load !");
-                return;
-            }
+        //    if (_jsonGridData == null)
+        //    {
+        //        Debug.LogWarning("GridController -- No data to load !");
+        //        return;
+        //    }
 
-            GridData = _newGridData;
-            Size = GridData.Size;
-            Origin = GridData.Origin;
-            ResolutionCorrection = GridData.ResolutionCorrection;
+        //    GridData = _newGridData;
+        //    Size = GridData.Size;
+        //    Origin = GridData.Origin;
+        //    ResolutionCorrection = GridData.ResolutionCorrection;
 
             
-            LayerCtrl.LoadFromData(GridData);
-            CreateNewGrid(false);
+        //    LayerCtrl.LoadFromData(GridData);
+        //    CreateNewGrid(false);
 
-            foreach (CellData _data in GridData.GetCellDatas())
-            {
-                Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_data.Position);
-                Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_data, this);
-                foreach (var item in _data.GetLayeredLinks())
-                {
-                    LayerCtrl.LinkCells(_newCell, _data.GetLinkCoordinates(item.Layer), item.Layer);
-                }
-            }
-        }
+        //    foreach (CellData _data in GridData.GetCellDatas())
+        //    {
+        //        Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_data.Position);
+        //        Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_data, this);
+        //        foreach (var item in _data.GetLayeredLinks())
+        //        {
+        //            LayerCtrl.LinkCells(_newCell, _data.GetLinkCoordinates(item.Layer), item.Layer);
+        //        }
+        //    }
+        //}
 
-        void OverwriteFile(string _jsonGridDataPath)
-        {
-            string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
+        //void OverwriteFile(string _jsonGridDataPath)
+        //{
+        //    string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
 
-            GridData newGridData = new GridData();
+        //    GridData newGridData = new GridData();
 
-            newGridData.SectorData = SectorData;
-            newGridData.Origin = Origin;
-            newGridData.Size = Size;
-            newGridData.ResolutionCorrection = ResolutionCorrection;
-            newGridData.CellsMatrix = CellsMatrix;
-            newGridData.Layers = LayerCtrl.Layers;
+        //    newGridData.SectorData = SectorData;
+        //    newGridData.Origin = Origin;
+        //    newGridData.Size = Size;
+        //    newGridData.ResolutionCorrection = ResolutionCorrection;
+        //    newGridData.CellsMatrix = CellsMatrix;
+        //    newGridData.Layers = LayerCtrl.Layers;
 
-            string newJsonData = JsonUtility.ToJson(newGridData);
+        //    string newJsonData = JsonUtility.ToJson(newGridData);
 
-            // controllo che siano state fatte delle modifiche rispetto al file caricato, altrimenti è inutile salvare lo stesso contenuto nel file
-            if(_jsonGridData != newJsonData)
-            {
-                File.WriteAllText(_jsonGridDataPath, newJsonData);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
-        }
-
-        void SaveNewGrid(string _name = null)
-        {
-            GridData newGridData = new GridData();
-
-            newGridData.SectorData = SectorData;
-            newGridData.Origin = Origin;
-            newGridData.Size = Size;
-            newGridData.ResolutionCorrection = ResolutionCorrection;
-            newGridData.CellsMatrix = CellsMatrix;
-            newGridData.Layers = LayerCtrl.Layers;
-
-            string assetName;
-            if (_name == null)
-                assetName = "NewGridData.json";
-            else
-                assetName = _name + ".json";
-
-            string completePath = AssetDatabase.GenerateUniqueAssetPath(CheckFolder() + assetName);
-
-            string newJsonData = JsonUtility.ToJson(newGridData);
-
-            File.WriteAllText(completePath, newJsonData);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
+        //    // controllo che siano state fatte delle modifiche rispetto al file caricato, altrimenti è inutile salvare lo stesso contenuto nel file
+        //    if(_jsonGridData != newJsonData)
+        //    {
+        //        File.WriteAllText(_jsonGridDataPath, newJsonData);
+        //        AssetDatabase.SaveAssets();
+        //        AssetDatabase.Refresh();
+        //    }
+        //}
 
         string CheckFolder()
         {
