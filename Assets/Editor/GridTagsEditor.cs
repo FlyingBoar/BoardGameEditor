@@ -18,11 +18,11 @@ namespace Grid
 
             if (targets.Length > 1)
             {
-                UpdateScannerLayer();
+                UpdateScannerLayerForTargets();
 
                 for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    bool tempBool = (targets[targets.Length - 1] as GridTags).ScannerLayers[i].Active;  // TODO: i Layer non vengono inizializzati in tempo se vengono selezionati più targets
+                    bool tempBool = (target as GridTags).ScannerLayers[i].Active;  // TODO: i Layer non vengono inizializzati in tempo se vengono selezionati più targets
 
                     for (int j = i; j < targets.Length; j++)
                     {
@@ -121,6 +121,43 @@ namespace Grid
                         {
                             gridTags.ScannerLayers[i].Active = oldLayerList[j].Active;
                             break;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Controlla se i targets hanno i layer inizializzati. Se così non è, ricrea la lista di layer nel gridTag
+        /// </summary>
+        void UpdateScannerLayerForTargets()
+        {
+            List<GridTags> tags = new List<GridTags>();
+            foreach (var _target in targets)
+            {
+                tags.Add(_target as GridTags);
+            }
+
+            for (int j = 0; j < tags.Count; j++)
+            {
+                if (tags[j].ScannerLayers.Count == 0 || tags[j].ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
+                {
+                    List<ScannerLayer> oldLayerList = tags[j].ScannerLayers;
+                    tags[j].ScannerLayers = new List<ScannerLayer>();
+                    for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                    {
+                        tags[j].ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
+                    }
+
+                    for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
+                    {
+                        for (int k = 0; k < oldLayerList.Count; k++)
+                        {
+                            if (gridTags.ScannerLayers[i].Layer.Name == oldLayerList[k].Layer.Name)
+                            {
+                                gridTags.ScannerLayers[i].Active = oldLayerList[k].Active;
+                                break;
+                            }
                         }
                     }
                 }
