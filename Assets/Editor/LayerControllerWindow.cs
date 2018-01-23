@@ -14,7 +14,7 @@ namespace Grid
         string newLayerName;
         Color newLayerGizmosColor;
 
-        Vector2 scrollPosition;
+        Vector2 scrollPosition;      
 
         public GridLayerControllerWindow(GridLayerController _layerCtrl)
         {
@@ -25,6 +25,10 @@ namespace Grid
 
         public void Show()
         {
+            if (GUILayout.Button("SaveProva")) {
+                layerCtrl.Save();
+            }
+
             GUILayout.BeginVertical("Box");
             scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 namespace Grid
 {
     [System.Serializable]
@@ -108,7 +109,7 @@ namespace Grid
             EditorGUILayout.BeginHorizontal("Box");
             if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
-                DataManager.LoadDataFromJson(AssetDatabase.GetAssetPath(fileToLoad));
+                DataManager.LoadData(AssetDatabase.GetAssetPath(fileToLoad));
                 GridCtrl.ReInitVariables();
             }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Grid
 {
@@ -9,6 +10,33 @@ namespace Grid
     {
         public string Name;
         public Color HandlesColor;
+        public LayerType Type;
+        [SerializeField]
+        GridTags[] allGridTags;
+
+        public string Save(GridController _gridCtrl) {
+            switch (Type) {
+                case LayerType.Prefab:
+                    SavePrefab(_gridCtrl);
+                    break;
+                case LayerType.Movement:
+                    SaveMovement();
+                    break;
+            }
+
+            return JsonUtility.ToJson(this);
+        }
+
+        void SavePrefab(GridController _gridCtrl) {
+            allGridTags = GameObject.FindObjectsOfType<GridTags>();
+            foreach (GridTags item in allGridTags) {
+                item.GridPosition = _gridCtrl.GetCoordinatesByPosition(item.transform.position);
+            }
+        }
+
+        void SaveMovement() {
+
+        }
 
         public Layer()
         {
@@ -51,6 +79,10 @@ namespace Grid
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public enum LayerType {
+            Prefab, Movement
         }
     }
 }
