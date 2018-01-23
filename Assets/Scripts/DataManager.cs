@@ -7,6 +7,8 @@ using Grid;
 
 public static class DataManager {
 
+    
+
     static GridData _gridData = new GridData();
 
     static GridData GridData {
@@ -65,7 +67,7 @@ public static class DataManager {
     /// Load the data .json from a path
     /// </summary>
     /// <param name="_jsonGridDataPath"></param>
-    public static void LoadDataFromJson(string _jsonGridDataPath)
+    public static void LoadData(string _jsonGridDataPath)
     {
         string _jsonGridData = File.ReadAllText(_jsonGridDataPath);
         if (_jsonGridData == null)

@@ -34,6 +34,10 @@ namespace Grid
 
         public GridController() { }
 
+        public GridController(GridLayerController _layerCtrl) {
+            Init(_layerCtrl);
+        }
+
         public void Init(GridLayerController _layerCtrl)
         {
             LayerCtrl = _layerCtrl;

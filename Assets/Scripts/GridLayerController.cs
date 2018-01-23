@@ -15,15 +15,15 @@ namespace Grid
             set { _selectedLayer = value; }
         }
 
-
         GridController gridCtrl;
 
-        public GridLayerController(GridController _gridCtrl)
-        {
-            gridCtrl = _gridCtrl;
+        #region API
+        public void Save() {
+            foreach (Layer layer in Layers) {
+                Debug.Log(layer.Save(gridCtrl));
+            }
         }
 
-        #region API
         public void LoadFromData(GridData _gridData)
         {
             Layers = _gridData.Layers;

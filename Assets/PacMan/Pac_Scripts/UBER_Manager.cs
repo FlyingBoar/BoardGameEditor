@@ -54,7 +54,7 @@ public class UBER_Manager : MonoBehaviour {
         if(GridToLoad != null)
         {
             string assetPath = DataManager.GetAssetPath(GridToLoad);
-            DataManager.LoadDataFromJson(assetPath);
+            DataManager.LoadData(assetPath);
             gridCtrl.ReInitVariables();
         }
     }
