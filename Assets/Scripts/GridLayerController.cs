@@ -17,6 +17,11 @@ namespace Grid
 
         GridController gridCtrl;
 
+        public GridLayerController( GridController _gridCtrl)
+        {
+            gridCtrl = _gridCtrl;
+        }
+
         #region API
         public void Save() {
             foreach (Layer layer in Layers) {
