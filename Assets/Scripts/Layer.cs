@@ -9,52 +9,31 @@ namespace Grid
     public class Layer
     {
         public string Name;
-        public Color HandlesColor;
-        public LayerType Type;
+        public Color Color;
         [SerializeField]
-        List<GridObjectData> objectsOnGreed;
-        [SerializeField]
-        GridTags[] allGridTags;
-
-        public string Save(GridController _gridCtrl) {
-            switch (Type) {
-                case LayerType.Prefab:
-                    SavePrefab(_gridCtrl);
-                    break;
-                case LayerType.Movement:
-                    SaveMovement();
-                    break;
-            }
-
-            return JsonUtility.ToJson(this);
-        }
-
-        void SavePrefab(GridController _gridCtrl) {
-            allGridTags = GameObject.FindObjectsOfType<GridTags>();
-            foreach (GridTags item in allGridTags) {
-                item.GridPosition = _gridCtrl.GetCoordinatesByPosition(item.transform.position);
-            }
-        }
-
-        void SaveMovement() {
-
-        }
+        List<LayerItemData> LayerItems;
 
         public Layer()
         {
-            HandlesColor.a = 100;
+            Color.a = 100;
         }
 
         public Layer(string _name)
         {
             Name = _name;
-            HandlesColor.a = 100;
+            Color.a = 100;
         }
 
         public Layer(string _name, Color _gizmosColor)
         {
             Name = _name;
-            HandlesColor = _gizmosColor;
+            Color = _gizmosColor;
+        }
+
+        public string Save(GridController _gridCtrl)
+        {
+
+            return JsonUtility.ToJson(this);
         }
 
         public static bool operator ==(Layer l1, Layer l2)
@@ -81,10 +60,6 @@ namespace Grid
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-
-        public enum LayerType {
-            Prefab, Movement
         }
     }
 }

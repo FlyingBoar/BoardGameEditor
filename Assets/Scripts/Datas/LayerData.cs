@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Grid {
+namespace Grid
+{
     [System.Serializable]
-    public class LayerData {
-
-        List<Layer> Layers;
+    public class LayerData
+    {
+        public List<Layer> Layers;
     }
 }

@@ -5,20 +5,10 @@ using UnityEngine;
 namespace Grid
 {
     [System.Serializable]
-    public class GridObjectData
+    public class LayerItemData
     {
-
         public Vector3Int Coordinates;
-        public Rotation Rotation;
+        public string Rotation;
         public string PrefabName;
-
-    }
-
-    public enum Rotation
-    {
-        Nord,
-        Est,
-        Sud,
-        Ovest
     }
 }
