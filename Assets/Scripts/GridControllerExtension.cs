@@ -125,10 +125,10 @@ namespace Grid
             float angle = (int)_cellLocalRotation * 45;
             Vector3 resultant = Vector3.forward;
             resultant = Quaternion.Euler(Vector3.up * angle) *resultant;
-            if ((int)_cellLocalRotation % 2 > 0)
+            if ((int)_cellLocalRotation % 2 != 0)
                 resultant *= Mathf.Sqrt(2);
-
-            return Vector3Int.FloorToInt(resultant);
+            Vector3Int resultantAsInt = new Vector3Int(Mathf.RoundToInt(resultant.x), Mathf.RoundToInt(resultant.y), Mathf.RoundToInt(resultant.z));
+            return resultantAsInt;
         }
         /// <summary>
         /// Return the coordinate of Right know a specific rotation

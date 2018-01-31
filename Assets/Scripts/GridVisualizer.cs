@@ -10,8 +10,7 @@ namespace Grid
     {
         public GridController GridCtrl;
 
-        //public InputAdapter_Tester InputTester;                                                       // Resa statica per Consentire accesso dal grid Controller
-        Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    // Resa statica per Consentire accesso dal grid Controller
+        Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    
 
         public bool ShowGrid = true;
         public Color GridHandlesColor = Color.cyan;
