@@ -5,29 +5,25 @@ using System.Linq;
 
 namespace Grid
 {
-    [System.Serializable]
     public class Layer
     {
-        public string Name;
-        public Color Color;
-        [SerializeField]
-        List<LayerItemData> LayerItems;
+        LayerData Data;
 
         public Layer()
         {
-            Color.a = 100;
+            Data.Color.a = 100;
         }
 
         public Layer(string _name)
         {
-            Name = _name;
-            Color.a = 100;
+            Data.Name = _name;
+            Data.Color.a = 100;
         }
 
         public Layer(string _name, Color _gizmosColor)
         {
-            Name = _name;
-            Color = _gizmosColor;
+            Data.Name = _name;
+            Data.Color = _gizmosColor;
         }
 
         public string Save(GridController _gridCtrl)
@@ -38,7 +34,7 @@ namespace Grid
 
         public static bool operator ==(Layer l1, Layer l2)
         {
-            if (l1.Name == l2.Name)
+            if (l1.Data.Name == l2.Data.Name)
                 return true;
             else
                 return false;
@@ -46,7 +42,7 @@ namespace Grid
 
         public static bool operator !=(Layer l1, Layer l2)
         {
-            if (l1.Name == l2.Name)
+            if (l1.Data.Name == l2.Data.Name)
                 return false;
             else
                 return true;

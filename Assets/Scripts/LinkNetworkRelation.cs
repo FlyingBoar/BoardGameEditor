@@ -7,6 +7,8 @@ namespace Grid
     public class LinkNetworkRelation : MonoBehaviour
     {
         List<LinkNetwork> linkNetworks = new List<LinkNetwork>();
+
+        public void GetNeighborhood() { }
     }
 }
 

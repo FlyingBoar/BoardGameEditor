@@ -7,6 +7,9 @@ namespace Grid
     [System.Serializable]
     public class LayerData
     {
-        public List<Layer> Layers;
+        public string Name;
+        public Color Color;
+        public List<LayerItemData> LayerItems;
     }
 }
+

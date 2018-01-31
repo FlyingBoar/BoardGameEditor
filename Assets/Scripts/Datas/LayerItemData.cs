@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Grid
 {
     [System.Serializable]
-    public class LayerItemData
+    public struct LayerItemData
     {
         public Vector3Int Coordinates;
         public string Rotation;
