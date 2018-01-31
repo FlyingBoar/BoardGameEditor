@@ -12,6 +12,8 @@ namespace Grid
         public Color HandlesColor;
         public LayerType Type;
         [SerializeField]
+        List<GridObjectData> objectsOnGreed;
+        [SerializeField]
         GridTags[] allGridTags;
 
         public string Save(GridController _gridCtrl) {
