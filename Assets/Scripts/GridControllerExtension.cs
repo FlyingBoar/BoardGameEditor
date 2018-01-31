@@ -115,13 +115,90 @@ namespace Grid
             return coordinates;
         }
 
-
-        public static Vector3Int GetForwardCoordinates(RotationDegrees _cellLocalRotation, int distance = 1)
+        /// <summary>
+        /// Return the coordinate of Forward know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetForward(RotationDegrees _cellLocalRotation)
         {
-            Vector3Int resultant = Vector3Int.zero;
             float angle = (int)_cellLocalRotation * 45;
+            Vector3 resultant = Vector3.forward;
+            resultant = Quaternion.Euler(Vector3.up * angle) *resultant;
+            if ((int)_cellLocalRotation % 2 > 0)
+                resultant *= Mathf.Sqrt(2);
 
-            return resultant;
+            return Vector3Int.FloorToInt(resultant);
+        }
+        /// <summary>
+        /// Return the coordinate of Right know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetRight(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 2;
+            return GetForward(newRot);
+        }
+        /// <summary>
+        /// Return the coordinate of Backward know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetBackward(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 4;
+            return GetForward(newRot);
+        }
+        /// <summary>
+        /// Return the coordinate of Left know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetLeft(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 6;
+            return GetForward(newRot);
+        }
+        /// <summary>
+         /// Return the coordinate of Forward-Right know a specific rotation
+         /// </summary>
+         /// <param name="_cellLocalRotation">Local rotation</param>
+         /// <returns></returns>
+        public static Vector3Int GetForwardRight(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 1;
+            return GetForward(newRot);
+        }
+        /// <summary>
+        /// Return the coordinate of Backward-Right know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetBackwardRight(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 3;
+            return GetForward(newRot);
+        }
+        /// <summary>
+        /// Return the coordinate of Backward-Left know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetBackwardLeft(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 5;
+            return GetForward(newRot);
+        }
+        /// <summary>
+        /// Return the coordinate of Forward-Left know a specific rotation
+        /// </summary>
+        /// <param name="_cellLocalRotation">Local rotation</param>
+        /// <returns></returns>
+        public static Vector3Int GetForwardLeft(RotationDegrees _cellLocalRotation)
+        {
+            RotationDegrees newRot = _cellLocalRotation + 7;
+            return GetForward(newRot);
         }
     }
 
