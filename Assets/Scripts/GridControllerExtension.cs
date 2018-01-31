@@ -90,10 +90,12 @@ namespace Grid
 
             return new Vector3Int(coordinates[0], coordinates[1], coordinates[2]);
         }
-        //Associate the coordinate of clostest Cell center (or cell array index)
-        //to the position vector
-        //By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
-        //the int cast on the normalized position
+        /// <summary>
+        ///Associate the coordinate of clostest Cell center (or cell array index)
+        ///to the position vector
+        ///By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
+        ///the int cast on the normalized position
+        /// <summary>
         public static Vector3Int GetCoordinatesByPosition(this GridController _gridCtrl, Vector3 _position, out bool _isInCellRadius)
         {
             Vector3Int coordinates = GetCoordinatesByPosition(_gridCtrl, _position);
@@ -112,5 +114,25 @@ namespace Grid
             _isInCellRadius = _isInCell;
             return coordinates;
         }
+
+
+        public static Vector3Int GetForwardCoordinates(RotationDegrees _cellLocalRotation, int distance = 1)
+        {
+            Vector3Int resultant = Vector3Int.zero;
+            float angle = (int)_cellLocalRotation * 45;
+
+            return resultant;
+        }
+    }
+
+    public enum RotationDegrees {
+        Angle_0 = 0,
+        Angle_45,
+        Angle_90,
+        Angle_135,
+        Angle_180,
+        Angle_225,
+        Angle_270,
+        Angle_315,
     }
 }
