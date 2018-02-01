@@ -4,11 +4,9 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace Grid
-{
+namespace Grid {
     [System.Serializable]
-    public class MasterGridWindow : EditorWindow
-    {
+    public class MasterGridWindow : EditorWindow {
         public static GridController GridCtrl { get { return MasterGrid.gridCtrl; } }
         public static GridControllerWindow GridCtrlWindow { get; private set; }
 
@@ -33,8 +31,7 @@ namespace Grid
         static List<string> toolbarEntries = new List<string>();
 
         [MenuItem("Window/Master Grid _%g")]
-        static void Init()
-        {
+        static void Init() {
             MasterGridWindow masterGrid = (MasterGridWindow)GetWindow(typeof(MasterGridWindow));
             masterGrid.titleContent = new GUIContent("Master Grid");
             masterGrid.Show();
@@ -49,8 +46,7 @@ namespace Grid
             GridLayerCtrlWindow = new GridLayerControllerWindow(LayerCtrl);
             GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
-            if (toolbarEntries.Count == 0)
-            {
+            if (toolbarEntries.Count == 0) {
                 toolbarEntries.Add("Grid Controller");
                 toolbarEntries.Add("Grid Visualizer");
                 toolbarEntries.Add("Layer Controller");
@@ -61,15 +57,13 @@ namespace Grid
             SceneView.onSceneGUIDelegate += MouseInteraction;
         }
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             //Workaround
             if (GridCtrl == null)
                 Init();
         }
 
-        private void OnGUI()
-        {
+        private void OnGUI() {
             #region Save/Load Region
 
             EditorGUILayout.Space();
@@ -79,16 +73,14 @@ namespace Grid
 
             if (fileToLoad == null)
                 GUI.enabled = false;
-            if (GUILayout.Button("Save", GUILayout.Height(40)))
-            {
+            if (GUILayout.Button("Save", GUILayout.Height(40))) {
                 GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveData(AssetDatabase.GetAssetPath(fileToLoad));
             }
             if (fileToLoad == null)
                 GUI.enabled = true;
 
-            if (GUILayout.Button("Save as", GUILayout.Height(40)))
-            {
+            if (GUILayout.Button("Save as", GUILayout.Height(40))) {
                 GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveNewData(newDataName);
             }
@@ -104,18 +96,15 @@ namespace Grid
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Load Grid") && fileToLoad != null)
-            {
+            if (GUILayout.Button("Load Grid") && fileToLoad != null) {
                 DataManager.LoadData(AssetDatabase.GetAssetPath(fileToLoad));
                 GridCtrl.ReInitVariables();
             }
 
             fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
-            if (fileToLoad != null)
-            {
+            if (fileToLoad != null) {
                 string loadFilePath = AssetDatabase.GetAssetPath(fileToLoad);
-                if (!loadFilePath.Contains(".json"))
-                {
+                if (!loadFilePath.Contains(".json")) {
                     fileToLoad = null;
                     Debug.LogWarning("File format not supported !");
                 }
@@ -128,8 +117,7 @@ namespace Grid
             #endregion
 
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
-            switch (selectedToolbarItem)
-            {
+            switch (selectedToolbarItem) {
                 case 0: // grid controller
                     GridCtrlWindow.Show();
                     break;
@@ -145,14 +133,12 @@ namespace Grid
             }
         }
 
-        static void DrawCall(SceneView _sceneView)
-        {
+        static void DrawCall(SceneView _sceneView) {
             GridVisualizer.DrawHandles();
             SceneView.RepaintAll();
         }
 
-        static void MouseInteraction(SceneView _sceneView)
-        {
+        static void MouseInteraction(SceneView _sceneView) {
             if (_sceneView != SceneView.currentDrawingSceneView)
                 return;
             //if (Event.current.type == EventType.MouseDown)
@@ -163,72 +149,56 @@ namespace Grid
             //        OnRightClick();
             //}
             //else
-            if (Event.current.type == EventType.MouseDrag)
-            {
+            if (Event.current.type == EventType.MouseDrag) {
                 if (Event.current.button == 0 && Event.current.shift)
                     DragSelection();
-            }
-            else if (Event.current.type == EventType.MouseUp)
-            {
-                if(Event.current.button == 0)
+            } else if (Event.current.type == EventType.MouseUp) {
+                if (Event.current.button == 0)
                     Tools.hidden = false;
             }
         }
 
-        static void DragSelection()
-        {
+        static void DragSelection() {
             if (GridCtrl == null)
                 return;
             Transform selectedTransf = Selection.activeTransform;
-            if (selectedTransf != null)
-            {
+            if (selectedTransf != null) {
                 LayerItem selectedLayerItem = selectedTransf.GetComponent<LayerItem>();
                 if (selectedLayerItem != null) {
                     Tools.hidden = true;
-                    selectedLayerItem.SetCoordianates(GridCtrl.GetCoordinatesByPosition(GridInput.PointerPosition));
-                    //Cell cell = GridCtrl.GetCellFromPosition();
-                    //if (cell != null) {
-
-                    //}
-                }
-                    else
-                        Tools.hidden = false;
+                    selectedLayerItem.SetCoordinates(GridCtrl.GetCoordinatesByPosition(GridInput.PointerPosition));
+                } 
             }
+            else
+                Tools.hidden = false;
         }
 
-        static void OnLeftClick()
-        {
+        static void OnLeftClick() {
             if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
                 GridCtrlWindow.LinkSelectedCell();
-            else if(GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
+            else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
                 GridCtrlWindow.LinkSelectedCell(true);
-            else if(GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
+            else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
                 GridCtrlWindow.UnlinkSelectedCell();
             else
                 GridCtrlWindow.SelectCell();
         }
 
-        static void OnRightClick()
-        {
-            if (GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition))
-            {
+        static void OnRightClick() {
+            if (GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition)) {
                 GenericMenu menu = new GenericMenu();
-                if (GridCtrlWindow.SelectedCell != null)
-                {
+                if (GridCtrlWindow.SelectedCell != null) {
                     menu.AddItem(new GUIContent("Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link); });
                     menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
                     menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
                 }
                 menu.ShowAsContext();
-            }
-            else if (GridCtrlWindow.CurrentMouseAction != GridControllerWindow.MouseActions.None)
-            {
+            } else if (GridCtrlWindow.CurrentMouseAction != GridControllerWindow.MouseActions.None) {
                 GridCtrlWindow.EndMouseAction();
             }
         }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() {
             SceneView.onSceneGUIDelegate -= DrawCall;
             SceneView.onSceneGUIDelegate -= MouseInteraction;
         }

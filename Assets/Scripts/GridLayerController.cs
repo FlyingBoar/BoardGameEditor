@@ -27,10 +27,13 @@ namespace Grid
 
         #region API
         public void NewItemInScene(LayerItem _item) {
-            _item.SetCoordianates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
+            _item.SetCoordinates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
             Layers[0].Data.ItemsInLayer.Add(_item.GetData());
         }
 
+        public void RemoveItemFromScene(LayerItem _item) {
+            Layers[0].Data.ItemsInLayer.Remove(_item.GetData());
+        }
 
         public void Save()
         {

@@ -38,8 +38,8 @@ namespace Grid
         #region API
         public string SaveToJson(GridController _gridCtrl)
         {
-            AddObjectsInThisLayer(_gridCtrl);
-            return JsonUtility.ToJson(_data);
+            //AddObjectsInThisLayer(_gridCtrl);
+            return JsonUtility.ToJson(Data);
         }
         #endregion
 

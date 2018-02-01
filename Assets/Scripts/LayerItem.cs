@@ -10,7 +10,7 @@ namespace Grid
     {
         List<LinkNetwork> linkNetworks = new List<LinkNetwork>();
 
-        LayerItemData data;
+        LayerItemData data = new LayerItemData();
 
         public Layer MembershipLayer;
 
@@ -20,10 +20,10 @@ namespace Grid
                 MasterGrid.gridLayerCtrl.NewItemInScene(this);
         }
 
-        public void SetCoordianates(Vector3Int _gridCoordinates) {
+        public void SetCoordinates(Vector3Int _gridCoordinates) {
             if (_gridCoordinates == data.GridCoordinates)
                 return;
-            data = new LayerItemData(_gridCoordinates, data.Rotation, data.PrefabName);
+            data.GridCoordinates =_gridCoordinates;
             transform.position = MasterGrid.gridCtrl.GetPositionByCoordinates(data.GridCoordinates);
         }
 
@@ -32,6 +32,11 @@ namespace Grid
         }
 
         public void GetNeighborhood() { }
+
+        private void OnDestroy() {
+            if (MasterGrid.gridLayerCtrl != null)
+                MasterGrid.gridLayerCtrl.RemoveItemFromScene(this);
+        }
     }
 }
 
