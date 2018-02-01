@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace Grid
 {
@@ -15,6 +16,7 @@ namespace Grid
             LayerItemData saveData = new LayerItemData();
             saveData.Coordinates = _gridCtrl.GetCoordinatesByPosition(transform.position);
 
+            saveData.PrefabName = PrefabUtility.GetPrefabParent(gameObject).name;
             return saveData;
         }
 
