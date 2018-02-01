@@ -43,11 +43,11 @@ namespace Grid
             for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                if (layerCtrl.GetLayerAtIndex(i).Name == "Base")
+                if (layerCtrl.GetLayerAtIndex(i).Data.Name == "Base")
                     GUI.enabled = false;
 
-                layerCtrl.GetLayerAtIndex(i).Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Name);
-                layerCtrl.GetLayerAtIndex(i).Color = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).Color);
+                layerCtrl.GetLayerAtIndex(i).Data.Name = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Data.Name);
+                layerCtrl.GetLayerAtIndex(i).Data.Color = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).Data.Color);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {
@@ -55,7 +55,7 @@ namespace Grid
                     continue;
                 }
 
-                if (layerCtrl.GetLayerAtIndex(i).Name == "Base")
+                if (layerCtrl.GetLayerAtIndex(i).Data.Name == "Base")
                     GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
@@ -80,7 +80,7 @@ namespace Grid
                 }
                 for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
                 {
-                    if(layerCtrl.GetLayerAtIndex(i).Name == newLayerName)
+                    if(layerCtrl.GetLayerAtIndex(i).Data.Name == newLayerName)
                     {
                         Debug.LogWarning("The name of the layer already exist !");
                         return;

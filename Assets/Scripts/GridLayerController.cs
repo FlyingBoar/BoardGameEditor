@@ -23,9 +23,12 @@ namespace Grid
         }
 
         #region API
-        public void Save() {
-            foreach (Layer layer in Layers) {
-                Debug.Log(layer.Save(gridCtrl));
+        public void Save()
+        {
+            string layers = string.Empty;
+            foreach (Layer layer in Layers)
+            { 
+                layers += layer.Save(gridCtrl);
             }
         }
 

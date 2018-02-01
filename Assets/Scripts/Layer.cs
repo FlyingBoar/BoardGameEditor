@@ -7,31 +7,43 @@ namespace Grid
 {
     public class Layer
     {
-        LayerData Data;
+        LayerData _data;
+        public LayerData Data
+        {
+            get { return _data; }
+            private set { _data = value; }
+        }
 
+        #region Constructors
         public Layer()
         {
-            Data.Color.a = 100;
+            Data = new LayerData();
         }
 
         public Layer(string _name)
         {
-            Data.Name = _name;
-            Data.Color.a = 100;
+            Data = new LayerData(_name);
         }
 
-        public Layer(string _name, Color _gizmosColor)
+        public Layer(string _name, Color _color)
         {
-            Data.Name = _name;
-            Data.Color = _gizmosColor;
+            Data = new LayerData(_name, _color);
         }
 
+        public Layer(LayerData _data)
+        {
+            Data = _data;
+        }
+        #endregion
+
+        #region API
         public string Save(GridController _gridCtrl)
         {
-
-            return JsonUtility.ToJson(this);
+            return JsonUtility.ToJson(_data);
         }
+        #endregion
 
+        #region Operators
         public static bool operator ==(Layer l1, Layer l2)
         {
             if (l1.Data.Name == l2.Data.Name)
@@ -57,5 +69,6 @@ namespace Grid
         {
             return base.GetHashCode();
         }
+        #endregion
     }
 }

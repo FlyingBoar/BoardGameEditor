@@ -10,6 +10,23 @@ namespace Grid
         public string Name;
         public Color Color;
         public List<LayerItemData> LayerItems;
+
+        public LayerData()
+        {
+            Color.a = 100;
+        }
+
+        public LayerData(string _name)
+        {
+            Name = _name;
+            Color.a = 100;
+        }
+
+        public LayerData(string _name, Color _color)
+        {
+            Name = _name;
+            Color = _color;
+        }
     }
 }
 

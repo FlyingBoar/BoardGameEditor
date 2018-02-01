@@ -66,7 +66,7 @@ namespace Grid
 
         void CheckSelectedLayer(int _i)
         {
-            tempLink[_i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(_i).Name, tempLink[_i]);
+            tempLink[_i] = EditorGUILayout.Toggle(visualizer.GridCtrl.LayerCtrl.GetLayerAtIndex(_i).Data.Name, tempLink[_i]);
 
             if (tempLink[_i])
             {

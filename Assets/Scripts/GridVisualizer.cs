@@ -71,7 +71,7 @@ namespace Grid
 
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
-            Handles.color = _layer.Color;
+            Handles.color = _layer.Data.Color;
             foreach (Vector3Int link in _cell.GetCellData().GetLinkCoordinates(_layer))
             {
                 Vector3 line = GridCtrl.GetPositionByCoordinates(link) - _cell.GetPosition();
