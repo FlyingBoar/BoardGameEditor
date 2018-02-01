@@ -8,6 +8,8 @@ namespace Grid
     {
         List<LinkNetwork> linkNetworks = new List<LinkNetwork>();
 
+        public Layer MembershipLayer;
+
         public LayerItemData SaveToData(GridController _gridCtrl)
         {
             LayerItemData saveData = new LayerItemData();

@@ -75,10 +75,10 @@ namespace Grid
 
         private void OnGUI()
         {
-
             #region Save/Load Region
 
             EditorGUILayout.Space();
+            EditorGUILayout.BeginVertical("Box");
 
             EditorGUILayout.BeginHorizontal();
 
@@ -106,7 +106,9 @@ namespace Grid
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal("Box");
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
                 DataManager.LoadData(AssetDatabase.GetAssetPath(fileToLoad));
@@ -125,6 +127,7 @@ namespace Grid
             }
 
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
 
             EditorGUILayout.Space();
             #endregion

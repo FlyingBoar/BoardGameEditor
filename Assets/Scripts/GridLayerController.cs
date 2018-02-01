@@ -25,11 +25,12 @@ namespace Grid
         #region API
         public void Save()
         {
-            string layers = string.Empty;
+            string layerSaved = string.Empty;
             foreach (Layer layer in Layers)
-            { 
-                layers += layer.Save(gridCtrl);
+            {
+                layerSaved += layer.Save(gridCtrl);
             }
+            Debug.Log(layerSaved);
         }
 
         public void LoadFromData(GridData _gridData)

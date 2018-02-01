@@ -25,7 +25,8 @@ namespace Grid
 
         public void Show()
         {
-            if (GUILayout.Button("SaveProva")) {
+            if (GUILayout.Button("SaveProva"))
+            {
                 layerCtrl.Save();
             }
 

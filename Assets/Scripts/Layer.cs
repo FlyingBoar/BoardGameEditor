@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 namespace Grid
 {
@@ -39,9 +38,21 @@ namespace Grid
         #region API
         public string Save(GridController _gridCtrl)
         {
+            AddObjectsInThisLayer(_gridCtrl);
             return JsonUtility.ToJson(_data);
         }
         #endregion
+
+        void AddObjectsInThisLayer(GridController _gridCtrl)
+        {
+            LayerItem[] itemInLayer = GameObject.FindObjectsOfType<LayerItem>();
+            Data.ItemsInLayer = new List<LayerItemData>();
+            for (int i = 0; i < itemInLayer.Length; i++)
+            {
+                if(itemInLayer[i].MembershipLayer == this)
+                    Data.ItemsInLayer.Add(itemInLayer[i].SaveToData(_gridCtrl));
+            }
+        }
 
         #region Operators
         public static bool operator ==(Layer l1, Layer l2)

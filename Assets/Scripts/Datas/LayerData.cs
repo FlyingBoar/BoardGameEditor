@@ -9,7 +9,7 @@ namespace Grid
     {
         public string Name;
         public Color Color;
-        public List<LayerItemData> LayerItems;
+        public List<LayerItemData> ItemsInLayer;
 
         public LayerData()
         {
