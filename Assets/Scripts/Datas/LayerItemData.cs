@@ -7,8 +7,14 @@ namespace Grid
     [System.Serializable]
     public struct LayerItemData
     {
-        public Vector3Int Coordinates;
+        public Vector3Int GridCoordinates;
         public RotationDegrees Rotation;
         public string PrefabName;
+
+        public LayerItemData(Vector3Int _gridCoordinates, RotationDegrees _rotation, string _prefabName) {
+            GridCoordinates = _gridCoordinates;
+            Rotation = _rotation;
+            PrefabName = _prefabName;
+        }
     }
 }

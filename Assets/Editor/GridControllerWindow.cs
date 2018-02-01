@@ -17,7 +17,7 @@ namespace Grid
             private set
             {
                 _selectedCell = value;
-                MasterGrid.GridVisualizer.SelectedCell = _selectedCell;
+                MasterGridWindow.GridVisualizer.SelectedCell = _selectedCell;
             }
         }
 
@@ -91,13 +91,13 @@ namespace Grid
         public void StartMouseAction(MouseActions _mouseActions)
         {
             CurrentMouseAction = _mouseActions;
-            MasterGrid.GridVisualizer.ShowMouseAction = true;
+            MasterGridWindow.GridVisualizer.ShowMouseAction = true;
         }
 
         public void EndMouseAction()
         {
             CurrentMouseAction = MouseActions.None;
-            MasterGrid.GridVisualizer.ShowMouseAction = false;
+            MasterGridWindow.GridVisualizer.ShowMouseAction = false;
         }
 
         /// <summary>

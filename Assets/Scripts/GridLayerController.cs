@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Grid
 {
+    /// <summary>
+    /// Controller che contiene qualsiasi funzione legata ai layer.
+    /// </summary>
     public class GridLayerController
     {
         internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
@@ -23,6 +26,12 @@ namespace Grid
         }
 
         #region API
+        public void NewItemInScene(LayerItem _item) {
+            _item.SetCoordianates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
+            Layers[0].Data.ItemsInLayer.Add(_item.GetData());
+        }
+
+
         public void Save()
         {
             string layerSaved = string.Empty;

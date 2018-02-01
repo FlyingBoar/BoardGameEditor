@@ -50,7 +50,7 @@ namespace Grid
             for (int i = 0; i < itemInLayer.Length; i++)
             {
                 if(itemInLayer[i].MembershipLayer == this)
-                    Data.ItemsInLayer.Add(itemInLayer[i].SaveToData(_gridCtrl));
+                    Data.ItemsInLayer.Add(itemInLayer[i].GetData());
             }
         }
 

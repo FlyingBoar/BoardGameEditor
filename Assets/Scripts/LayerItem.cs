@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Grid
+namespace Grid 
 {
+    [ExecuteInEditMode]
     public class LayerItem : MonoBehaviour
     {
         List<LinkNetwork> linkNetworks = new List<LinkNetwork>();
 
+        LayerItemData data;
+
         public Layer MembershipLayer;
 
-        public LayerItemData SaveToData(GridController _gridCtrl)
+        public void Awake() 
         {
-            LayerItemData saveData = new LayerItemData();
-            saveData.Coordinates = _gridCtrl.GetCoordinatesByPosition(transform.position);
-
-            saveData.PrefabName = PrefabUtility.GetPrefabParent(gameObject).name;
-            return saveData;
+            if (MasterGrid.gridLayerCtrl != null)
+                MasterGrid.gridLayerCtrl.NewItemInScene(this);
         }
 
-        public void SetUpByData(LayerItemData _data, GridController _gridCtrl)
-        {
-            transform.position = _gridCtrl.GetPositionByCoordinates(_data.Coordinates);
+        public void SetCoordianates(Vector3Int _gridCoordinates) {
+            if (_gridCoordinates == data.GridCoordinates)
+                return;
+            data = new LayerItemData(_gridCoordinates, data.Rotation, data.PrefabName);
+            transform.position = MasterGrid.gridCtrl.GetPositionByCoordinates(data.GridCoordinates);
+        }
 
-            Vector3 positionToLook = _gridCtrl.GetPositionByCoordinates(GridControllerExtension.GetForward(_data.Rotation));
-            transform.rotation = Quaternion.LookRotation(positionToLook);
+        public LayerItemData GetData() {
+            return data;
         }
 
         public void GetNeighborhood() { }

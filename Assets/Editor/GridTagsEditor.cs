@@ -20,7 +20,7 @@ namespace Grid
             {
                 UpdateScannerLayerForTargets();
 
-                for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                for (int i = 0; i < MasterGridWindow.LayerCtrl.GetNumberOfLayers(); i++)
                 {
                     bool tempBool = (target as GridTags).ScannerLayers[i].Active;  // TODO: i Layer non vengono inizializzati in tempo se vengono selezionati più targets
 
@@ -51,7 +51,7 @@ namespace Grid
             EditorGUI.indentLevel = 1;
             EditorGUILayout.BeginVertical();
 
-            if (MasterGrid.LayerCtrl == null)
+            if (MasterGridWindow.LayerCtrl == null)
                 return; //WORKAROUND !!
 
             UpdateScannerLayer();
@@ -104,13 +104,13 @@ namespace Grid
 
         void UpdateScannerLayer()
         {
-            if (gridTags.ScannerLayers.Count == 0 || gridTags.ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
+            if (gridTags.ScannerLayers.Count == 0 || gridTags.ScannerLayers.Count != MasterGridWindow.LayerCtrl.GetNumberOfLayers())
             {
                 List<ScannerLayer> oldLayerList = gridTags.ScannerLayers;
                 gridTags.ScannerLayers = new List<ScannerLayer>();
-                for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                for (int i = 0; i < MasterGridWindow.LayerCtrl.GetNumberOfLayers(); i++)
                 {
-                    gridTags.ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
+                    gridTags.ScannerLayers.Add(new ScannerLayer(MasterGridWindow.LayerCtrl.GetLayerAtIndex(i), false));
                 }
 
                 for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
@@ -140,13 +140,13 @@ namespace Grid
 
             for (int j = 0; j < tags.Count; j++)
             {
-                if (tags[j].ScannerLayers.Count == 0 || tags[j].ScannerLayers.Count != MasterGrid.LayerCtrl.GetNumberOfLayers())
+                if (tags[j].ScannerLayers.Count == 0 || tags[j].ScannerLayers.Count != MasterGridWindow.LayerCtrl.GetNumberOfLayers())
                 {
                     List<ScannerLayer> oldLayerList = tags[j].ScannerLayers;
                     tags[j].ScannerLayers = new List<ScannerLayer>();
-                    for (int i = 0; i < MasterGrid.LayerCtrl.GetNumberOfLayers(); i++)
+                    for (int i = 0; i < MasterGridWindow.LayerCtrl.GetNumberOfLayers(); i++)
                     {
-                        tags[j].ScannerLayers.Add(new ScannerLayer(MasterGrid.LayerCtrl.GetLayerAtIndex(i), false));
+                        tags[j].ScannerLayers.Add(new ScannerLayer(MasterGridWindow.LayerCtrl.GetLayerAtIndex(i), false));
                     }
 
                     for (int i = 0; i < gridTags.ScannerLayers.Count; i++)
