@@ -28,7 +28,7 @@ namespace Grid
             string layerSaved = string.Empty;
             foreach (Layer layer in Layers)
             {
-                layerSaved += layer.Save(gridCtrl);
+                layerSaved += layer.SaveToJson(gridCtrl);
             }
             Debug.Log(layerSaved);
         }
