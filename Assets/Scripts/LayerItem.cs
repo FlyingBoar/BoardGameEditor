@@ -20,20 +20,23 @@ namespace Grid
                 MasterGrid.gridLayerCtrl.NewItemInScene(this);
         }
 
-        public void SetCoordinates(Vector3Int _gridCoordinates) {
+        public void SetCoordinates(Vector3Int _gridCoordinates)
+        {
             if (_gridCoordinates == data.GridCoordinates)
                 return;
             data.GridCoordinates =_gridCoordinates;
             transform.position = MasterGrid.gridCtrl.GetPositionByCoordinates(data.GridCoordinates);
         }
 
-        public LayerItemData GetData() {
+        public LayerItemData GetData()
+        {
             return data;
         }
 
         public void GetNeighborhood() { }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             if (MasterGrid.gridLayerCtrl != null)
                 MasterGrid.gridLayerCtrl.RemoveItemFromScene(this);
         }

@@ -14,7 +14,8 @@ namespace Grid
         public string Prefabname;
         public Vector3Int GridPosition;
 
-        public void Awake() {
+        public void Awake()
+        {
             Prefabname = PrefabUtility.GetPrefabParent(gameObject).name;
         }
     }
