@@ -60,8 +60,6 @@ namespace Grid
             for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                if (layerCtrl.GetLayerAtIndex(i).Data.ID == "Base")
-                    GUI.enabled = false;
 
                 layerCtrl.GetLayerAtIndex(i).Data.ID = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Data.ID);
                 layerCtrl.GetLayerAtIndex(i).Data.Color = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).Data.Color);
@@ -72,8 +70,6 @@ namespace Grid
                     continue;
                 }
 
-                if (layerCtrl.GetLayerAtIndex(i).Data.ID == "Base")
-                    GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
 

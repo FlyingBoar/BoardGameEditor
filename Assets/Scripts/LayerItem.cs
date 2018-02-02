@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 namespace Grid 
 {
@@ -12,14 +11,9 @@ namespace Grid
 
         LayerItemData data = new LayerItemData();
 
-        public Layer MembershipLayer;
+        public Layer MembershipLayer { get; set; }
 
-        public void Awake() 
-        {
-            if (MasterGrid.gridLayerCtrl != null)
-                MasterGrid.gridLayerCtrl.NewItemInScene(this);
-        }
-
+        #region API
         public void SetCoordinates(Vector3Int _gridCoordinates)
         {
             if (_gridCoordinates == data.GridCoordinates)
@@ -32,8 +26,13 @@ namespace Grid
         {
             return data;
         }
+        #endregion
 
-        public void GetNeighborhood() { }
+        private void Awake()
+        {
+            if (MasterGrid.gridLayerCtrl != null)
+                MasterGrid.gridLayerCtrl.NewItemInScene(this);
+        }
 
         private void OnDestroy()
         {

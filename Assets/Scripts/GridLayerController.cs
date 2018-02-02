@@ -13,7 +13,7 @@ namespace Grid
 
         List<LinkNetworkType> NetworkTypes = new List<LinkNetworkType>();
 
-        int _selectedLayer = -1;
+        int _selectedLayer = 0;
         public int SelectedLayer
         {
             get { return _selectedLayer; }
@@ -72,7 +72,8 @@ namespace Grid
         public void NewItemInScene(LayerItem _item)
         {
             _item.SetCoordinates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
-            Layers[0].Data.ItemsInLayer.Add(_item.GetData());
+            _item.MembershipLayer = Layers[SelectedLayer];
+            Layers[SelectedLayer].Data.ItemsInLayer.Add(_item.GetData());
         }
 
         public void RemoveItemFromScene(LayerItem _item)

@@ -14,11 +14,6 @@ namespace Grid
         }
 
         #region Constructors
-        public Layer()
-        {
-            Data = new LayerData();
-        }
-
         public Layer(string _name)
         {
             Data = new LayerData(_name);

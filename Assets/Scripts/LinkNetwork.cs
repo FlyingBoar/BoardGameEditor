@@ -7,7 +7,7 @@ namespace Grid
     public class LinkNetwork
     {
         LinkNetworkType type;
-        List<Link> Links = new List<Link>();
+        List<Link> links = new List<Link>();
 
         public LinkNetwork(LinkNetworkType _type)
         {
@@ -16,13 +16,13 @@ namespace Grid
 
         public void AddLink(Link _newLink)
         {
-            foreach (Link link in Links)
+            foreach (Link link in links)
             {
                 if (link.ID == _newLink.ID)
                     return;
             }
 
-            Links.Add(_newLink);
+            links.Add(_newLink);
         }
     } 
     
