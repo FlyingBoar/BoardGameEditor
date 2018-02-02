@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace Grid
 {
@@ -10,6 +11,8 @@ namespace Grid
         GridLayerController layerCtrl;
         Texture addLayerTexture;
         Texture removeLayerTexture;
+
+        bool[] tempSelectedLayer;
 
         string newLayerName;
         Color newLayersColor;
@@ -50,8 +53,9 @@ namespace Grid
             scrollPositionLayer = GUILayout.BeginScrollView(scrollPositionLayer);
 
             GUILayout.BeginHorizontal();
+            GUILayout.Label("Is Active", EditorStyles.boldLabel);
             GUILayout.Label("Layer", EditorStyles.boldLabel);
-            GUILayout.Space(10);
+            GUILayout.Space(5);
             GUILayout.Label("Color", EditorStyles.boldLabel);
             GUILayout.EndHorizontal();
 
@@ -59,8 +63,21 @@ namespace Grid
 
             for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
             {
+                if (tempSelectedLayer == null || tempSelectedLayer.Length != layerCtrl.GetNumberOfLayers())
+                {
+                    tempSelectedLayer = new bool[layerCtrl.GetNumberOfLayers()];
+                    tempSelectedLayer[0] = true;
+                    layerCtrl.SelectedLayer = 0;
+                }
+                if (!tempSelectedLayer.ToList().Contains(true))
+                {
+                    tempSelectedLayer[0] = true;
+                    layerCtrl.SelectedLayer = 0;
+                }
+
                 EditorGUILayout.BeginHorizontal();
 
+                UpdateSelectedLayer(i);
                 layerCtrl.GetLayerAtIndex(i).Data.ID = EditorGUILayout.TextField(layerCtrl.GetLayerAtIndex(i).Data.ID);
                 layerCtrl.GetLayerAtIndex(i).Data.Color = EditorGUILayout.ColorField(layerCtrl.GetLayerAtIndex(i).Data.Color);
 
@@ -73,7 +90,7 @@ namespace Grid
                 GUILayout.EndHorizontal();
             }
 
-            GUILayout.Space(2);
+            GUILayout.Space(4);
             GUILayout.Label("New Layer", EditorStyles.boldLabel);
             GUILayout.Space(2);
 
@@ -172,6 +189,34 @@ namespace Grid
             GUILayout.EndHorizontal();
             GUILayout.EndScrollView();
             GUILayout.EndVertical();
+        }
+
+        void UpdateSelectedLayer(int _i)
+        {
+            tempSelectedLayer[_i] = EditorGUILayout.Toggle(tempSelectedLayer[_i]);
+
+            if (tempSelectedLayer[_i])
+            {
+                layerCtrl.SelectedLayer = _i;
+
+                for (int i = 0; i < tempSelectedLayer.Length; i++)
+                {
+                    if (i != _i)
+                    {
+                        tempSelectedLayer[i] = false;
+                    }
+                }
+                return;
+            }
+
+            if (tempSelectedLayer.ToList().Contains(true))
+            {
+                return;
+            }
+            else
+            {
+                layerCtrl.SelectedLayer = 0;
+            }
         }
     }
 }

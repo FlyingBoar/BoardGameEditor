@@ -41,10 +41,9 @@ namespace Grid
         void AddObjectsInThisLayer(GridController _gridCtrl)
         {
             LayerItem[] itemInLayer = GameObject.FindObjectsOfType<LayerItem>();
-            Data.ItemsInLayer = new List<LayerItemData>();
             for (int i = 0; i < itemInLayer.Length; i++)
             {
-                if(itemInLayer[i].MembershipLayer == this)
+                if(itemInLayer[i].MembershipLayer == this && !Data.ItemsInLayer.Contains(itemInLayer[i].GetData()))
                     Data.ItemsInLayer.Add(itemInLayer[i].GetData());
             }
         }
