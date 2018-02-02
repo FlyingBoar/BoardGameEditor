@@ -101,6 +101,11 @@ namespace Grid
                 return Layers[_index];
         }
 
+        public Layer GetSelectedLayer()
+        {
+            return Layers[SelectedLayer];
+        }
+
         public void AddLayer(Layer _layer)
         {
             if(!Layers.Contains(_layer))

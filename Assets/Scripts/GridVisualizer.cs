@@ -29,30 +29,42 @@ namespace Grid
 
         public void DrawHandles()
         {
-            List<Cell> cellList = GridCtrl.GetCellsList();
-            if (cellList.Count <= 0)
-                return;
 
-            foreach (Cell cell in cellList)
-            {
-                if (ShowGrid)
-                    DisplayCell(cell, GridHandlesColor);
-                if (ShowLayersLink)
-                {
-                    if (GridCtrl.LayerCtrl.SelectedLayer >= 0)
-                        DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(GridCtrl.LayerCtrl.SelectedLayer));
-                }
-            }
+            DisplayMouseCell(MasterGrid.gridLayerCtrl.GetSelectedLayer().Data.Color);
 
-            if(ShowMouseAction)
-                DisplayLinkPreview(Color.red);
+            //if(SelectedCell != null)
+            //{
+            //    DisplayCell(SelectedCell, Color.red);
+            //    DisplayLayerLink(SelectedCell, MasterGrid.gridLayerCtrl.GetSelectedLayer());
+            //}
 
-            if (ShowMousePosition)
-                DisplayMousePosition(Color.red);
-            if (ShowMouseCell)
-                DisplayMouseCell(Color.red);
+            //List<Cell> cellList = GridCtrl.GetCellsList();
+            //if (cellList.Count <= 0)
+            //    return;
+
+            //foreach (Cell cell in cellList)
+            //{
+            //    if (ShowGrid)
+            //        DisplayCell(cell, GridHandlesColor);
+            //    if (ShowLayersLink)
+            //    {
+            //        if (GridCtrl.LayerCtrl.SelectedLayer >= 0)
+            //            DisplayLayerLink(cell, GridCtrl.LayerCtrl.GetLayerAtIndex(GridCtrl.LayerCtrl.SelectedLayer));
+            //    }
+            //}
+
+            //if(ShowMouseAction)
+            //    DisplayLinkPreview(Color.red);
+
+            //if (ShowMousePosition)
+            //    DisplayMousePosition(Color.red);
+            //if (ShowMouseCell)
+            //    DisplayMouseCell(Color.red);
         }
 
+        /// <summary>
+        /// [Deprecato]
+        /// </summary>
         void DisplayCell(Cell _cell, Color color)
         {
             if (_cell == null)
@@ -69,6 +81,9 @@ namespace Grid
             Handles.DrawWireCube(_cell.GetPosition(), (_cell.GetRadius() / 25f));
         }
 
+        /// <summary>
+        /// [Deprecato]
+        /// </summary>
         void DisplayLayerLink(Cell _cell, Layer _layer)
         {
             Handles.color = _layer.Data.Color;
@@ -78,7 +93,9 @@ namespace Grid
                 Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }
-
+        /// <summary>
+        /// [Deprecato]
+        /// </summary>
         void DisplayMousePosition(Color _color)
         {
             Handles.color = _color;
@@ -88,12 +105,37 @@ namespace Grid
         void DisplayMouseCell(Color _color)
         {
             Handles.color = _color;
-            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
+            Vector3 _mouseCell = GridCtrl.GetPositionByCoordinates(GridCtrl.GetCoordinatesByPosition(MousePos));
 
             if(_mouseCell != null)
-                Handles.DrawWireCube(_mouseCell.GetPosition(), _mouseCell.GetRadius() * 2.01f);
+            {
+                Handles.DrawWireCube(_mouseCell, GridCtrl.SectorData.Radius * 2.01f);
+                _color.a *= .10f;
+                Handles.color = _color;
+                List<Vector3Int> neighbours = GridControllerExtension.GetNeighbours(GridCtrl.GetCoordinatesByPosition(_mouseCell));
+                foreach (Vector3Int _neighbour in neighbours)
+                {
+                    Vector3 neighbourPos = GridCtrl.GetPositionByCoordinates(_neighbour);
+                    Handles.DrawWireCube(neighbourPos, GridCtrl.SectorData.Radius * 2.01f);
+                }
+                _color.a = 1;
+                foreach (Vector3Int _neighbour in neighbours)
+                {
+                    Vector3 neighbourPos = GridCtrl.GetPositionByCoordinates(_neighbour);
+                    ShowLink(_mouseCell, neighbourPos, _color);
+                }
+            }
         }
 
+        void ShowLink(Vector3 _startLink, Vector3 _endLink, Color _color)
+        {
+            Handles.color = _color;
+            Handles.DrawLine(_startLink, _endLink);
+        }
+
+        /// <summary>
+        /// [Deprecato]
+        /// </summary>
         void DisplayLinkPreview(Color _color)
         {
             Handles.color = _color;

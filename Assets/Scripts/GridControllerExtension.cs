@@ -200,6 +200,64 @@ namespace Grid
             RotationDegrees newRot = _cellLocalRotation + 7;
             return GetForward(newRot);
         }
+        /// <summary>
+        /// Return the list of coordinates of the neighbours of a specific coordinate
+        /// </summary>
+        /// <param name="_coordinates">the position to start to take the coordinates of the neighbours </param>
+        /// <returns></returns>
+        public static List<Vector3Int> GetNeighbours(Vector3Int _coordinates, NeighboursShape _shape = NeighboursShape.All)
+        {
+            
+            List<Vector3Int> _plusNeighbours = new List<Vector3Int>();
+            List<Vector3Int> _crossNeighbours = new List<Vector3Int>();
+
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+                    if (i == 0 || j == 0)
+                        _plusNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
+                    else
+                        _crossNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
+
+                }
+            }
+
+            if(_shape == NeighboursShape.All)
+            {
+                List<Vector3Int> allNeighbours = new List<Vector3Int>();
+                foreach (Vector3Int _neighbour in _plusNeighbours)
+                {
+                    allNeighbours.Add(_neighbour);
+                }
+                foreach (Vector3Int _neighbour in _crossNeighbours)
+                {
+                    allNeighbours.Add(_neighbour);
+                }
+
+                return allNeighbours;
+            }
+
+            if(_shape == NeighboursShape.Plus)
+            {
+                return _plusNeighbours;
+            }
+
+            if (_shape == NeighboursShape.Cross)
+            {
+                return _crossNeighbours;
+            }
+
+            return null;
+        }
+
+        //public static List<Vector3> GetNeighbourPositions(Vector3Int _coordinates)
+        //{
+        //    List<Vector3> _neighboursPos = new List<Vector3>();
+        //    List<Vector3Int> _neighboursCoordinates = GetNeighbours(_coordinates);
+        //}
     }
 
     public enum RotationDegrees {
@@ -211,5 +269,12 @@ namespace Grid
         Angle_225,
         Angle_270,
         Angle_315,
+    }
+
+    public enum NeighboursShape
+    {
+        All,
+        Plus,
+        Cross
     }
 }
