@@ -155,15 +155,14 @@ namespace Grid
         {
             if (_sceneView != SceneView.currentDrawingSceneView)
                 return;
-            //if (Event.current.type == EventType.MouseDown)
-            //{
-            //    if (Event.current.button == 0)
-            //        OnLeftClick();
-            //    else if (Event.current.button == 1)
-            //        OnRightClick();
-            //}
-            //else
-            if (Event.current.type == EventType.MouseDrag)
+            if (Event.current.type == EventType.MouseDown)
+            {
+                if (Event.current.button == 0)
+                    OnLeftClick();
+                else if (Event.current.button == 1)
+                    OnRightClick();
+            }
+            else if (Event.current.type == EventType.MouseDrag)
             {
                 if (Event.current.button == 0 && Event.current.shift)
                     DragSelection();
@@ -195,14 +194,14 @@ namespace Grid
 
         static void OnLeftClick()
         {
-            if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
-                GridCtrlWindow.LinkSelectedCell();
-            else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
-                GridCtrlWindow.LinkSelectedCell(true);
-            else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
-                GridCtrlWindow.UnlinkSelectedCell();
-            else
-                GridCtrlWindow.SelectCell();
+            //if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
+            //    GridCtrlWindow.LinkSelectedCell();
+            //else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
+            //    GridCtrlWindow.LinkSelectedCell(true);
+            //else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
+            //    GridCtrlWindow.UnlinkSelectedCell();
+            //else
+            //    GridCtrlWindow.SelectCell();
         }
 
         static void OnRightClick()
