@@ -9,7 +9,9 @@ namespace Grid
     /// </summary>
     public class GridLayerController
     {
-        internal List<Layer> Layers = new List<Layer> { new Layer("Base") };
+        List<Layer> Layers = new List<Layer> { new Layer("Base") };
+
+        List<LinkNetworkType> NetworkTypes = new List<LinkNetworkType>();
 
         int _selectedLayer = -1;
         public int SelectedLayer
@@ -26,17 +28,6 @@ namespace Grid
         }
 
         #region API
-        public void NewItemInScene(LayerItem _item)
-        {
-            _item.SetCoordinates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
-            Layers[0].Data.ItemsInLayer.Add(_item.GetData());
-        }
-
-        public void RemoveItemFromScene(LayerItem _item)
-        {
-            Layers[0].Data.ItemsInLayer.Remove(_item.GetData());
-        }
-
         public void Save()
         {
             string layerSaved = string.Empty;
@@ -52,6 +43,45 @@ namespace Grid
             Layers = _gridData.Layers;
         }
 
+        #region LinkNetwork
+        public void AddLinkNetwork(string _id, Color _color)
+        {
+            NetworkTypes.Add(new LinkNetworkType(_id, _color));
+        }
+
+        public void RemoveLinkNetwork(LinkNetworkType _layerToRemove)
+        {
+            NetworkTypes.Remove(_layerToRemove);
+        }
+
+        public int GetNumberOfLinkNetworks()
+        {
+            return NetworkTypes.Count;
+        }
+
+        public LinkNetworkType GetLinkNetworkAtIndex(int _index)
+        {
+            if (_index >= NetworkTypes.Count || _index < 0)
+                return null;
+            else
+                return NetworkTypes[_index];
+        }
+        #endregion
+
+        #region LayerItem
+        public void NewItemInScene(LayerItem _item)
+        {
+            _item.SetCoordinates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
+            Layers[0].Data.ItemsInLayer.Add(_item.GetData());
+        }
+
+        public void RemoveItemFromScene(LayerItem _item)
+        {
+            Layers[0].Data.ItemsInLayer.Remove(_item.GetData());
+        }
+        #endregion
+
+        #region Layer
         public List<Layer> GetLayers()
         {
             return Layers;
@@ -96,13 +126,16 @@ namespace Grid
             if (gridCtrl.DoesGridExist())
                 RemoveAllLinks(_layer);
         }
+        #endregion
+        #endregion
 
+        #region OLD LINKS
         public void LinkCells(Cell _cellOrigin, List<Vector3Int> _cellsCoordinates, Layer _layer, bool _mutualLink = false)
         {
             foreach (Vector3Int _coordinate in _cellsCoordinates)
             {
                 _cellOrigin.Link(_coordinate, _layer);
-                if(_mutualLink)
+                if (_mutualLink)
                     gridCtrl.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
             }
         }

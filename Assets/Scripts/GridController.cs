@@ -93,7 +93,7 @@ namespace Grid
         public void SaveCellMatrixInData()
         {
             GridData.CellsMatrix = CellsMatrix;
-            GridData.Layers = LayerCtrl.Layers;
+            //GridData.Layers = LayerCtrl.Layers;
         }
 
         #region Getter

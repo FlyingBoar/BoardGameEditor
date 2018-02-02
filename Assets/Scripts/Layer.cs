@@ -57,7 +57,7 @@ namespace Grid
         #region Operators
         public static bool operator ==(Layer l1, Layer l2)
         {
-            if (l1.Data.Name == l2.Data.Name)
+            if (l1.Data.ID == l2.Data.ID)
                 return true;
             else
                 return false;
@@ -65,7 +65,7 @@ namespace Grid
 
         public static bool operator !=(Layer l1, Layer l2)
         {
-            if (l1.Data.Name == l2.Data.Name)
+            if (l1.Data.ID == l2.Data.ID)
                 return false;
             else
                 return true;

@@ -63,7 +63,7 @@ namespace Grid
                 if (isMixedValues)
                 {
                     EditorGUI.showMixedValue = true;
-                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Data.Name, gridTags.ScannerLayers[i].Active);
+                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Data.ID, gridTags.ScannerLayers[i].Active);
                     EditorGUI.showMixedValue = false;
 
                     if (EditorGUI.EndChangeCheck())
@@ -82,7 +82,7 @@ namespace Grid
                 else
                 {
                     
-                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Data.Name, gridTags.ScannerLayers[i].Active);
+                    changedBool = gridTags.ScannerLayers[i].Active = EditorGUILayout.Toggle(gridTags.ScannerLayers[i].Layer.Data.ID, gridTags.ScannerLayers[i].Active);
 
                     if (EditorGUI.EndChangeCheck())
                     {
@@ -117,7 +117,7 @@ namespace Grid
                 {
                     for (int j = 0; j < oldLayerList.Count; j++)
                     {
-                        if (gridTags.ScannerLayers[i].Layer.Data.Name == oldLayerList[j].Layer.Data.Name)
+                        if (gridTags.ScannerLayers[i].Layer.Data.ID == oldLayerList[j].Layer.Data.ID)
                         {
                             gridTags.ScannerLayers[i].Active = oldLayerList[j].Active;
                             break;
@@ -153,7 +153,7 @@ namespace Grid
                     {
                         for (int k = 0; k < oldLayerList.Count; k++)
                         {
-                            if (gridTags.ScannerLayers[i].Layer.Data.Name == oldLayerList[k].Layer.Data.Name)
+                            if (gridTags.ScannerLayers[i].Layer.Data.ID == oldLayerList[k].Layer.Data.ID)
                             {
                                 gridTags.ScannerLayers[i].Active = oldLayerList[k].Active;
                                 break;

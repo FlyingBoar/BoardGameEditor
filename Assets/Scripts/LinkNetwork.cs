@@ -6,9 +6,13 @@ namespace Grid
 {
     public class LinkNetwork
     {
+        LinkNetworkType type;
         List<Link> Links = new List<Link>();
 
-        public LinkNetwork() { }
+        public LinkNetwork(LinkNetworkType _type)
+        {
+            type = _type;
+        }
 
         public void AddLink(Link _newLink)
         {
@@ -22,6 +26,7 @@ namespace Grid
         }
     } 
     
+    [System.Serializable]
     public struct Link
     {
         public DirectionID ID;
