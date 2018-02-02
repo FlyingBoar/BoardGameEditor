@@ -11,6 +11,7 @@ namespace Grid
     {
         LayerItem layerItem;
 
+        #region Textures
         Texture verticalArrows;
         Texture verticalArrowsCross;
         Texture horizontalArrows;
@@ -33,6 +34,8 @@ namespace Grid
         Texture backwardLeftButton;
         Texture backwardButton;
         Texture backwardRightButton;
+        #endregion
+
         private void OnEnable()
         {
             layerItem = (LayerItem)target;
@@ -64,46 +67,79 @@ namespace Grid
         public override void OnInspectorGUI()
         {
             EditorGUILayout.BeginVertical("Box");
-
             EditorGUILayout.LabelField("Edit Links :", EditorStyles.boldLabel);
             GUILayout.Space(3);
 
+            ShowForwardButtons();
+            ShowCentralButtons();
+            ShowBackwardButtons();
+
+            EditorGUILayout.EndVertical();
+        }
+
+        void ShowForwardButtons()
+        {
             EditorGUILayout.BeginHorizontal();
-            
             if (GUILayout.Button(forwardLeftButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (forwardLeftButton == diagonalArrows1)
+                {
                     forwardLeftButton = diagonalArrowsCross1;
+                }
                 else
+                {
                     forwardLeftButton = diagonalArrows1;
+                }
             }
-            else if(GUILayout.Button(forwardButton, GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(forwardButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (forwardButton == verticalArrows)
+                {
                     forwardButton = verticalArrowsCross;
+
+                }
                 else
+                {
+
                     forwardButton = verticalArrows;
+                }
             }
-            else if(GUILayout.Button(forwardRightButton, GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(forwardRightButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (forwardRightButton == diagonalArrows2)
+                {
+
                     forwardRightButton = diagonalArrowsCross2;
+                }
                 else
+                {
+
                     forwardRightButton = diagonalArrows2;
+                }
             }
             EditorGUILayout.EndHorizontal();
 
+        }
+
+        void ShowCentralButtons()
+        {
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(leftButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (leftButton == horizontalArrows)
+                {
+
                     leftButton = horizontalArrowsCross;
+                }
                 else
+                {
+
                     leftButton = horizontalArrows;
+                }
             }
             else if (GUILayout.Button(centralButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
-                if(centralButton == central)
+                if (centralButton == central)
                 {
                     forwardLeftButton = diagonalArrowsCross1;
                     forwardButton = verticalArrowsCross;
@@ -135,41 +171,64 @@ namespace Grid
             else if (GUILayout.Button(rightButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (rightButton == horizontalArrows)
+                {
+
                     rightButton = horizontalArrowsCross;
+                }
                 else
+                {
                     rightButton = horizontalArrows;
+
+                }
             }
             EditorGUILayout.EndHorizontal();
+        }
 
+        void ShowBackwardButtons()
+        {
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(backwardLeftButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (backwardLeftButton == diagonalArrows2)
+                {
                     backwardLeftButton = diagonalArrowsCross2;
+
+                }
                 else
+                {
+
                     backwardLeftButton = diagonalArrows2;
+                }
             }
             else if (GUILayout.Button(backwardButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (backwardButton == verticalArrows)
+                {
+
                     backwardButton = verticalArrowsCross;
+                }
                 else
+                {
+
                     backwardButton = verticalArrows;
+                }
             }
             else if (GUILayout.Button(backwardRightButton, GUILayout.Height(30), GUILayout.Width(30)))
             {
                 if (backwardRightButton == diagonalArrows1)
+                {
+
                     backwardRightButton = diagonalArrowsCross1;
+                }
                 else
+                {
+
                     backwardRightButton = diagonalArrows1;
+                }
             }
 
             EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.EndVertical();
         }
     }
-
-
 }
 
