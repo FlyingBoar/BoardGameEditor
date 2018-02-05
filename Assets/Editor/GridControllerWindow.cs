@@ -80,7 +80,7 @@ namespace Grid
 
         public void SelectCell()
         {
-            SelectedCell = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            SelectedCell = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
         }
 
         public void DeselectCell()
@@ -105,7 +105,7 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell(bool _mutualLink = false)
         {
-            Cell cellToLink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            Cell cellToLink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToLink != null)
             {
                 gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
@@ -116,7 +116,7 @@ namespace Grid
 
         public void UnlinkSelectedCell()
         {
-            Cell cellToUnlink = gridCtrl.GetCellFromPosition(GridInput.PointerPosition);
+            Cell cellToUnlink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
             if (SelectedCell != null && cellToUnlink != null)
             {
                 gridCtrl.LayerCtrl.UnlinkCells(SelectedCell, cellToUnlink);

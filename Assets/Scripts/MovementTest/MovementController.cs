@@ -16,7 +16,7 @@ public class MovementController : MonoBehaviour {
         List<Cell> possibleMovement = new List<Cell>();
         List<Cell> tempList = new List<Cell>();
 
-        Cell startCell = TESTController.GetCellFromPosition(transform.position);
+        Cell startCell = MasterGrid.GetCellFromPosition(transform.position);
         if (PointsOfMovement >= 0)
         {
             possibleMovement.Add(startCell);
@@ -31,7 +31,7 @@ public class MovementController : MonoBehaviour {
                 List<Cell> cells = new List<Cell>();
                 foreach (var item in possibleMovement[j].GetNeighbourgs(TESTController.LayerCtrl.GetLayerAtIndex(0)))
                 {
-                    cells.Add(TESTController.GetCellByCoordinates(item));
+                    cells.Add(MasterGrid.GetCellByCoordinates(item));
                 }
                 tempList.AddRange(cells);
             }

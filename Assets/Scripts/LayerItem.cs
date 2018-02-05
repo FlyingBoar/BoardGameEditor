@@ -19,7 +19,7 @@ namespace Grid
             if (_gridCoordinates == data.GridCoordinates)
                 return;
             data.GridCoordinates =_gridCoordinates;
-            transform.position = MasterGrid.gridCtrl.GetPositionByCoordinates(data.GridCoordinates);
+            transform.position = MasterGrid.GetPositionByCoordinates(data.GridCoordinates);
         }
 
         public LayerItemData GetData()

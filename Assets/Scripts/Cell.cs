@@ -17,7 +17,7 @@ namespace Grid
         {
             get
             {
-                Vector3Int coordinates = gridCtrl.GetCoordinatesByPosition(cellData.Position);
+                Vector3Int coordinates = MasterGrid.GetCoordinatesByPosition(cellData.Position);
                 return new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
             }
         }
@@ -64,7 +64,7 @@ namespace Grid
                 return cellData.Position;
             else
             {
-                Vector3 centerPos = gridCtrl.GetPositionByCoordinates(GridCoordinates);
+                Vector3 centerPos = MasterGrid.GetPositionByCoordinates(GridCoordinates);
                 //centerPos = new Vector3(GridCoordinates.x * distance.x, GridCoordinates.y * distance.y, GridCoordinates.z * distance.z);
                 //centerPos -= cellData.SectorData.Radius;
                 //centerPos += gridCtrl.Origin;
@@ -99,7 +99,7 @@ namespace Grid
             List<Vector3Int> linkedNodes = cellData.GetLinkCoordinates(_layer);
             for (int i = 0; i < linkedNodes.Count; i++)
             {
-                gridCtrl.GetCellByCoordinates(linkedNodes[i]).UnLink(GridCoordinates, _layer);
+                MasterGrid.GetCellByCoordinates(linkedNodes[i]).UnLink(GridCoordinates, _layer);
             }
             linkedNodes.Clear();
         }

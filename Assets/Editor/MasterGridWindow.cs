@@ -185,7 +185,7 @@ namespace Grid
                 if (selectedLayerItem != null)
                 {
                     Tools.hidden = true;
-                    selectedLayerItem.SetCoordinates(GridCtrl.GetCoordinatesByPosition(GridInput.PointerPosition));
+                    selectedLayerItem.SetCoordinates(MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition));
                 } 
             }
             else
@@ -206,7 +206,7 @@ namespace Grid
 
         static void OnRightClick()
         {
-            if (GridCtrlWindow.SelectedCell == GridCtrl.GetCellFromPosition(GridInput.PointerPosition))
+            if (GridCtrlWindow.SelectedCell == MasterGrid.GetCellFromPosition(GridInput.PointerPosition))
             {
                 GenericMenu menu = new GenericMenu();
                 if (GridCtrlWindow.SelectedCell != null)

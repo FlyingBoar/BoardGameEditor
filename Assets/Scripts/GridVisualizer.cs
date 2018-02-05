@@ -89,12 +89,13 @@ namespace Grid
             Handles.color = _layer.Data.Color;
             foreach (Vector3Int link in _cell.GetCellData().GetLinkCoordinates(_layer))
             {
-                Vector3 line = GridCtrl.GetPositionByCoordinates(link) - _cell.GetPosition();
+                Vector3 line = MasterGrid.GetPositionByCoordinates(link) - _cell.GetPosition();
                 Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
             }
         }
         /// <summary>
         /// [Deprecato]
+        /// usare DisplayMouseCell
         /// </summary>
         void DisplayMousePosition(Color _color)
         {
@@ -105,23 +106,23 @@ namespace Grid
         void DisplayMouseCell(Color _color)
         {
             Handles.color = _color;
-            Vector3 _mouseCell = GridCtrl.GetPositionByCoordinates(GridCtrl.GetCoordinatesByPosition(MousePos));
+            Vector3 _mouseCell = MasterGrid.GetPositionByCoordinates(MasterGrid.GetCoordinatesByPosition(MousePos));
 
             if(_mouseCell != null)
             {
                 Handles.DrawWireCube(_mouseCell, GridCtrl.SectorData.Radius * 2.01f);
                 _color.a *= .10f;
                 Handles.color = _color;
-                List<Vector3Int> neighbours = GridControllerExtension.GetNeighbours(GridCtrl.GetCoordinatesByPosition(_mouseCell));
+                List<Vector3Int> neighbours = MasterGrid.GetNeighbours(MasterGrid.GetCoordinatesByPosition(_mouseCell));
                 foreach (Vector3Int _neighbour in neighbours)
                 {
-                    Vector3 neighbourPos = GridCtrl.GetPositionByCoordinates(_neighbour);
+                    Vector3 neighbourPos = MasterGrid.GetPositionByCoordinates(_neighbour);
                     Handles.DrawWireCube(neighbourPos, GridCtrl.SectorData.Radius * 2.01f);
                 }
                 _color.a = 1;
                 foreach (Vector3Int _neighbour in neighbours)
                 {
-                    Vector3 neighbourPos = GridCtrl.GetPositionByCoordinates(_neighbour);
+                    Vector3 neighbourPos = MasterGrid.GetPositionByCoordinates(_neighbour);
                     ShowLink(_mouseCell, neighbourPos, _color);
                 }
             }
@@ -139,7 +140,7 @@ namespace Grid
         void DisplayLinkPreview(Color _color)
         {
             Handles.color = _color;
-            Cell _mouseCell = GridCtrl.GetCellFromPosition(MousePos);
+            Cell _mouseCell = MasterGrid.GetCellFromPosition(MousePos);
 
             if (_mouseCell != null)
                 Handles.DrawLine(SelectedCell.GetPosition(), _mouseCell.GetPosition());

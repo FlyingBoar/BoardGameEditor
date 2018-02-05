@@ -71,7 +71,7 @@ namespace Grid
         #region LayerItem
         public void NewItemInScene(LayerItem _item)
         {
-            _item.SetCoordinates(MasterGrid.gridCtrl.GetCoordinatesByPosition(_item.transform.position));
+            _item.SetCoordinates(MasterGrid.GetCoordinatesByPosition(_item.transform.position));
             _item.MembershipLayer = Layers[SelectedLayer];
             Layers[SelectedLayer].Data.ItemsInLayer.Add(_item.GetData());
         }
@@ -142,7 +142,7 @@ namespace Grid
             {
                 _cellOrigin.Link(_coordinate, _layer);
                 if (_mutualLink)
-                    gridCtrl.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
+                    MasterGrid.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
             }
         }
 

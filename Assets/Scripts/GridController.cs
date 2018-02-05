@@ -81,7 +81,7 @@ namespace Grid
 
             foreach (CellData _cellData in GridData.GetCellDatas())
             {
-                Vector3Int _matrixPosition = this.GetCoordinatesByPosition(_cellData.Position);
+                Vector3Int _matrixPosition = MasterGrid.GetCoordinatesByPosition(_cellData.Position);
                 Cell _newCell = CellsMatrix[_matrixPosition.x, _matrixPosition.y, _matrixPosition.z] = new Cell(_cellData, this);
                 foreach (var item in _cellData.GetLayeredLinks())
                 {
@@ -220,7 +220,7 @@ namespace Grid
             int j = _j < Size.y ? _j : 0;
             int k = _k < Size.z ? _k : 0;
 
-            Vector3 nodePos = this.GetPositionByCoordinates(new Vector3Int(i, j, k));
+            Vector3 nodePos = MasterGrid.GetPositionByCoordinates(new Vector3Int(i, j, k));
 
             CellsMatrix[i, j, k] = new Cell(new CellData(SectorData, nodePos, LayerCtrl.GetLayerAtIndex(0)), this);
         }

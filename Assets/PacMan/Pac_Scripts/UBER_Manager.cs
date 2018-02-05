@@ -9,7 +9,7 @@ public class UBER_Manager : MonoBehaviour {
     public GameObject PacMan;
 
     public TextAsset GridToLoad;
-    Cell pacmanCell { get { return gridCtrl.GetCellFromPosition(PacMan.transform.position); } }
+    Cell pacmanCell { get { return MasterGrid.GetCellFromPosition(PacMan.transform.position); } }
 
     private void Start()
     {
