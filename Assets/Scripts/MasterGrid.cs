@@ -17,49 +17,6 @@ namespace Grid
 
         #region API
         /// <summary>
-        /// data una posizione restituisce la cella corrispondente
-        /// </summary>
-        /// <param name="_position">la posizione da controllare</param>
-        /// <returns>la cella che si trova in quella posizione</returns>
-        public static Cell GetCellFromPosition(Vector3 _position, bool isInRadius = false)
-        {
-            bool _inRadius = isInRadius;
-            Vector3Int indexes = GetCoordinatesByPosition(_position, out _inRadius);
-            if (!_inRadius)
-                return null;
-            Cell[,,] matrix = gridCtrl.GetCellsMatrix();
-
-            try
-            {
-                return matrix[indexes.x, indexes.y, indexes.z];
-            }
-            catch (System.IndexOutOfRangeException)
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// Return a specific cell based on coordinates
-        /// </summary>
-        /// <param name="_gridCtrl"></param>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        public static Cell GetCellByCoordinates(Vector3Int _coordinates)
-        {
-            Cell[,,] matrix = gridCtrl.GetCellsMatrix();
-
-            try
-            {
-                return matrix[_coordinates.x, _coordinates.y, _coordinates.z];
-            }
-            catch (System.IndexOutOfRangeException)
-            {
-                return null;
-            }
-        }
-        /// <summary>
         /// Return the center postion of the cell
         /// </summary>
         /// <param name="_gridCtrl"></param>

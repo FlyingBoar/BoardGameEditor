@@ -18,7 +18,7 @@ namespace Grid
         public bool ShowMousePosition;
         public bool ShowMouseCell;
         [HideInInspector]
-        public Cell SelectedCell;
+        public Vector3Int SelectedCell;
 
         public bool ShowMouseAction;
 
@@ -65,20 +65,20 @@ namespace Grid
         /// <summary>
         /// [Deprecato]
         /// </summary>
-        void DisplayCell(Cell _cell, Color color)
+        void DisplayCell(Vector3Int _coordinates, Color color)
         {
-            if (_cell == null)
+            if (_coordinates == null)
                 return;
 
-            if (_cell == SelectedCell)
+            if (_coordinates == SelectedCell)
             {
                 Handles.color = Color.red;
-                Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 1.8f);
+                Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), MasterGrid.gridCtrl.SectorData.Radius * 1.8f);
             }
 
             Handles.color = color;
-            Handles.DrawWireCube(_cell.GetPosition(), _cell.GetRadius() * 2);
-            Handles.DrawWireCube(_cell.GetPosition(), (_cell.GetRadius() / 25f));
+            Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), MasterGrid.gridCtrl.SectorData.Radius * 2);
+            Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), (MasterGrid.gridCtrl.SectorData.Radius / 25f));
         }
 
         /// <summary>
@@ -132,18 +132,6 @@ namespace Grid
         {
             Handles.color = _color;
             Handles.DrawLine(_startLink, _endLink);
-        }
-
-        /// <summary>
-        /// [Deprecato]
-        /// </summary>
-        void DisplayLinkPreview(Color _color)
-        {
-            Handles.color = _color;
-            Cell _mouseCell = MasterGrid.GetCellFromPosition(MousePos);
-
-            if (_mouseCell != null)
-                Handles.DrawLine(SelectedCell.GetPosition(), _mouseCell.GetPosition());
         }
     }
 }

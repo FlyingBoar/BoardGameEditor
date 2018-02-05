@@ -97,10 +97,7 @@ namespace Grid
         public void UnLinkAll(Layer _layer)
         {
             List<Vector3Int> linkedNodes = cellData.GetLinkCoordinates(_layer);
-            for (int i = 0; i < linkedNodes.Count; i++)
-            {
-                MasterGrid.GetCellByCoordinates(linkedNodes[i]).UnLink(GridCoordinates, _layer);
-            }
+            //Rimossa la funzionalità di rimuovere i link dalle altre celle verso questa
             linkedNodes.Clear();
         }
         #endregion

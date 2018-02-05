@@ -206,10 +206,10 @@ namespace Grid
 
         static void OnRightClick()
         {
-            if (GridCtrlWindow.SelectedCell == MasterGrid.GetCellFromPosition(GridInput.PointerPosition))
+            if (GridCtrlWindow.SelectedCoordinates == MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition))
             {
                 GenericMenu menu = new GenericMenu();
-                if (GridCtrlWindow.SelectedCell != null)
+                if (GridCtrlWindow.SelectedCoordinates != null)
                 {
                     menu.AddItem(new GUIContent("Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link); });
                     menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });

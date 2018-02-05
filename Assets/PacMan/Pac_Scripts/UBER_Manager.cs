@@ -9,7 +9,7 @@ public class UBER_Manager : MonoBehaviour {
     public GameObject PacMan;
 
     public TextAsset GridToLoad;
-    Cell pacmanCell { get { return MasterGrid.GetCellFromPosition(PacMan.transform.position); } }
+    Vector3Int pacmanCoordinates { get { return MasterGrid.GetCoordinatesByPosition(PacMan.transform.position); } }
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class UBER_Manager : MonoBehaviour {
 
     private void Update()
     {
-        Vector3Int coordinatesOfNext = pacmanCell.GridCoordinates;
+        Vector3Int coordinatesOfNext = pacmanCoordinates;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {

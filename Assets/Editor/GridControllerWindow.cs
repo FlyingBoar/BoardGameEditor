@@ -10,14 +10,14 @@ namespace Grid
         GridController gridCtrl;
         TextAsset fileToLoad;
 
-        private Cell _selectedCell;
-        public Cell SelectedCell
+        private Vector3Int _selectedCoordinates;
+        public Vector3Int SelectedCoordinates
         {
-            get { return _selectedCell; }
+            get { return _selectedCoordinates; }
             private set
             {
-                _selectedCell = value;
-                MasterGridWindow.GridVisualizer.SelectedCell = _selectedCell;
+                _selectedCoordinates = value;
+                MasterGridWindow.GridVisualizer.SelectedCell = _selectedCoordinates;
             }
         }
 
@@ -80,12 +80,13 @@ namespace Grid
 
         public void SelectCell()
         {
-            SelectedCell = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
+            SelectedCoordinates = MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition);
         }
 
         public void DeselectCell()
         {
-            SelectedCell = null;
+            Debug.LogError("Attenzione! Workaround");
+            SelectedCoordinates = new Vector3Int(1000,1000,1000);
         }
 
         public void StartMouseAction(MouseActions _mouseActions)
@@ -105,10 +106,11 @@ namespace Grid
         /// </summary>
         public void LinkSelectedCell(bool _mutualLink = false)
         {
-            Cell cellToLink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
-            if (SelectedCell != null && cellToLink != null)
+            Vector3Int cellToLink = MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition);
+            if (SelectedCoordinates != null && cellToLink != null)
             {
-                gridCtrl.LayerCtrl.LinkCells(SelectedCell, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
+                Debug.LogError("Attenzione! Funzionalità rimossa durante la rimozione del sistema a celle");
+                //gridCtrl.LayerCtrl.LinkCells(SelectedCoordinates, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
                 EndMouseAction();
                 DeselectCell();
             }
@@ -116,10 +118,11 @@ namespace Grid
 
         public void UnlinkSelectedCell()
         {
-            Cell cellToUnlink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
-            if (SelectedCell != null && cellToUnlink != null)
+            Debug.LogError("Attenzione: funzionalità rimossa durane la rimozione del sistema a celle");
+            //Cell cellToUnlink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
+            if (SelectedCoordinates != null /*&& cellToUnlink != null*/)
             {
-                gridCtrl.LayerCtrl.UnlinkCells(SelectedCell, cellToUnlink);
+                //gridCtrl.LayerCtrl.UnlinkCells(SelectedCoordinates, cellToUnlink);
                 EndMouseAction();
                 DeselectCell();
             }

@@ -12,16 +12,16 @@ namespace Grid
         public void ScanGrid(GridController _gridCtrl)
         {
             List<GridTags> gridTagsList = GameObject.FindObjectsOfType<GridTags>().ToList();
-
-            foreach (GridTags tag in gridTagsList)
-            {
-                Cell cell = MasterGrid.GetCellFromPosition(tag.transform.position, true);
-                foreach (ScannerLayer layer in tag.ScannerLayers)
-                {
-                    if(layer.Active)
-                        cell.UnLinkAll(layer.Layer);
-                }             
-            }
+            Debug.LogError("Attenzione: funzione disattivata durante il processo di rimoszione matrice celle/refactoring sistema layer");
+            //foreach (GridTags tag in gridTagsList)
+            //{
+            //    Cell cell = MasterGrid.GetCellFromPosition(tag.transform.position, true);
+            //    foreach (ScannerLayer layer in tag.ScannerLayers)
+            //    {
+            //        if(layer.Active)
+            //            cell.UnLinkAll(layer.Layer);
+            //    }             
+            //}
         }
     }
 }

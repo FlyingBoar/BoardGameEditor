@@ -11,12 +11,12 @@ public class MovementController : MonoBehaviour {
     /// Calcola le celle in cui è possibile muoversi
     /// </summary>
     /// <returns>Le celle raggiungibili dalla pedina</returns>
-    public List<Cell> EvaluateMovementPown()
+    public List<Vector3Int> EvaluateMovementPown()
     {
-        List<Cell> possibleMovement = new List<Cell>();
-        List<Cell> tempList = new List<Cell>();
+        List<Vector3Int> possibleMovement = new List<Vector3Int>();
+        List<Vector3Int> tempList = new List<Vector3Int>();
 
-        Cell startCell = MasterGrid.GetCellFromPosition(transform.position);
+        Vector3Int startCell = MasterGrid.GetCoordinatesByPosition(transform.position);
         if (PointsOfMovement >= 0)
         {
             possibleMovement.Add(startCell);
@@ -24,26 +24,28 @@ public class MovementController : MonoBehaviour {
         else
             return null;
 
-        for (int i = 0; i < PointsOfMovement; i++)
-        {
-            for (int j = 0; j < possibleMovement.Count; j++)
-            {
-                List<Cell> cells = new List<Cell>();
-                foreach (var item in possibleMovement[j].GetNeighbourgs(TESTController.LayerCtrl.GetLayerAtIndex(0)))
-                {
-                    cells.Add(MasterGrid.GetCellByCoordinates(item));
-                }
-                tempList.AddRange(cells);
-            }
+        Debug.LogError("Funzionalità rimossa durante il refactoring del sistema a Layer e la rimozione della Matrice di celle");
 
-            for (int k = 0; k < tempList.Count; k++)
-            {
-                if(!possibleMovement.Contains(tempList[k] as Cell))
-                {
-                    possibleMovement.Add(tempList[k] as Cell);
-                }
-            }
-        }
+        //for (int i = 0; i < PointsOfMovement; i++)
+        //{
+        //    for (int j = 0; j < possibleMovement.Count; j++)
+        //    {
+        //        List<Vector3Int> cells = new List<Vector3Int>();
+        //        foreach (var item in MasterGrid.GetNeighbours()
+        //        {
+        //            cells.Add(MasterGrid.GetCellByCoordinates(item));
+        //        }
+        //        tempList.AddRange(cells);
+        //    }
+
+        //    for (int k = 0; k < tempList.Count; k++)
+        //    {
+        //        if(!possibleMovement.Contains(tempList[k] as Cell))
+        //        {
+        //            possibleMovement.Add(tempList[k] as Cell);
+        //        }
+        //    }
+        //}
 
         return possibleMovement;
     }

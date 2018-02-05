@@ -136,13 +136,13 @@ namespace Grid
         #endregion
 
         #region OLD LINKS
-        public void LinkCells(Cell _cellOrigin, List<Vector3Int> _cellsCoordinates, Layer _layer, bool _mutualLink = false)
+        public void LinkCells(Cell _cellOrigin, List<Vector3Int> _cellsCoordinates, Layer _layer/*, bool _mutualLink = false*/)
         {
             foreach (Vector3Int _coordinate in _cellsCoordinates)
             {
                 _cellOrigin.Link(_coordinate, _layer);
-                if (_mutualLink)
-                    MasterGrid.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
+                //if (_mutualLink)
+                //    MasterGrid.GetCellByCoordinates(_coordinate).Link(_cellOrigin.GridCoordinates, _layer);
             }
         }
 
