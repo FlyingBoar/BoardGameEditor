@@ -26,6 +26,20 @@ namespace Grid
         {
             return data;
         }
+
+        public LinkNetwork GetLinkNetworkByType(LinkNetworkType _networkType)
+        {
+            for (int i = 0; i < linkNetworks.Count; i++)
+                if(linkNetworks[i].Type == _networkType)
+                    return linkNetworks[i];
+
+            return null;
+        }
+
+        public List<LinkNetwork> GetLinkNetworks()
+        {
+            return linkNetworks;
+        }
         #endregion
 
         private void Awake()

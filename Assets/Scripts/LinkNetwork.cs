@@ -6,49 +6,43 @@ namespace Grid
 {
     public class LinkNetwork
     {
-        LinkNetworkType type;
-        List<Link> links = new List<Link>();
+        public LinkNetworkType Type;
+        List<Vector3Int> links = new List<Vector3Int>();
 
         public LinkNetwork(LinkNetworkType _type)
         {
-            type = _type;
+            Type = _type;
         }
 
-        public void AddLink(Link _newLink)
+        public List<Vector3Int> GetLinks()
         {
-            foreach (Link link in links)
-            {
-                if (link.ID == _newLink.ID)
-                    return;
-            }
-
-            links.Add(_newLink);
+            return links;
         }
     } 
     
-    [System.Serializable]
-    public struct Link
-    {
-        public DirectionID ID;
-        public Vector3Int Direction;
+    //[System.Serializable]
+    //public struct Link
+    //{
+    //    public DirectionID ID;
+    //    public Vector3Int Connection;
 
-        public Link(DirectionID _id, Vector3Int _direction)
-        {
-            ID = _id;
-            Direction = _direction;
-        }
-    }
+    //    public Link(DirectionID _id, Vector3Int _direction)
+    //    {
+    //        ID = _id;
+    //        Connection = _direction;
+    //    }
+    //}
 
-    public enum DirectionID
-    {
-        Forward,
-        ForwardRight,
-        Right,
-        BackwardRight,
-        Backward,
-        BackwardLeft,
-        Left,
-        ForwardLeft
-    }
+    //public enum DirectionID
+    //{
+    //    Forward,
+    //    ForwardRight,
+    //    Right,
+    //    BackwardRight,
+    //    Backward,
+    //    BackwardLeft,
+    //    Left,
+    //    ForwardLeft
+    //}
 }
 

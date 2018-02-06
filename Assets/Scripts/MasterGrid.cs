@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Grid 
 {
-    public static class MasterGrid {
-
+    public static class MasterGrid
+    {
         public static GridController gridCtrl;
         public static GridLayerController gridLayerCtrl;
 
@@ -174,7 +174,6 @@ namespace Grid
         /// <returns></returns>
         public static List<Vector3Int> GetNeighbours(Vector3Int _coordinates, NeighboursShape _shape = NeighboursShape.All)
         {
-
             List<Vector3Int> _plusNeighbours = new List<Vector3Int>();
             List<Vector3Int> _crossNeighbours = new List<Vector3Int>();
 
@@ -188,19 +187,16 @@ namespace Grid
                         _plusNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
                     else
                         _crossNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
-
                 }
             }
 
             switch (_shape)
             {
                 case NeighboursShape.All:
-                    {
-                        List<Vector3Int> allNeighbours = new List<Vector3Int>();
-                        allNeighbours.AddRange(_plusNeighbours);
-                        allNeighbours.AddRange(_crossNeighbours);
-                        return allNeighbours;
-                    }
+                    List<Vector3Int> allNeighbours = new List<Vector3Int>();
+                    allNeighbours.AddRange(_plusNeighbours);
+                    allNeighbours.AddRange(_crossNeighbours);
+                    return allNeighbours;
                 case NeighboursShape.Plus:
                     return _plusNeighbours;
                 case NeighboursShape.Cross:
@@ -208,6 +204,29 @@ namespace Grid
                 default:
                     return null;
             }
+        }
+        #endregion
+
+        #region LinkNetwork API
+        public static List<Vector3Int> GetNeighboursByLinkNetwork(Vector3Int _coordinates, LinkNetworkType _networkType, NeighboursShape _shape = NeighboursShape.All)
+        {
+            List<Vector3Int> filteredNeighbours = new List<Vector3Int>();
+            List<Layer> layers = gridLayerCtrl.GetLayers();
+
+            for (int i = 0; i < layers.Count; i++)
+            {
+                for (int j = 0; j < layers[i].LayerItemInstances.Count; j++)
+                {
+                    LayerItem item = layers[i].LayerItemInstances[j];
+                    if(item.GetData().GridCoordinates == _coordinates)
+                    {
+                        List<Vector3Int> links = item.GetLinkNetworkByType(_networkType).GetLinks();
+                        
+                    }
+                }
+            }
+
+            return filteredNeighbours;
         }
         #endregion
     }

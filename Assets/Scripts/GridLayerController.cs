@@ -74,11 +74,13 @@ namespace Grid
             _item.SetCoordinates(MasterGrid.GetCoordinatesByPosition(_item.transform.position));
             _item.MembershipLayer = Layers[SelectedLayer];
             Layers[SelectedLayer].Data.ItemsInLayer.Add(_item.GetData());
+            Layers[SelectedLayer].LayerItemInstances.Add(_item);
         }
 
         public void RemoveItemFromScene(LayerItem _item)
         {
-            Layers[0].Data.ItemsInLayer.Remove(_item.GetData());
+            Layers[SelectedLayer].Data.ItemsInLayer.Remove(_item.GetData());
+            Layers[SelectedLayer].LayerItemInstances.Remove(_item);
         }
         #endregion
 

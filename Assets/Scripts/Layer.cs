@@ -13,6 +13,8 @@ namespace Grid
             private set { _data = value; }
         }
 
+        public List<LayerItem> LayerItemInstances = new List<LayerItem>();
+
         #region Constructors
         public Layer(string _name)
         {
