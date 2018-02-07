@@ -4,19 +4,32 @@ using UnityEngine;
 
 namespace Grid
 {
+    [System.Serializable]
     public class LinkNetwork
     {
-        public LinkNetworkType Type;
-        List<Vector3Int> links = new List<Vector3Int>();
+        public string ID;
+        [SerializeField]
+        List<Vector3Int> blockedDirections = new List<Vector3Int>();
 
         public LinkNetwork(LinkNetworkType _type)
         {
-            Type = _type;
+            ID = _type.ID;
         }
 
         public List<Vector3Int> GetLinks()
         {
-            return links;
+            return blockedDirections;
+        }
+
+        public void AddBlockedDirection(Vector3Int _direction)
+        {
+            if(!blockedDirections.Contains(_direction))
+                blockedDirections.Add(_direction);
+        }
+
+        public void RemoveBlockedDirection(Vector3Int _direction)
+        {
+            blockedDirections.Remove(_direction);
         }
     } 
     

@@ -14,10 +14,10 @@ namespace Grid
 
         bool[] tempSelectedLayer;
 
-        string newLayerName;
+        string newLayerName = string.Empty;
         Color newLayersColor;
 
-        string newLinkNetworkName;
+        string newLinkNetworkName = string.Empty;
         Color newLinkNetworkColor;
 
         Vector2 scrollPosition;

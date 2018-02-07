@@ -13,11 +13,12 @@ public class UBER_Manager : MonoBehaviour {
 
     private void Start()
     {
-        gridCtrl = new GridController();
-        gridLayerCtrl = new GridLayerController(gridCtrl);
-        gridCtrl.LayerCtrl = gridLayerCtrl;
-        LoadGrid();
-        Datas = gridCtrl.GridData;
+        MasterGrid.Init();
+        //gridCtrl = new GridController();
+        //gridLayerCtrl = new GridLayerController(gridCtrl);
+        //gridCtrl.LayerCtrl = gridLayerCtrl;
+        //LoadGrid();
+        //Datas = gridCtrl.GridData;
         //gridLayerCtrl.Layers = Datas.Layers;
     }
 

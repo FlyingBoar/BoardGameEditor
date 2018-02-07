@@ -7,7 +7,8 @@ namespace Grid
     [ExecuteInEditMode]
     public class LayerItem : MonoBehaviour
     {
-        List<LinkNetwork> linkNetworks = new List<LinkNetwork>();
+        [SerializeField]
+        List<LinkNetwork> blockedLinkNetworks = new List<LinkNetwork>();
 
         LayerItemData data = new LayerItemData();
 
@@ -27,18 +28,45 @@ namespace Grid
             return data;
         }
 
-        public LinkNetwork GetLinkNetworkByType(LinkNetworkType _networkType)
+        public LinkNetwork GetBlockedLinkNetworkByType(LinkNetworkType _networkType)
         {
-            for (int i = 0; i < linkNetworks.Count; i++)
-                if(linkNetworks[i].Type == _networkType)
-                    return linkNetworks[i];
+            for (int i = 0; i < blockedLinkNetworks.Count; i++)
+                if(blockedLinkNetworks[i].ID == _networkType.ID)
+                    return blockedLinkNetworks[i];
 
             return null;
         }
 
-        public List<LinkNetwork> GetLinkNetworks()
+        public List<LinkNetwork> GetBlockedLinkNetworks()
         {
-            return linkNetworks;
+            return blockedLinkNetworks;
+        }
+
+        public void AddBlockedLink(Vector3Int _direction, LinkNetworkType _type)
+        {
+            foreach (LinkNetwork network in blockedLinkNetworks)
+            {
+                if(network.ID == _type.ID)
+                {
+                    network.AddBlockedDirection(_direction);
+                    return;
+                }
+            }
+
+            blockedLinkNetworks.Add(new LinkNetwork(_type));
+            AddBlockedLink(_direction, _type);
+        }
+
+        public void RemoveBlockedLink(Vector3Int _direction, LinkNetworkType _type)
+        {
+            foreach (LinkNetwork network in blockedLinkNetworks)
+            {
+                if (network.ID == _type.ID)
+                {
+                    network.RemoveBlockedDirection(_direction);
+                    return;
+                }
+            }
         }
         #endregion
 

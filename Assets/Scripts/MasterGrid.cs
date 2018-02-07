@@ -9,7 +9,8 @@ namespace Grid
         public static GridController gridCtrl;
         public static GridLayerController gridLayerCtrl;
 
-        public static void Init() {
+        public static void Init()
+        {
             gridCtrl = new GridController();
             gridLayerCtrl = new GridLayerController(gridCtrl);
             gridCtrl.Init(gridLayerCtrl);
@@ -52,8 +53,6 @@ namespace Grid
                 normFactor.y != 0 ? Mathf.RoundToInt(spacePos.y/normFactor.y): 0,
                 normFactor.z != 0 ? Mathf.RoundToInt(spacePos.z/normFactor.z): 0,
             };
-
-
 
             return new Vector3Int(coordinates[0], coordinates[1], coordinates[2]);
         }
@@ -170,7 +169,7 @@ namespace Grid
         /// <summary>
         /// Return the list of coordinates of the neighbours of a specific coordinate
         /// </summary>
-        /// <param name="_coordinates">the position to start to take the coordinates of the neighbours </param>
+        /// <param name="_coordinates">The position to start to take the coordinates of the neighbours</param>
         /// <returns></returns>
         public static List<Vector3Int> GetNeighbours(Vector3Int _coordinates, NeighboursShape _shape = NeighboursShape.All)
         {
@@ -208,11 +207,18 @@ namespace Grid
         #endregion
 
         #region LinkNetwork API
+        /// <summary>
+        /// Return the list of coordinates of the neighbours of a specific coordinate filtered by the type of LinkNetwork
+        /// </summary>
+        /// <param name="_coordinates">The position to start to take the coordinates of the neighbours</param>
+        /// <param name="_networkType">The type of the LinkNetwork to search</param>
+        /// <returns></returns>
         public static List<Vector3Int> GetNeighboursByLinkNetwork(Vector3Int _coordinates, LinkNetworkType _networkType, NeighboursShape _shape = NeighboursShape.All)
         {
-            List<Vector3Int> filteredNeighbours = new List<Vector3Int>();
+            List<Vector3Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
             List<Layer> layers = gridLayerCtrl.GetLayers();
 
+            // remove directions that are blocked on the _coordinates
             for (int i = 0; i < layers.Count; i++)
             {
                 for (int j = 0; j < layers[i].LayerItemInstances.Count; j++)
@@ -220,8 +226,31 @@ namespace Grid
                     LayerItem item = layers[i].LayerItemInstances[j];
                     if(item.GetData().GridCoordinates == _coordinates)
                     {
-                        List<Vector3Int> links = item.GetLinkNetworkByType(_networkType).GetLinks();
-                        
+                        List<Vector3Int> links = item.GetBlockedLinkNetworkByType(_networkType).GetLinks();
+                        for (int k = 0; k < links.Count; k++)
+                        {
+                            filteredNeighbours.Remove(links[i]);
+                        }
+                    }
+                }
+            }
+
+            // check if there are neighbours that block movements
+            for (int i = 0; i < filteredNeighbours.Count; i++)
+            {
+                for (int j = 0; j < layers.Count; j++)
+                {
+                    for (int k = 0; k < layers[i].LayerItemInstances.Count; k++)
+                    {
+                        LayerItem item = layers[j].LayerItemInstances[k];
+                        if(item.GetData().GridCoordinates == filteredNeighbours[i])
+                        {
+                            List<Vector3Int> links = item.GetBlockedLinkNetworkByType(_networkType).GetLinks();
+                            for (int l = 0; l < links.Count; l++)
+                            {
+                                filteredNeighbours.Remove(links[i]);
+                            }
+                        }
                     }
                 }
             }

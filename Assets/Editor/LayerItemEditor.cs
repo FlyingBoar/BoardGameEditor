@@ -36,6 +36,9 @@ namespace Grid
         Texture backwardRightButton;
         #endregion
 
+        string[] networkTypes;
+        int selectedNetworkTypes;
+
         private void OnEnable()
         {
             layerItem = (LayerItem)target;
@@ -66,15 +69,27 @@ namespace Grid
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.LabelField("Edit Links :", EditorStyles.boldLabel);
-            GUILayout.Space(3);
+            if(MasterGrid.gridLayerCtrl != null || MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0)
+            {
+                EditorGUILayout.BeginVertical("Box");
 
-            ShowForwardButtons();
-            ShowCentralButtons();
-            ShowBackwardButtons();
+                EditorGUILayout.LabelField("Edit Links :", EditorStyles.boldLabel);
+                GUILayout.Space(3);
 
-            EditorGUILayout.EndVertical();
+                ShowNetworkTypeSelection();
+
+                ShowForwardButtons();
+                ShowCentralButtons();
+                ShowBackwardButtons();
+
+                EditorGUILayout.EndVertical();
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("Can't edit links because there are no Link Netwotk Type in Grid Layer Controller", MessageType.Warning);
+            }
+
+            base.OnInspectorGUI();
         }
 
         void ShowForwardButtons()
@@ -84,10 +99,12 @@ namespace Grid
             {
                 if (forwardLeftButton == diagonalArrows1)
                 {
+                    AddBlockedDirection(new Vector3Int(-1, 0, 1));
                     forwardLeftButton = diagonalArrowsCross1;
                 }
                 else
                 {
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, 1));
                     forwardLeftButton = diagonalArrows1;
                 }
             }
@@ -95,12 +112,12 @@ namespace Grid
             {
                 if (forwardButton == verticalArrows)
                 {
+                    AddBlockedDirection(new Vector3Int(0, 0, 1));
                     forwardButton = verticalArrowsCross;
-
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(0, 0, 1));
                     forwardButton = verticalArrows;
                 }
             }
@@ -108,12 +125,12 @@ namespace Grid
             {
                 if (forwardRightButton == diagonalArrows2)
                 {
-
+                    AddBlockedDirection(new Vector3Int(1, 0, 1));
                     forwardRightButton = diagonalArrowsCross2;
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(1, 0, 1));
                     forwardRightButton = diagonalArrows2;
                 }
             }
@@ -128,12 +145,12 @@ namespace Grid
             {
                 if (leftButton == horizontalArrows)
                 {
-
+                    AddBlockedDirection(new Vector3Int(-1, 0, 0));
                     leftButton = horizontalArrowsCross;
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, 0));
                     leftButton = horizontalArrows;
                 }
             }
@@ -141,30 +158,47 @@ namespace Grid
             {
                 if (centralButton == central)
                 {
+                    AddBlockedDirection(new Vector3Int(-1, 0, 1));
                     forwardLeftButton = diagonalArrowsCross1;
+                    AddBlockedDirection(new Vector3Int(0, 0, 1));
                     forwardButton = verticalArrowsCross;
+                    AddBlockedDirection(new Vector3Int(1, 0, 1));
                     forwardRightButton = diagonalArrowsCross2;
 
-                    rightButton = horizontalArrowsCross;
-                    centralButton = centralCross;
+                    AddBlockedDirection(new Vector3Int(-1, 0, 0));
                     leftButton = horizontalArrowsCross;
+                    centralButton = centralCross;
+                    AddBlockedDirection(new Vector3Int(1, 0, 0));
+                    rightButton = horizontalArrowsCross;
 
+
+                    AddBlockedDirection(new Vector3Int(-1, 0, -1));
                     backwardLeftButton = diagonalArrowsCross2;
+                    AddBlockedDirection(new Vector3Int(0, 0, -1));
                     backwardButton = verticalArrowsCross;
+                    AddBlockedDirection(new Vector3Int(1, 0, -1));
                     backwardRightButton = diagonalArrowsCross1;
                 }
                 else
                 {
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, 1));
                     forwardLeftButton = diagonalArrows1;
+                    RemoveBlockedDirection(new Vector3Int(0, 0, 1));                
                     forwardButton = verticalArrows;
+                    RemoveBlockedDirection(new Vector3Int(1, 0, 1));
                     forwardRightButton = diagonalArrows2;
 
-                    rightButton = horizontalArrows;
-                    centralButton = central;
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, 0));
                     leftButton = horizontalArrows;
+                    centralButton = central;
+                    RemoveBlockedDirection(new Vector3Int(1, 0, 0));
+                    rightButton = horizontalArrows;
 
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, -1));
                     backwardLeftButton = diagonalArrows2;
+                    RemoveBlockedDirection(new Vector3Int(0, 0, -1));
                     backwardButton = verticalArrows;
+                    RemoveBlockedDirection(new Vector3Int(1, 0, -1));
                     backwardRightButton = diagonalArrows1;
                 }
             }
@@ -172,13 +206,13 @@ namespace Grid
             {
                 if (rightButton == horizontalArrows)
                 {
-
+                    AddBlockedDirection(new Vector3Int(1, 0, 0));
                     rightButton = horizontalArrowsCross;
                 }
                 else
                 {
+                    AddBlockedDirection(new Vector3Int(1, 0, 0));
                     rightButton = horizontalArrows;
-
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -191,12 +225,12 @@ namespace Grid
             {
                 if (backwardLeftButton == diagonalArrows2)
                 {
+                    AddBlockedDirection(new Vector3Int(-1, 0, -1));
                     backwardLeftButton = diagonalArrowsCross2;
-
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(-1, 0, -1));
                     backwardLeftButton = diagonalArrows2;
                 }
             }
@@ -204,12 +238,12 @@ namespace Grid
             {
                 if (backwardButton == verticalArrows)
                 {
-
+                    AddBlockedDirection(new Vector3Int(0, 0, -1));
                     backwardButton = verticalArrowsCross;
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(0, 0, -1));
                     backwardButton = verticalArrows;
                 }
             }
@@ -217,17 +251,41 @@ namespace Grid
             {
                 if (backwardRightButton == diagonalArrows1)
                 {
-
+                    AddBlockedDirection(new Vector3Int(1, 0, -1));
                     backwardRightButton = diagonalArrowsCross1;
                 }
                 else
                 {
-
+                    RemoveBlockedDirection(new Vector3Int(1, 0, -1));
                     backwardRightButton = diagonalArrows1;
                 }
             }
 
             EditorGUILayout.EndHorizontal();
+        }
+
+        void ShowNetworkTypeSelection()
+        {
+            if (networkTypes == null || MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length)
+            {
+                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
+                {
+                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
+                }
+            }
+
+            selectedNetworkTypes = EditorGUILayout.Popup(selectedNetworkTypes, networkTypes);
+        }
+
+        void AddBlockedDirection(Vector3Int _direction)
+        {
+            layerItem.AddBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes));
+        }
+
+        void RemoveBlockedDirection(Vector3Int _direction)
+        {
+            layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes));
         }
     }
 }
