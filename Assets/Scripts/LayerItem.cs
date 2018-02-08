@@ -28,28 +28,33 @@ namespace Grid
             return data;
         }
 
-        public LinkNetwork GetBlockedLinkNetworkByType(LinkNetworkType _networkType)
+        public int GetBlockedLinkNetworksCount()
+        {
+            return blockedLinkNetworks.Count;
+        }
+
+        public LinkNetwork GetBlockedLinkNetworkByType(string _id)
         {
             for (int i = 0; i < blockedLinkNetworks.Count; i++)
-                if(blockedLinkNetworks[i].ID == _networkType.ID)
+                if(blockedLinkNetworks[i].ID == _id)
                     return blockedLinkNetworks[i];
 
             return null;
         }
 
-        public void AddBlockedLink(Vector3Int _direction, LinkNetworkType _type)
+        public void AddBlockedLink(Vector3Int _direction, string _id)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)
             {
-                if(network.ID == _type.ID)
+                if(network.ID == _id)
                 {
                     network.AddBlockedDirection(_direction);
                     return;
                 }
             }
 
-            blockedLinkNetworks.Add(new LinkNetwork(_type));
-            AddBlockedLink(_direction, _type);
+            blockedLinkNetworks.Add(new LinkNetwork(_id));
+            AddBlockedLink(_direction, _id);
         }
 
         public void RemoveBlockedLink(Vector3Int _direction, LinkNetworkType _type)

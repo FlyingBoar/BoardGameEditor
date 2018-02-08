@@ -166,6 +166,7 @@ namespace Grid
             RotationDegrees newRot = _cellLocalRotation + 7;
             return GetForward(newRot);
         }
+
         /// <summary>
         /// Return the list of coordinates of the neighbours of a specific coordinate
         /// </summary>
@@ -204,9 +205,6 @@ namespace Grid
                     return null;
             }
         }
-        #endregion
-
-        #region LinkNetwork API
         /// <summary>
         /// Return the list of coordinates of the neighbours available on a specific coordinate, filtered by the type of LinkNetwork
         /// </summary>
@@ -241,7 +239,9 @@ namespace Grid
 
             return filteredNeighbours;
         }
+        #endregion
 
+        #region LinkNetwork
         /// <summary>
         /// Return the list of the neighbours, removing the one blocked by the LayerItem if the is one
         /// </summary>
@@ -257,10 +257,10 @@ namespace Grid
             LayerItem itemFound = SearchLayerItemByCoordinates(_coordinates, _layers);
             if (itemFound != null)
             {
-                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByType(_networkType).GetLinks();
+                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByType(_networkType.ID).GetLinks();
                 for (int i = 0; i < links.Count; i++)
                 {
-                    filteredNeighbours.Remove(links[i]);
+                    filteredNeighbours.Remove(links[i] + _coordinates);
                 }
             }
             return filteredNeighbours;

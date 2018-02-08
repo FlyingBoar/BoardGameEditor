@@ -11,9 +11,9 @@ namespace Grid
         [SerializeField]
         List<Vector3Int> blockedDirections = new List<Vector3Int>();
 
-        public LinkNetwork(LinkNetworkType _type)
+        public LinkNetwork(string _id)
         {
-            ID = _type.ID;
+            ID = _id;
         }
 
         public List<Vector3Int> GetLinks()
@@ -31,31 +31,6 @@ namespace Grid
         {
             blockedDirections.Remove(_direction);
         }
-    } 
-    
-    //[System.Serializable]
-    //public struct Link
-    //{
-    //    public DirectionID ID;
-    //    public Vector3Int Connection;
-
-    //    public Link(DirectionID _id, Vector3Int _direction)
-    //    {
-    //        ID = _id;
-    //        Connection = _direction;
-    //    }
-    //}
-
-    //public enum DirectionID
-    //{
-    //    Forward,
-    //    ForwardRight,
-    //    Right,
-    //    BackwardRight,
-    //    Backward,
-    //    BackwardLeft,
-    //    Left,
-    //    ForwardLeft
-    //}
+    }
 }
 
