@@ -37,11 +37,6 @@ namespace Grid
             return null;
         }
 
-        public List<LinkNetwork> GetBlockedLinkNetworks()
-        {
-            return blockedLinkNetworks;
-        }
-
         public void AddBlockedLink(Vector3Int _direction, LinkNetworkType _type)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)

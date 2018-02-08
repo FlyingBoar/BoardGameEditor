@@ -92,6 +92,7 @@ namespace Grid
             base.OnInspectorGUI();
         }
 
+        #region Show
         void ShowForwardButtons()
         {
             EditorGUILayout.BeginHorizontal();
@@ -135,7 +136,6 @@ namespace Grid
                 }
             }
             EditorGUILayout.EndHorizontal();
-
         }
 
         void ShowCentralButtons()
@@ -277,6 +277,7 @@ namespace Grid
 
             selectedNetworkTypes = EditorGUILayout.Popup(selectedNetworkTypes, networkTypes);
         }
+        #endregion
 
         void AddBlockedDirection(Vector3Int _direction)
         {

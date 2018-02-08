@@ -208,54 +208,84 @@ namespace Grid
 
         #region LinkNetwork API
         /// <summary>
-        /// Return the list of coordinates of the neighbours of a specific coordinate filtered by the type of LinkNetwork
+        /// Return the list of coordinates of the neighbours available on a specific coordinate, filtered by the type of LinkNetwork
         /// </summary>
         /// <param name="_coordinates">The position to start to take the coordinates of the neighbours</param>
         /// <param name="_networkType">The type of the LinkNetwork to search</param>
         /// <returns></returns>
         public static List<Vector3Int> GetNeighboursByLinkNetwork(Vector3Int _coordinates, LinkNetworkType _networkType, NeighboursShape _shape = NeighboursShape.All)
         {
-            List<Vector3Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
             List<Layer> layers = gridLayerCtrl.GetLayers();
 
-            // remove directions that are blocked on the _coordinates
-            for (int i = 0; i < layers.Count; i++)
-            {
-                for (int j = 0; j < layers[i].LayerItemInstances.Count; j++)
-                {
-                    LayerItem item = layers[i].LayerItemInstances[j];
-                    if(item.GetData().GridCoordinates == _coordinates)
-                    {
-                        List<Vector3Int> links = item.GetBlockedLinkNetworkByType(_networkType).GetLinks();
-                        for (int k = 0; k < links.Count; k++)
-                        {
-                            filteredNeighbours.Remove(links[i]);
-                        }
-                    }
-                }
-            }
+            List<Vector3Int> filteredNeighbours = GetNeighboursByLinkNetworkUnfiltered(_coordinates, _networkType, layers, _shape);
 
-            // check if there are neighbours that block movements
+            List<LayerItem> itemsToCheck = new List<LayerItem>();
+            LayerItem itemFound = null;
             for (int i = 0; i < filteredNeighbours.Count; i++)
             {
-                for (int j = 0; j < layers.Count; j++)
+                itemFound = SearchLayerItemByCoordinates(_coordinates, layers);
+                if (itemFound != null)
+                    itemsToCheck.Add(itemFound);
+            }
+
+            List<Vector3Int> unfilterdNeighboursLinks = new List<Vector3Int>();
+
+            for (int i = 0; i < itemsToCheck.Count; i++)
+            {
+                unfilterdNeighboursLinks.AddRange(GetNeighboursByLinkNetworkUnfiltered(itemsToCheck[i].GetData().GridCoordinates, _networkType, layers, _shape));
+                for (int j = 0; j < unfilterdNeighboursLinks.Count; j++)
                 {
-                    for (int k = 0; k < layers[i].LayerItemInstances.Count; k++)
-                    {
-                        LayerItem item = layers[j].LayerItemInstances[k];
-                        if(item.GetData().GridCoordinates == filteredNeighbours[i])
-                        {
-                            List<Vector3Int> links = item.GetBlockedLinkNetworkByType(_networkType).GetLinks();
-                            for (int l = 0; l < links.Count; l++)
-                            {
-                                filteredNeighbours.Remove(links[i]);
-                            }
-                        }
-                    }
+                    filteredNeighbours.Remove(unfilterdNeighboursLinks[i]);
                 }
             }
 
             return filteredNeighbours;
+        }
+
+        /// <summary>
+        /// Return the list of the neighbours, removing the one blocked by the LayerItem if the is one
+        /// </summary>
+        /// <param name="_coordinates"></param>
+        /// <param name="_networkType"></param>
+        /// <param name="_layers"></param>
+        /// <param name="_shape"></param>
+        /// <returns></returns>
+        static List<Vector3Int> GetNeighboursByLinkNetworkUnfiltered(Vector3Int _coordinates, LinkNetworkType _networkType, List<Layer> _layers, NeighboursShape _shape = NeighboursShape.All)
+        {
+            List<Vector3Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
+            
+            LayerItem itemFound = SearchLayerItemByCoordinates(_coordinates, _layers);
+            if (itemFound != null)
+            {
+                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByType(_networkType).GetLinks();
+                for (int i = 0; i < links.Count; i++)
+                {
+                    filteredNeighbours.Remove(links[i]);
+                }
+            }
+            return filteredNeighbours;
+        }
+
+        /// <summary>
+        /// Return the LayerItem at the given coordinates if the is one, else return null
+        /// </summary>
+        /// <param name="_coordinates"></param>
+        /// <param name="_layers"></param>
+        /// <returns></returns>
+        static LayerItem SearchLayerItemByCoordinates(Vector3Int _coordinates, List<Layer> _layers)
+        {
+            for (int i = 0; i < _layers.Count; i++)
+            {
+                for (int j = 0; j < _layers[i].LayerItemInstances.Count; j++)
+                {
+                    LayerItem item = _layers[i].LayerItemInstances[j];
+                    if (item.GetData().GridCoordinates == _coordinates)
+                    {
+                        return item;
+                    }
+                }
+            }
+            return null;
         }
         #endregion
     }
