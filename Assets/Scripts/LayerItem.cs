@@ -42,6 +42,11 @@ namespace Grid
             return null;
         }
 
+        public LinkNetwork GetBlockedLinkNetworkByIndex(int _index)
+        {
+            return blockedLinkNetworks[_index];
+        }
+
         public void AddBlockedLink(Vector3Int _direction, string _id)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)
@@ -57,11 +62,11 @@ namespace Grid
             AddBlockedLink(_direction, _id);
         }
 
-        public void RemoveBlockedLink(Vector3Int _direction, LinkNetworkType _type)
+        public void RemoveBlockedLink(Vector3Int _direction, string _id)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)
             {
-                if (network.ID == _type.ID)
+                if (network.ID == _id)
                 {
                     network.RemoveBlockedDirection(_direction);
                     return;
