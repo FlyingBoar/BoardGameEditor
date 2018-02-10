@@ -39,7 +39,7 @@ namespace Grid
                 _selectedNetworkTypes = value;
                 if (oldValue != _selectedNetworkTypes)
                 {
-                    UpdateAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
+                    SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace Grid
             }
             else
             {
-                UpdateAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
+                SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
             }
         }
 
@@ -116,15 +116,15 @@ namespace Grid
         void ShowForwardButtons()
         {
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(texturesButtonMatrix[2,0], GUILayout.Height(30), GUILayout.Width(30)))
+            if (GUILayout.Button(texturesButtonMatrix[2,0], GUILayout.Height(30), GUILayout.Width(30))) // forward left
             {
                 UpdateButtonLogic(2, 0);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[2, 1], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[2, 1], GUILayout.Height(30), GUILayout.Width(30))) // forward
             {
                 UpdateButtonLogic(2, 1);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[2, 2], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[2, 2], GUILayout.Height(30), GUILayout.Width(30))) // forward right
             {
                 UpdateButtonLogic(2, 2);
             }
@@ -134,15 +134,15 @@ namespace Grid
         void ShowCentralButtons()
         {
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(texturesButtonMatrix[1, 0], GUILayout.Height(30), GUILayout.Width(30)))
+            if (GUILayout.Button(texturesButtonMatrix[1, 0], GUILayout.Height(30), GUILayout.Width(30))) // left
             {
                 UpdateButtonLogic(1, 0);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[1, 1], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[1, 1], GUILayout.Height(30), GUILayout.Width(30))) // central
             {
                 UpdateButtonLogic(1, 1);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[1, 2], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[1, 2], GUILayout.Height(30), GUILayout.Width(30))) // right
             {
                 UpdateButtonLogic(1, 2);
             }
@@ -152,15 +152,15 @@ namespace Grid
         void ShowBackwardButtons()
         {
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button(texturesButtonMatrix[0, 0], GUILayout.Height(30), GUILayout.Width(30)))
+            if (GUILayout.Button(texturesButtonMatrix[0, 0], GUILayout.Height(30), GUILayout.Width(30))) // backward left
             {
                 UpdateButtonLogic(0, 0);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[0, 1], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[0, 1], GUILayout.Height(30), GUILayout.Width(30))) // beackward
             {
                 UpdateButtonLogic(0, 1);
             }
-            else if (GUILayout.Button(texturesButtonMatrix[0, 2], GUILayout.Height(30), GUILayout.Width(30)))
+            else if (GUILayout.Button(texturesButtonMatrix[0, 2], GUILayout.Height(30), GUILayout.Width(30))) // backward right
             {
                 UpdateButtonLogic(0, 2);
             }
@@ -207,7 +207,14 @@ namespace Grid
 
         void UpdateButtonTexture(int _i, int _j, bool _value)
         {
-            if(_i - _j == 0)
+            if (_i == 1 && _j == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = centralCross;
+                else
+                    texturesButtonMatrix[_i, _j] = central;
+            }
+            else if (_i - _j == 0)
             {
                 if (_value)
                     texturesButtonMatrix[_i, _j] = diagonalArrowsCross2;
@@ -235,30 +242,68 @@ namespace Grid
                 else
                     texturesButtonMatrix[_i, _j] = horizontalArrows;
             }
-
-            if(layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
-                texturesButtonMatrix[1, 1] = centralCross;
-            else
-                texturesButtonMatrix[1, 1] = central;
         }
 
         void UpdateButtonLogic(int _i, int _j)
         {
-            if (logicButtonMatrix[_i, _j] == true)
+            if (logicButtonMatrix[_i, _j])
+            {
+                UpdateButtonLogic(_i, _j, false);
+            }
+            else
+            {
+                UpdateButtonLogic(_i, _j, true);
+            }
+        }
+
+        void UpdateButtonLogic(int _i, int _j, bool _value)
+        {
+            if(_i == 1 && _j == 1)
+            {
+
+            }
+            if (_value)
             {
                 RemoveBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
-                logicButtonMatrix[_i, _j] = false;
-                UpdateButtonTexture(_i, _j, false);
+                logicButtonMatrix[_i, _j] = _value;
+                UpdateButtonTexture(_i, _j, _value);
             }
             else
             {
                 AddBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
-                logicButtonMatrix[_i, _j] = true;
-                UpdateButtonTexture(_i, _j, true);
+                logicButtonMatrix[_i, _j] = _value;
+                UpdateButtonTexture(_i, _j, _value);
+            }
+
+            UpdateCentralButton();
+        }
+
+        void UpdateCentralButton()
+        {
+            if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
+            {
+                logicButtonMatrix[1, 1] = true;
+                UpdateButtonTexture(1, 1, true);
+            }
+            else
+            {
+                logicButtonMatrix[1, 1] = false;
+                UpdateButtonTexture(1, 1, false);
             }
         }
 
-        void UpdateAllButtonsLogic(string _linkID)
+        void UpdateAllButtonLogic(bool _value)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    UpdateButtonLogic(i, j, _value);
+                }
+            }
+        }
+
+        void SetupAllButtonsLogic(string _linkID)
         {
             List<Vector3Int> links = layerItem.GetBlockedLinkNetworkByType(_linkID).GetLinks();
 
@@ -266,10 +311,13 @@ namespace Grid
             {
                 for (int j = -1; j < 2; j++)
                 {
-                    if (i == 0 && j == 0)
-                        continue;
                     for (int k = 0; k < links.Count; k++)
                     {
+                        if (i == 0 && j == 0)
+                        {
+                            UpdateCentralButton();
+                            continue;
+                        }
                         if (links[k] == new Vector3Int(i, 0, j))
                         {
                             logicButtonMatrix[i + 1, j + 1] = true;
