@@ -99,7 +99,7 @@ namespace Grid
                 EditorGUILayout.LabelField("Edit Links :", EditorStyles.boldLabel);
                 GUILayout.Space(3);
 
-                UpdateNetworkTypeSelection();
+                //UpdateNetworkTypeSelection();
                 selectedNetworkTypes = EditorGUILayout.Popup(selectedNetworkTypes, networkTypes);
 
                 ShowForwardButtons();
@@ -140,7 +140,7 @@ namespace Grid
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 1], GUILayout.Height(30), GUILayout.Width(30))) // central
             {
-                UpdateButtonLogic(1, 1);
+                UpdateCentralButton();
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 2], GUILayout.Height(30), GUILayout.Width(30))) // right
             {
@@ -180,14 +180,22 @@ namespace Grid
         void RemoveBlockedDirection(Vector3Int _direction)
         {
             if (MasterGrid.gridLayerCtrl != null)
-                layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes).ID);
+                 layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes).ID);
             else
                 layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID);
         }
 
         void UpdateNetworkTypeSelection()
         {
-            if ((networkTypes == null && layerItem.GetBlockedLinkNetworksCount() > 0) || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
+            if (MasterGrid.gridLayerCtrl != null && (MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length))
+            {
+                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
+                {
+                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
+                }
+            }
+            if (networkTypes == null && (layerItem.GetBlockedLinkNetworksCount() == 0) || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
             {
                 networkTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
                 for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
@@ -195,14 +203,6 @@ namespace Grid
                     networkTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID;
                 }
             }
-            //else if ((MasterGrid.gridLayerCtrl != null && networkTypes == null && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0) || MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length)
-            //{
-            //    networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
-            //    for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
-            //    {
-            //        networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
-            //    }
-            //}   
         }
 
         void UpdateButtonTexture(int _i, int _j, bool _value)
@@ -257,12 +257,13 @@ namespace Grid
         }
 
         void UpdateButtonLogic(int _i, int _j, bool _value)
-        {
+        {       
             if(_i == 1 && _j == 1)
             {
-
+                logicButtonMatrix[_i, _j] = _value;
+                UpdateButtonTexture(_i, _j, _value);
             }
-            if (_value)
+            else if (_value)
             {
                 RemoveBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
                 logicButtonMatrix[_i, _j] = _value;
@@ -275,10 +276,10 @@ namespace Grid
                 UpdateButtonTexture(_i, _j, _value);
             }
 
-            UpdateCentralButton();
+            //UpdateCentralButtonForced();
         }
 
-        void UpdateCentralButton()
+        void UpdateCentralButtonForced()
         {
             if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
             {
@@ -292,13 +293,19 @@ namespace Grid
             }
         }
 
-        void UpdateAllButtonLogic(bool _value)
+        void UpdateCentralButton()
         {
+            bool value;
+            if (logicButtonMatrix[1, 1])
+                value = false;
+            else
+                value = true;
+
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    UpdateButtonLogic(i, j, _value);
+                    UpdateButtonLogic(i, j, value);
                 }
             }
         }
@@ -314,10 +321,8 @@ namespace Grid
                     for (int k = 0; k < links.Count; k++)
                     {
                         if (i == 0 && j == 0)
-                        {
-                            UpdateCentralButton();
                             continue;
-                        }
+
                         if (links[k] == new Vector3Int(i, 0, j))
                         {
                             logicButtonMatrix[i + 1, j + 1] = true;
@@ -332,6 +337,8 @@ namespace Grid
                     }
                 }
             }
+
+            UpdateCentralButtonForced();
         }
     }
 }
