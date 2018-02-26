@@ -39,6 +39,11 @@ namespace Grid
                 _selectedNetworkTypes = value;
                 if (lastSelected != _selectedNetworkTypes)
                 {
+                    if (_selectedNetworkTypes > layerItem.GetBlockedLinkNetworksCount() - 1)
+                    {
+                        layerItem.AddLinkNetwork(networkTypes[selectedNetworkTypes]);
+                    }
+
                     SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
                 }
             }
@@ -228,17 +233,29 @@ namespace Grid
 
         void UpdateNetworkTypeSelection()
         {
-            //if (MasterGrid.gridLayerCtrl != null && (MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length))
-            //{
-            //    networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
-            //    for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
-            //    {
-            //        networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
-            //    }
-            //}
-            if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
+            if (MasterGrid.gridLayerCtrl != null && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != layerItem.GetBlockedLinkNetworksCount())
             {
                 int lastSelected = selectedNetworkTypes;
+
+                // TODO : vanno controllati anche per id, oltre che per numero
+                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
+                {
+                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
+                }
+
+                if (selectedNetworkTypes != lastSelected)
+                {
+                    if (lastSelected > networkTypes.Length - 1)
+                        selectedNetworkTypes = 0;
+                    else
+                        selectedNetworkTypes = lastSelected;
+                }
+            }
+            else if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
+            {
+                int lastSelected = selectedNetworkTypes;
+
                 networkTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
                 for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
                 {
@@ -335,30 +352,46 @@ namespace Grid
             }
         }
 
-
         void SetupAllButtonsLogic(string _linkID)
         {
-            List<Vector3Int> links = layerItem.GetBlockedLinkNetworkByType(_linkID).GetLinks();
+            List<Vector3Int> blockedLinks = layerItem.GetBlockedLinkNetworkByType(_linkID).GetLinks();
 
-            for (int i = -1; i < 2; i++)
+            if(blockedLinks.Count == 0)
             {
-                for (int j = -1; j < 2; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int k = 0; k < links.Count; k++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        if (i == 0 && j == 0)
+                        if (i == 1 && j == 1)
                             continue;
 
-                        if (links[k] == new Vector3Int(i, 0, j))
+                        UpdateButtonLogic(i, j, false);
+                        UpdateButtonTexture(i, j, false);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = -1; i < 2; i++)
+                {
+                    for (int j = -1; j < 2; j++)
+                    {
+                        for (int k = 0; k < blockedLinks.Count; k++)
                         {
-                            logicButtonMatrix[i + 1, j + 1] = true;
-                            UpdateButtonTexture(i + 1, j + 1, true);
-                            break;
-                        }
-                        else
-                        {
-                            logicButtonMatrix[i + 1, j + 1] = false;
-                            UpdateButtonTexture(i + 1, j + 1, false);
+                            if (i == 0 && j == 0)
+                                continue;
+
+                            if (blockedLinks[k] == new Vector3Int(i, 0, j))
+                            {
+                                logicButtonMatrix[i + 1, j + 1] = true;
+                                UpdateButtonTexture(i + 1, j + 1, true);
+                                break;
+                            }
+                            else
+                            {
+                                logicButtonMatrix[i + 1, j + 1] = false;
+                                UpdateButtonTexture(i + 1, j + 1, false);
+                            }
                         }
                     }
                 }

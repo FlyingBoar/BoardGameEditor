@@ -73,6 +73,11 @@ namespace Grid
                 }
             }
         }
+
+        public void AddLinkNetwork(string _id)
+        {
+            blockedLinkNetworks.Add(new LinkNetwork(_id));
+        }
         #endregion
 
         private void Awake()
