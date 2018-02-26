@@ -35,9 +35,9 @@ namespace Grid
             get { return _selectedNetworkTypes; }
             set
             {
-                int oldValue = _selectedNetworkTypes;
+                int lastSelected = _selectedNetworkTypes;
                 _selectedNetworkTypes = value;
-                if (oldValue != _selectedNetworkTypes)
+                if (lastSelected != _selectedNetworkTypes)
                 {
                     SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
                 }
@@ -99,7 +99,7 @@ namespace Grid
                 EditorGUILayout.LabelField("Edit Links :", EditorStyles.boldLabel);
                 GUILayout.Space(3);
 
-                //UpdateNetworkTypeSelection();
+                UpdateNetworkTypeSelection();
                 selectedNetworkTypes = EditorGUILayout.Popup(selectedNetworkTypes, networkTypes);
 
                 ShowForwardButtons();
@@ -140,7 +140,7 @@ namespace Grid
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 1], GUILayout.Height(30), GUILayout.Width(30))) // central
             {
-                UpdateCentralButton();
+                //UpdateCentralButton();
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 2], GUILayout.Height(30), GUILayout.Width(30))) // right
             {
@@ -187,20 +187,29 @@ namespace Grid
 
         void UpdateNetworkTypeSelection()
         {
-            if (MasterGrid.gridLayerCtrl != null && (MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length))
+            //if (MasterGrid.gridLayerCtrl != null && (MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != networkTypes.Length))
+            //{
+            //    networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+            //    for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
+            //    {
+            //        networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
+            //    }
+            //}
+            if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
             {
-                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
-                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
-                {
-                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
-                }
-            }
-            if (networkTypes == null && (layerItem.GetBlockedLinkNetworksCount() == 0) || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
-            {
+                int lastSelected = selectedNetworkTypes;
                 networkTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
                 for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
                 {
-                    networkTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID;
+                    networkTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(i).ID;
+                }
+
+                if(selectedNetworkTypes != lastSelected)
+                {
+                    if (lastSelected > networkTypes.Length - 1)
+                        selectedNetworkTypes = 0;
+                    else
+                        selectedNetworkTypes = lastSelected;
                 }
             }
         }
@@ -260,18 +269,20 @@ namespace Grid
         {       
             if(_i == 1 && _j == 1)
             {
-                logicButtonMatrix[_i, _j] = _value;
-                UpdateButtonTexture(_i, _j, _value);
+                //logicButtonMatrix[_i, _j] = _value;
+                //UpdateButtonTexture(_i, _j, _value);
+                return;
             }
-            else if (_value)
+
+            if (_value)
             {
-                RemoveBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
+                AddBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
                 logicButtonMatrix[_i, _j] = _value;
                 UpdateButtonTexture(_i, _j, _value);
             }
             else
             {
-                AddBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
+                RemoveBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
                 logicButtonMatrix[_i, _j] = _value;
                 UpdateButtonTexture(_i, _j, _value);
             }
@@ -279,36 +290,36 @@ namespace Grid
             //UpdateCentralButtonForced();
         }
 
-        void UpdateCentralButtonForced()
-        {
-            if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
-            {
-                logicButtonMatrix[1, 1] = true;
-                UpdateButtonTexture(1, 1, true);
-            }
-            else
-            {
-                logicButtonMatrix[1, 1] = false;
-                UpdateButtonTexture(1, 1, false);
-            }
-        }
+        //void UpdateCentralButtonForced()
+        //{
+        //    if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
+        //    {
+        //        logicButtonMatrix[1, 1] = true;
+        //        UpdateButtonTexture(1, 1, true);
+        //    }
+        //    else
+        //    {
+        //        logicButtonMatrix[1, 1] = false;
+        //        UpdateButtonTexture(1, 1, false);
+        //    }
+        //}
 
-        void UpdateCentralButton()
-        {
-            bool value;
-            if (logicButtonMatrix[1, 1])
-                value = false;
-            else
-                value = true;
+        //void UpdateCentralButton()
+        //{
+        //    bool value;
+        //    if (logicButtonMatrix[1, 1])
+        //        value = false;
+        //    else
+        //        value = true;
 
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    UpdateButtonLogic(i, j, value);
-                }
-            }
-        }
+        //    for (int i = 0; i < 3; i++)
+        //    {
+        //        for (int j = 0; j < 3; j++)
+        //        {
+        //            UpdateButtonLogic(i, j, value);
+        //        }
+        //    }
+        //}
 
         void SetupAllButtonsLogic(string _linkID)
         {
@@ -338,7 +349,7 @@ namespace Grid
                 }
             }
 
-            UpdateCentralButtonForced();
+            //UpdateCentralButtonForced();
         }
     }
 }
