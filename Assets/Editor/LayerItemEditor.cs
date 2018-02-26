@@ -112,7 +112,7 @@ namespace Grid
             base.OnInspectorGUI();
         }
 
-        #region Show
+        #region Show Buttons
         void ShowForwardButtons()
         {
             EditorGUILayout.BeginHorizontal();
@@ -140,7 +140,7 @@ namespace Grid
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 1], GUILayout.Height(30), GUILayout.Width(30))) // central
             {
-                //UpdateCentralButton();
+                UpdateCentralButtonLogic();
             }
             else if (GUILayout.Button(texturesButtonMatrix[1, 2], GUILayout.Height(30), GUILayout.Width(30))) // right
             {
@@ -169,6 +169,7 @@ namespace Grid
 
         #endregion
 
+        #region Update Blocked Directions
         void AddBlockedDirection(Vector3Int _direction)
         {
             if(MasterGrid.gridLayerCtrl != null)
@@ -183,6 +184,46 @@ namespace Grid
                  layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes).ID);
             else
                 layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID);
+        }
+        #endregion
+
+        void UpdateButtonTexture(int _i, int _j, bool _value)
+        {
+            if (_i == 1 && _j == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = centralCross;
+                else
+                    texturesButtonMatrix[_i, _j] = central;
+            }
+            else if (_i - _j == 0)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross2;
+                else
+                    texturesButtonMatrix[_i, _j] = diagonalArrows2;
+            }
+            else if (Mathf.Abs(_i - _j) == 2)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross1;
+                else
+                    texturesButtonMatrix[_i, _j] = diagonalArrows1;
+            }
+            else if (_i == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = verticalArrowsCross;
+                else
+                    texturesButtonMatrix[_i, _j] = verticalArrows;
+            }
+            else if (_j == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = horizontalArrowsCross;
+                else
+                    texturesButtonMatrix[_i, _j] = horizontalArrows;
+            }
         }
 
         void UpdateNetworkTypeSelection()
@@ -214,45 +255,7 @@ namespace Grid
             }
         }
 
-        void UpdateButtonTexture(int _i, int _j, bool _value)
-        {
-            if (_i == 1 && _j == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = centralCross;
-                else
-                    texturesButtonMatrix[_i, _j] = central;
-            }
-            else if (_i - _j == 0)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross2;
-                else
-                    texturesButtonMatrix[_i, _j] = diagonalArrows2;
-            }
-            else if (Mathf.Abs(_i - _j) == 2)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross1;
-                else
-                    texturesButtonMatrix[_i, _j] = diagonalArrows1;
-            }
-            else if(_i == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = verticalArrowsCross;
-                else
-                    texturesButtonMatrix[_i, _j] = verticalArrows;
-            }
-            else if (_j == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = horizontalArrowsCross;
-                else
-                    texturesButtonMatrix[_i, _j] = horizontalArrows;
-            }
-        }
-
+        #region Button Logics Update
         void UpdateButtonLogic(int _i, int _j)
         {
             if (logicButtonMatrix[_i, _j])
@@ -268,11 +271,7 @@ namespace Grid
         void UpdateButtonLogic(int _i, int _j, bool _value)
         {       
             if(_i == 1 && _j == 1)
-            {
-                //logicButtonMatrix[_i, _j] = _value;
-                //UpdateButtonTexture(_i, _j, _value);
                 return;
-            }
 
             if (_value)
             {
@@ -287,39 +286,55 @@ namespace Grid
                 UpdateButtonTexture(_i, _j, _value);
             }
 
-            //UpdateCentralButtonForced();
+            UpdateCentralButtonLogicForced();
         }
 
-        //void UpdateCentralButtonForced()
-        //{
-        //    if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
-        //    {
-        //        logicButtonMatrix[1, 1] = true;
-        //        UpdateButtonTexture(1, 1, true);
-        //    }
-        //    else
-        //    {
-        //        logicButtonMatrix[1, 1] = false;
-        //        UpdateButtonTexture(1, 1, false);
-        //    }
-        //}
+        void UpdateCentralButtonLogic()
+        {
+            bool valueToSet;
+            if(logicButtonMatrix[1, 1])
+            {
+                logicButtonMatrix[1, 1] = false;
+                UpdateButtonTexture(1, 1, false);
+                valueToSet = false;
+            }
+            else
+            {
+                logicButtonMatrix[1, 1] = true;
+                UpdateButtonTexture(1, 1, true);
+                valueToSet = true;
+            }
 
-        //void UpdateCentralButton()
-        //{
-        //    bool value;
-        //    if (logicButtonMatrix[1, 1])
-        //        value = false;
-        //    else
-        //        value = true;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (i == 1 && j == 1)
+                        continue;
 
-        //    for (int i = 0; i < 3; i++)
-        //    {
-        //        for (int j = 0; j < 3; j++)
-        //        {
-        //            UpdateButtonLogic(i, j, value);
-        //        }
-        //    }
-        //}
+                    if (logicButtonMatrix[i,j] != valueToSet)
+                    {
+                        UpdateButtonLogic(i, j, valueToSet);
+                        UpdateButtonTexture(i, j, valueToSet);
+                    }
+                }
+            }
+        }
+
+        void UpdateCentralButtonLogicForced()
+        {
+            if (layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).GetLinks().Count == 8)
+            {
+                logicButtonMatrix[1, 1] = true;
+                UpdateButtonTexture(1, 1, true);
+            }
+            else
+            {
+                logicButtonMatrix[1, 1] = false;
+                UpdateButtonTexture(1, 1, false);
+            }
+        }
+
 
         void SetupAllButtonsLogic(string _linkID)
         {
@@ -349,8 +364,9 @@ namespace Grid
                 }
             }
 
-            //UpdateCentralButtonForced();
+            UpdateCentralButtonLogicForced();
         }
+        #endregion
     }
 }
 
