@@ -15,6 +15,11 @@ namespace Grid
             ID = _id;
             Color = _color;
         }
+
+        public override string ToString()
+        {
+            return ID;
+        }
     }
 }
 

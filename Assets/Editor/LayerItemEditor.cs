@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace Grid
 {
@@ -117,6 +118,66 @@ namespace Grid
             base.OnInspectorGUI();
         }
 
+        #region NetworkType Selection
+        void UpdateNetworkTypeSelection()
+        {
+            if (MasterGrid.gridLayerCtrl != null && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != layerItem.GetBlockedLinkNetworksCount())
+            {
+                int lastSelected = selectedNetworkTypes;
+
+                // TODO : vanno controllati anche per id, oltre che per numero
+                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
+                {
+                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
+                }
+
+                RestorePreviousSelection(lastSelected);
+            }
+            else if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
+            {
+                int lastSelected = selectedNetworkTypes;
+
+                networkTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
+                for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
+                {
+                    networkTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(i).ID;
+                }
+
+                RestorePreviousSelection(lastSelected);
+            }
+        }
+
+        void UpdateNetworkTypes(string[] _newIDs)
+        {
+            List<string> tempTypes = networkTypes.ToList();
+
+            for (int i = 0; i < tempTypes.Count; i++)
+            {
+                for (int j = 0; j < _newIDs.Length; j++)
+                {
+                    if (tempTypes[i] == _newIDs[j])
+                        break;
+
+                    tempTypes.Add(_newIDs[j]);
+                }
+            }
+
+            networkTypes = tempTypes.ToArray();
+        }
+
+        void RestorePreviousSelection(int _lastSelected)
+        {
+            if (selectedNetworkTypes != _lastSelected)
+            {
+                if (_lastSelected > networkTypes.Length - 1)
+                    selectedNetworkTypes = 0;
+                else
+                    selectedNetworkTypes = _lastSelected;
+            }
+        }
+        #endregion
+
         #region Show Buttons
         void ShowForwardButtons()
         {
@@ -191,86 +252,6 @@ namespace Grid
                 layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID);
         }
         #endregion
-
-        void UpdateButtonTexture(int _i, int _j, bool _value)
-        {
-            if (_i == 1 && _j == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = centralCross;
-                else
-                    texturesButtonMatrix[_i, _j] = central;
-            }
-            else if (_i - _j == 0)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross2;
-                else
-                    texturesButtonMatrix[_i, _j] = diagonalArrows2;
-            }
-            else if (Mathf.Abs(_i - _j) == 2)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross1;
-                else
-                    texturesButtonMatrix[_i, _j] = diagonalArrows1;
-            }
-            else if (_i == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = verticalArrowsCross;
-                else
-                    texturesButtonMatrix[_i, _j] = verticalArrows;
-            }
-            else if (_j == 1)
-            {
-                if (_value)
-                    texturesButtonMatrix[_i, _j] = horizontalArrowsCross;
-                else
-                    texturesButtonMatrix[_i, _j] = horizontalArrows;
-            }
-        }
-
-        void UpdateNetworkTypeSelection()
-        {
-            if (MasterGrid.gridLayerCtrl != null && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != layerItem.GetBlockedLinkNetworksCount())
-            {
-                int lastSelected = selectedNetworkTypes;
-
-                // TODO : vanno controllati anche per id, oltre che per numero
-                networkTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
-                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
-                {
-                    networkTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID;
-                }
-
-                if (selectedNetworkTypes != lastSelected)
-                {
-                    if (lastSelected > networkTypes.Length - 1)
-                        selectedNetworkTypes = 0;
-                    else
-                        selectedNetworkTypes = lastSelected;
-                }
-            }
-            else if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
-            {
-                int lastSelected = selectedNetworkTypes;
-
-                networkTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
-                for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
-                {
-                    networkTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(i).ID;
-                }
-
-                if(selectedNetworkTypes != lastSelected)
-                {
-                    if (lastSelected > networkTypes.Length - 1)
-                        selectedNetworkTypes = 0;
-                    else
-                        selectedNetworkTypes = lastSelected;
-                }
-            }
-        }
 
         #region Button Logics Update
         void UpdateButtonLogic(int _i, int _j)
@@ -400,6 +381,45 @@ namespace Grid
             UpdateCentralButtonLogicForced();
         }
         #endregion
+
+        void UpdateButtonTexture(int _i, int _j, bool _value)
+        {
+            if (_i == 1 && _j == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = centralCross;
+                else
+                    texturesButtonMatrix[_i, _j] = central;
+            }
+            else if (_i - _j == 0)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross2;
+                else
+                    texturesButtonMatrix[_i, _j] = diagonalArrows2;
+            }
+            else if (Mathf.Abs(_i - _j) == 2)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = diagonalArrowsCross1;
+                else
+                    texturesButtonMatrix[_i, _j] = diagonalArrows1;
+            }
+            else if (_i == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = verticalArrowsCross;
+                else
+                    texturesButtonMatrix[_i, _j] = verticalArrows;
+            }
+            else if (_j == 1)
+            {
+                if (_value)
+                    texturesButtonMatrix[_i, _j] = horizontalArrowsCross;
+                else
+                    texturesButtonMatrix[_i, _j] = horizontalArrows;
+            }
+        }
     }
 }
 
