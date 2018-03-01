@@ -257,7 +257,7 @@ namespace Grid
             LayerItem itemFound = SearchLayerItemByCoordinates(_coordinates, _layers);
             if (itemFound != null)
             {
-                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByType(_networkType.ID).GetLinks();
+                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByID(_networkType.ID).GetLinks();
                 for (int i = 0; i < links.Count; i++)
                 {
                     filteredNeighbours.Remove(links[i] + _coordinates);

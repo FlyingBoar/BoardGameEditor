@@ -143,12 +143,12 @@ namespace Grid
             for (int i = 0; i < layerCtrl.GetNumberOfLinkNetworks(); i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                layerCtrl.GetLinkNetworkAtIndex(i).ID = EditorGUILayout.TextField(layerCtrl.GetLinkNetworkAtIndex(i).ID);
-                layerCtrl.GetLinkNetworkAtIndex(i).Color = EditorGUILayout.ColorField(layerCtrl.GetLinkNetworkAtIndex(i).Color);
+                layerCtrl.GetLinkNetworkByIndex(i).ID = EditorGUILayout.TextField(layerCtrl.GetLinkNetworkByIndex(i).ID);
+                layerCtrl.GetLinkNetworkByIndex(i).Color = EditorGUILayout.ColorField(layerCtrl.GetLinkNetworkByIndex(i).Color);
 
                 if (GUILayout.Button(removeLayerTexture, GUILayout.Height(18), GUILayout.Width(20)))
                 {
-                    layerCtrl.RemoveLinkNetwork(layerCtrl.GetLinkNetworkAtIndex(i));
+                    layerCtrl.RemoveLinkNetwork(layerCtrl.GetLinkNetworkByIndex(i));
                 }
                 GUILayout.EndHorizontal();
             }
@@ -173,7 +173,7 @@ namespace Grid
                 }
                 for (int i = 0; i < layerCtrl.GetNumberOfLayers(); i++)
                 {
-                    if (layerCtrl.GetNumberOfLinkNetworks() > 0 && layerCtrl.GetLinkNetworkAtIndex(i).ID == newLinkNetworkName)
+                    if (layerCtrl.GetNumberOfLinkNetworks() > 0 && layerCtrl.GetLinkNetworkByIndex(i).ID == newLinkNetworkName)
                     {
                         Debug.LogWarning("The name of the Link Network Type already exist !");
                         return;

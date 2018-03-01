@@ -33,7 +33,7 @@ namespace Grid
             return blockedLinkNetworks.Count;
         }
 
-        public LinkNetwork GetBlockedLinkNetworkByType(string _id)
+        public LinkNetwork GetBlockedLinkNetworkByID(string _id)
         {
             for (int i = 0; i < blockedLinkNetworks.Count; i++)
                 if(blockedLinkNetworks[i].ID == _id)
@@ -44,7 +44,10 @@ namespace Grid
 
         public LinkNetwork GetBlockedLinkNetworkByIndex(int _index)
         {
-            return blockedLinkNetworks[_index];
+            if (_index < 0 || _index >= blockedLinkNetworks.Count)
+                return null;
+            else
+                return blockedLinkNetworks[_index];
         }
 
         public void AddBlockedLink(Vector3Int _direction, string _id)

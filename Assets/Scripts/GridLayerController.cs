@@ -59,12 +59,21 @@ namespace Grid
             return NetworkTypes.Count;
         }
 
-        public LinkNetworkType GetLinkNetworkAtIndex(int _index)
+        public LinkNetworkType GetLinkNetworkByIndex(int _index)
         {
             if (_index >= NetworkTypes.Count || _index < 0)
                 return null;
             else
                 return NetworkTypes[_index];
+        }
+
+        public LinkNetworkType GetLinkNetworkByID(string _id)
+        {
+            for (int i = 0; i < NetworkTypes.Count; i++)
+                if (NetworkTypes[i].ID == _id)
+                    return NetworkTypes[i];
+
+            return null;
         }
         #endregion
 

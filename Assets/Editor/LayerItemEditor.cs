@@ -48,7 +48,7 @@ namespace Grid
             }
             else
             {
-                SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
+                SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
             }
         }
 
@@ -82,6 +82,7 @@ namespace Grid
 
         #region NetworkType Selection
         string[] networkTypes;
+
         int _selectedNetworkTypes;
         int selectedNetworkTypes
         {
@@ -92,72 +93,54 @@ namespace Grid
                 _selectedNetworkTypes = value;
 
                 if (lastSelected != _selectedNetworkTypes)
-                    SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByType(networkTypes[selectedNetworkTypes]).ID);
+                    SetupAllButtonsLogic(layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
             }
         }
 
         void UpdateNetworkTypeSelection()
         {
-            List<string> tempTypes;
-
             if (MasterGrid.gridLayerCtrl != null && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() > 0 && MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks() != layerItem.GetBlockedLinkNetworksCount())
             {
                 int lastSelected = selectedNetworkTypes;
 
-                tempTypes = new List<string>();
-                for (int i = 0; i < MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks(); i++)
-                    tempTypes.Add(MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(i).ID);
+                string[] tempLayterCtrlTypes = new string[MasterGrid.gridLayerCtrl.GetNumberOfLinkNetworks()];
+                for (int i = 0; i < tempLayterCtrlTypes.Length; i++)
+                    tempLayterCtrlTypes[i] = MasterGrid.gridLayerCtrl.GetLinkNetworkByIndex(i).ID;
 
-                UpdateNetworkTypesByLayerCtrl(tempTypes);
+                string[] tempLayerItemTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
+                for (int i = 0; i < tempLayerItemTypes.Length; i++)
+                    tempLayerItemTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(i).ID;
+
+                networkTypes = MergeLinkNetwork(tempLayterCtrlTypes, tempLayerItemTypes);
                 RestorePreviousSelection(lastSelected);
             }
             else if (networkTypes == null || layerItem.GetBlockedLinkNetworksCount() != networkTypes.Length)
             {
                 int lastSelected = selectedNetworkTypes;
 
-                tempTypes = new List<string>();
-                for (int i = 0; i < layerItem.GetBlockedLinkNetworksCount(); i++)
-                    tempTypes.Add(layerItem.GetBlockedLinkNetworkByIndex(i).ID);
+                string[] tempTypes = new string[layerItem.GetBlockedLinkNetworksCount()];
+                for (int i = 0; i < tempTypes.Length; i++)
+                    tempTypes[i] = layerItem.GetBlockedLinkNetworkByIndex(i).ID;
 
-                UpdateNetworkTypesByLayerItem(tempTypes);
+                networkTypes = tempTypes;
                 RestorePreviousSelection(lastSelected);
             }
         }
-        
-        void UpdateNetworkTypesByLayerCtrl(List<string> _newIDs)
+
+        string[] MergeLinkNetwork(string[] _newIDsFromCtrl, string[] _newIDsFromItem)
         {
-            /* 
-            * Se _newIDs sono esattamente gli stessi di quelli contenuti in layerItem allora li assegno a networkTypes, e ritorno.
-            * Altrimenti creo nuovi LinkNetwork in layerItem da _newIDs e sommo _newIDs a quelli contenuti in layerItem nella lista che sarà il nuovo networkTypes[]
-            */
-        }
+            List<string> tempTypes = _newIDsFromItem.ToList();
 
-        void UpdateNetworkTypesByLayerItem(List<string> _newIDs)
-        {
-            if(networkTypes == null)
+            for (int i = 0; i < _newIDsFromCtrl.Length; i++)
             {
-                networkTypes = _newIDs.ToArray();
-                return;
+                if (_newIDsFromItem.Contains(_newIDsFromCtrl[i]))
+                    continue;
+
+                layerItem.AddLinkNetwork(_newIDsFromCtrl[i]);
+                tempTypes.Add(_newIDsFromCtrl[i]);
             }
-            else
-            {
-                List<string> tempTypes = networkTypes.ToList();
 
-                for (int i = 0; i < tempTypes.Count; i++)
-                {
-                    for (int j = 0; j < _newIDs.Count; j++)
-                    {
-                        if (tempTypes[i] == _newIDs[j])
-                            break;
-
-                        layerItem.AddLinkNetwork(_newIDs[j]);
-                        tempTypes.Add(_newIDs[j]);
-                    }
-                }
-
-                networkTypes = tempTypes.ToArray();
-                return;              
-            }
+            return tempTypes.ToArray();
         }
 
         void RestorePreviousSelection(int _lastSelected)
@@ -233,17 +216,17 @@ namespace Grid
         void AddBlockedDirection(Vector3Int _direction)
         {
             if(MasterGrid.gridLayerCtrl != null)
-                layerItem.AddBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes).ID);
+                layerItem.AddBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
             else
-                layerItem.AddBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID);
+                layerItem.AddBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
         }
 
         void RemoveBlockedDirection(Vector3Int _direction)
         {
             if (MasterGrid.gridLayerCtrl != null)
-                 layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkAtIndex(selectedNetworkTypes).ID);
+                layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
             else
-                layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByIndex(selectedNetworkTypes).ID);
+                layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
         }
         #endregion
 
@@ -331,7 +314,7 @@ namespace Grid
 
         void SetupAllButtonsLogic(string _linkID)
         {
-            List<Vector3Int> blockedLinks = layerItem.GetBlockedLinkNetworkByType(_linkID).GetLinks();
+            List<Vector3Int> blockedLinks = layerItem.GetBlockedLinkNetworkByID(_linkID).GetLinks();
 
             if(blockedLinks.Count == 0)
             {
