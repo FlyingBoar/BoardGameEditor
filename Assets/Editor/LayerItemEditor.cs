@@ -68,6 +68,8 @@ namespace Grid
                 GUILayout.Space(3);
 
                 UpdateNetworkTypeSelection();
+                if (networkTypes != null && selectedNetworkTypes >= networkTypes.Length)
+                    selectedNetworkTypes = 0;
                 selectedNetworkTypes = EditorGUILayout.Popup(selectedNetworkTypes, networkTypes);
 
                 ShowForwardButtons();
