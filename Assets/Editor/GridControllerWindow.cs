@@ -26,9 +26,6 @@ namespace Grid
         [SerializeField]
         Vector2 scrollPosition;
 
-        [SerializeField]
-        string newDataName = "NewGridData";
-
         public GridControllerWindow(GridController _gridCtrl)
         {
             gridCtrl = _gridCtrl;
