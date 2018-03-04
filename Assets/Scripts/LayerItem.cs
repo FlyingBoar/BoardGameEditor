@@ -15,7 +15,7 @@ namespace Grid
         public Layer MembershipLayer { get; set; }
 
         #region API
-        public void SetCoordinates(Vector3Int _gridCoordinates)
+        public void SetCoordinates(Vector2Int _gridCoordinates)
         {
             if (_gridCoordinates == data.GridCoordinates)
                 return;
@@ -50,7 +50,7 @@ namespace Grid
                 return blockedLinkNetworks[_index];
         }
 
-        public void AddBlockedLink(Vector3Int _direction, string _id)
+        public void AddBlockedLink(Vector2Int _direction, string _id)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)
             {
@@ -65,7 +65,7 @@ namespace Grid
             AddBlockedLink(_direction, _id);
         }
 
-        public void RemoveBlockedLink(Vector3Int _direction, string _id)
+        public void RemoveBlockedLink(Vector2Int _direction, string _id)
         {
             foreach (LinkNetwork network in blockedLinkNetworks)
             {

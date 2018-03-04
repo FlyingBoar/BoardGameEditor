@@ -215,7 +215,7 @@ namespace Grid
         #endregion
 
         #region Update Blocked Directions
-        void AddBlockedDirection(Vector3Int _direction)
+        void AddBlockedDirection(Vector2Int _direction)
         {
             if(MasterGrid.gridLayerCtrl != null)
                 layerItem.AddBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
@@ -223,7 +223,7 @@ namespace Grid
                 layerItem.AddBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
         }
 
-        void RemoveBlockedDirection(Vector3Int _direction)
+        void RemoveBlockedDirection(Vector2Int _direction)
         {
             if (MasterGrid.gridLayerCtrl != null)
                 layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
@@ -254,13 +254,13 @@ namespace Grid
 
             if (_value)
             {
-                AddBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
+                AddBlockedDirection(new Vector2Int(_i - 1, _j - 1));
                 logicButtonMatrix[_i, _j] = _value;
                 UpdateButtonTexture(_i, _j, _value);
             }
             else
             {
-                RemoveBlockedDirection(new Vector3Int(_i - 1, 0, _j - 1));
+                RemoveBlockedDirection(new Vector2Int(_i - 1, _j - 1));
                 logicButtonMatrix[_i, _j] = _value;
                 UpdateButtonTexture(_i, _j, _value);
             }
@@ -316,7 +316,7 @@ namespace Grid
 
         void SetupAllButtonsLogic(string _linkID)
         {
-            List<Vector3Int> blockedLinks = layerItem.GetBlockedLinkNetworkByID(_linkID).GetLinks();
+            List<Vector2Int> blockedLinks = layerItem.GetBlockedLinkNetworkByID(_linkID).GetLinks();
 
             if(blockedLinks.Count == 0)
             {
@@ -343,7 +343,7 @@ namespace Grid
                             if (i == 0 && j == 0)
                                 continue;
 
-                            if (blockedLinks[k] == new Vector3Int(i, 0, j))
+                            if (blockedLinks[k] == new Vector2Int(i, j))
                             {
                                 logicButtonMatrix[i + 1, j + 1] = true;
                                 UpdateButtonTexture(i + 1, j + 1, true);

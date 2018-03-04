@@ -16,13 +16,14 @@ public class MovementController : MonoBehaviour {
         List<Vector3Int> possibleMovement = new List<Vector3Int>();
         List<Vector3Int> tempList = new List<Vector3Int>();
 
-        Vector3Int startCell = MasterGrid.GetCoordinatesByPosition(transform.position);
-        if (PointsOfMovement >= 0)
-        {
-            possibleMovement.Add(startCell);
-        }
-        else
-            return null;
+        //TODO: check con Luca/Fulvio
+        //Vector3Int startCell = MasterGrid.GetCoordinatesByPosition(transform.position);
+        //if (PointsOfMovement >= 0)
+        //{
+        //    possibleMovement.Add(startCell);
+        //}
+        //else
+        //    return null;
 
         Debug.LogError("Funzionalità rimossa durante il refactoring del sistema a Layer e la rimozione della Matrice di celle");
 

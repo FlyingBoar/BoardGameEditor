@@ -235,6 +235,10 @@ Prefab:
       propertyPath: InputTester
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1393469623960952, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
   m_IsPrefabParent: 0

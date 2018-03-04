@@ -18,7 +18,7 @@ namespace Grid
         public bool ShowMousePosition;
         public bool ShowMouseCell;
         [HideInInspector]
-        public Vector3Int SelectedCell;
+        public Vector2Int SelectedCell;
 
         public bool ShowMouseAction;
 
@@ -62,46 +62,19 @@ namespace Grid
             //    DisplayMouseCell(Color.red);
         }
 
+        //TODO: check con Luca/Fulvio l'uso di queste due funzioni (se non chiamate da nessuno, togliamole)
         /// <summary>
         /// [Deprecato]
         /// </summary>
-        void DisplayCell(Vector3Int _coordinates, Color color)
-        {
-            if (_coordinates == null)
-                return;
-
-            if (_coordinates == SelectedCell)
-            {
-                Handles.color = Color.red;
-                Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), MasterGrid.gridCtrl.SectorData.Radius * 1.8f);
-            }
-
-            Handles.color = color;
-            Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), MasterGrid.gridCtrl.SectorData.Radius * 2);
-            Handles.DrawWireCube(MasterGrid.GetPositionByCoordinates(_coordinates), (MasterGrid.gridCtrl.SectorData.Radius / 25f));
-        }
-
-        /// <summary>
-        /// [Deprecato]
-        /// </summary>
-        void DisplayLayerLink(Cell _cell, Layer _layer)
-        {
-            Handles.color = _layer.Data.Color;
-            foreach (Vector3Int link in _cell.GetCellData().GetLinkCoordinates(_layer))
-            {
-                Vector3 line = MasterGrid.GetPositionByCoordinates(link) - _cell.GetPosition();
-                Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
-            }
-        }
-        /// <summary>
-        /// [Deprecato]
-        /// usare DisplayMouseCell
-        /// </summary>
-        void DisplayMousePosition(Color _color)
-        {
-            Handles.color = _color;
-            Handles.DrawWireDisc(MousePos, Vector3.up, .5f);
-        }
+        //void DisplayLayerLink(Cell _cell, Layer _layer)
+        //{
+        //    Handles.color = _layer.Data.Color;
+        //    foreach (Vector3Int link in _cell.GetCellData().GetLinkCoordinates(_layer))
+        //    {
+        //        Vector3 line = MasterGrid.GetPositionByCoordinates(link) - _cell.GetPosition();
+        //        Handles.DrawLine(_cell.GetPosition() + line * 0.25f, _cell.GetPosition() + line * .75f);
+        //    }
+        //}
 
         void DisplayMouseCell(Color _color)
         {
@@ -111,16 +84,16 @@ namespace Grid
             if(_mouseCell != null)
             {
                 Handles.DrawWireCube(_mouseCell, GridCtrl.SectorData.Radius * 2.01f);
-                _color.a *= .10f;
+                _color.a *= .1f;
                 Handles.color = _color;
-                List<Vector3Int> neighbours = MasterGrid.GetNeighbours(MasterGrid.GetCoordinatesByPosition(_mouseCell));
-                foreach (Vector3Int _neighbour in neighbours)
+                List<Vector2Int> neighbours = MasterGrid.GetNeighbours(MasterGrid.GetCoordinatesByPosition(_mouseCell));
+                foreach (Vector2Int _neighbour in neighbours)
                 {
                     Vector3 neighbourPos = MasterGrid.GetPositionByCoordinates(_neighbour);
                     Handles.DrawWireCube(neighbourPos, GridCtrl.SectorData.Radius * 2.01f);
                 }
                 _color.a = 1;
-                foreach (Vector3Int _neighbour in neighbours)
+                foreach (Vector2Int _neighbour in neighbours)
                 {
                     Vector3 neighbourPos = MasterGrid.GetPositionByCoordinates(_neighbour);
                     ShowLink(_mouseCell, neighbourPos, _color);

@@ -7,32 +7,38 @@ namespace Grid
     [System.Serializable]
     public class GridData
     {
-        public CellData.SectorData SectorData = new CellData.SectorData() { Shape = CellData.AreaShape.Square, Radius = new Vector3(1, 0, 1) };
+        public SectorData SectorData = new SectorData() { Radius = new Vector2(1, 1) };
 
+        public Vector3 Normal = Vector3.forward;
         public Vector3 Origin;
-        public Vector3Int Size = new Vector3Int(10,0,10);
-        public Vector3 ResolutionCorrection;
-
-        Cell[,,] _cellsMatrix;
-        public Cell[,,] CellsMatrix {
-            set { _cellsMatrix = value;
-                foreach (Cell cell in _cellsMatrix)
-                {
-                    if(cell != null)
-                    {
-                        Cells.Add(cell.GetCellData());
-                    }
-                }
-            }
-        }
-        [SerializeField]
-        List<CellData> Cells = new List<CellData>();
-
+        public Vector2 ResolutionCorrection;
+        
         public List<Layer> Layers;
+    }
 
-        public List<CellData> GetCellDatas()
+    [System.Serializable]
+    public struct SectorData
+    {
+        public Vector2 Radius;
+        public Vector2 Diameter { get { return Radius * 2; } }
+    }
+
+    [System.Serializable]
+    public struct LayeredLink
+    {
+        public List<Vector2Int> LinkedCoordinates;
+        public Layer Layer;
+
+        public LayeredLink(List<Vector2Int> _linkedCoordinates, Layer _layer)
         {
-            return Cells;
+            Layer = _layer;
+            LinkedCoordinates = _linkedCoordinates;
+        }
+
+        public LayeredLink(Vector2Int _linkedCoordinate, Layer _layer)
+        {
+            Layer = _layer;
+            LinkedCoordinates = new List<Vector2Int>() { _linkedCoordinate };
         }
     }
 }

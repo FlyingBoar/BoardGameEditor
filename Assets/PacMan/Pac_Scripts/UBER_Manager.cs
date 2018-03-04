@@ -9,7 +9,7 @@ public class UBER_Manager : MonoBehaviour {
     public GameObject PacMan;
 
     public TextAsset GridToLoad;
-    Vector3Int pacmanCoordinates { get { return MasterGrid.GetCoordinatesByPosition(PacMan.transform.position); } }
+    Vector2Int pacmanCoordinates { get { return MasterGrid.GetCoordinatesByPosition(PacMan.transform.position); } }
 
     private void Start()
     {
@@ -22,30 +22,31 @@ public class UBER_Manager : MonoBehaviour {
         //gridLayerCtrl.Layers = Datas.Layers;
     }
 
-    private void Update()
-    {
-        Vector3Int coordinatesOfNext = pacmanCoordinates;
+    //TODO: check con Luca/Fulvio
+    //private void Update()
+    //{
+    //    Vector2Int coordinatesOfNext = pacmanCoordinates;
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            coordinatesOfNext += new Vector3Int(0, 0, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            coordinatesOfNext += new Vector3Int(0, 0, -1);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            coordinatesOfNext += Vector3Int.left;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            coordinatesOfNext += Vector3Int.right;
-        }
+    //    if (Input.GetKeyDown(KeyCode.UpArrow))
+    //    {
+    //        coordinatesOfNext += new Vector3Int(0, 0, 1);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.DownArrow))
+    //    {
+    //        coordinatesOfNext += new Vector3Int(0, 0, -1);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.LeftArrow))
+    //    {
+    //        coordinatesOfNext += Vector3Int.left;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.RightArrow))
+    //    {
+    //        coordinatesOfNext += Vector3Int.right;
+    //    }
 
-        //if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext).GridCoordinates))
-        //    Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext));
-    }
+    //    //if (pacmanCell.GetNeighbourgs(gridLayerCtrl.Layers[0]).Contains(gridCtrl.GetCellByCoordinates(coordinatesOfNext).GridCoordinates))
+    //    //    Snap(gridCtrl.GetPositionByCoordinates(coordinatesOfNext));
+    //}
 
     /// <summary>
     /// Cerca il path della griglie e lo carica

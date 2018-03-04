@@ -99,7 +99,8 @@ namespace Grid
                 GUI.enabled = false;
             if (GUILayout.Button("Save", GUILayout.Height(40)))
             {
-                GridCtrl.SaveCellMatrixInData();
+                //TODO: check con Luca/Fulvio
+                //GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveData(AssetDatabase.GetAssetPath(fileToLoad));
             }
             if (fileToLoad == null)
@@ -107,7 +108,8 @@ namespace Grid
 
             if (GUILayout.Button("Save as", GUILayout.Height(40)))
             {
-                GridCtrl.SaveCellMatrixInData();
+                //TODO: check con Luca/Fulvio
+                //GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveNewData(newDataName);
             }
 

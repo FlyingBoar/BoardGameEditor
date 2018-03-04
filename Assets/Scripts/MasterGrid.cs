@@ -18,6 +18,26 @@ namespace Grid
 
         #region API
         /// <summary>
+        /// Rotate a vector to allign vector3.up with the Grid plane Normal
+        /// </summary>
+        /// <param name="_originalV"></param>
+        /// <returns></returns>
+        public static Vector3 ToGridVectorSpace(this Vector3 _originalV)
+        {
+            Vector3 gridSpaceVec = gridCtrl.RotationToGridSpace * _originalV;
+            return gridSpaceVec;
+        }
+        /// <summary>
+        /// Rotate a vector from the Grid vector space to the Unity default one.
+        /// </summary>
+        /// <param name="_originalV"></param>
+        /// <returns></returns>
+        public static Vector3 FromGridVectorSpace(this Vector3 _originalV)
+        {
+            Vector3 unitySpaceVec = Quaternion.Inverse(gridCtrl.RotationToGridSpace) * _originalV;
+            return unitySpaceVec;
+        }
+        /// <summary>
         /// Return the center postion of the cell
         /// </summary>
         /// <param name="_gridCtrl"></param>
@@ -25,12 +45,13 @@ namespace Grid
         /// <param name="j"></param>
         /// <param name="k"></param>
         /// <returns></returns>
-        public static Vector3 GetPositionByCoordinates(Vector3Int _coordinates)
+        public static Vector3 GetPositionByCoordinates(Vector2Int _coordinates)
         {
             Vector3 spacePos = new Vector3(
                 _coordinates.x * (gridCtrl.SectorData.Diameter.x + gridCtrl.ResolutionCorrection.x),
                 _coordinates.y * (gridCtrl.SectorData.Diameter.y + gridCtrl.ResolutionCorrection.y),
-                _coordinates.z * (gridCtrl.SectorData.Diameter.z + gridCtrl.ResolutionCorrection.z));
+                0);
+            spacePos = spacePos.FromGridVectorSpace();
             spacePos += gridCtrl.Origin;
 
             return spacePos;
@@ -42,19 +63,19 @@ namespace Grid
         /// <param name="_gridCtrl"></param>
         /// <param name="_position"></param>
         /// <returns></returns>
-        public static Vector3Int GetCoordinatesByPosition(Vector3 _position)
+        public static Vector2Int GetCoordinatesByPosition(Vector3 _position)
         {
             Vector3 spacePos = _position - gridCtrl.Origin;
-            Vector3 normFactor = gridCtrl.SectorData.Diameter + gridCtrl.ResolutionCorrection;
+            spacePos = spacePos.ToGridVectorSpace();
+            Vector2 normFactor = gridCtrl.SectorData.Diameter + gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
             {
                 normFactor.x != 0 ? Mathf.RoundToInt(spacePos.x/normFactor.x): 0,
                 normFactor.y != 0 ? Mathf.RoundToInt(spacePos.y/normFactor.y): 0,
-                normFactor.z != 0 ? Mathf.RoundToInt(spacePos.z/normFactor.z): 0,
             };
 
-            return new Vector3Int(coordinates[0], coordinates[1], coordinates[2]);
+            return new Vector2Int(coordinates[0], coordinates[1]);
         }
         /// <summary>
         ///Associate the coordinate of clostest Cell center (or cell array index)
@@ -62,9 +83,9 @@ namespace Grid
         ///By Math: this is actually the metric conversion of the Grid Sub Vectorial Space, but
         ///the int cast on the normalized position
         /// <summary>
-        public static Vector3Int GetCoordinatesByPosition(Vector3 _position, out bool _isInCellRadius)
+        public static Vector2Int GetCoordinatesByPosition(Vector3 _position, out bool _isInCellRadius)
         {
-            Vector3Int coordinates = GetCoordinatesByPosition(_position);
+            Vector2Int coordinates = GetCoordinatesByPosition(_position);
             bool _isInCell = true;
 
             Vector3 centerPos = GetPositionByCoordinates(coordinates);
@@ -72,9 +93,6 @@ namespace Grid
                 _isInCell = false;
 
             if (Mathf.Abs(centerPos.y - _position.y) > gridCtrl.SectorData.Radius.y)
-                _isInCell = false;
-
-            if (Mathf.Abs(centerPos.z - _position.z) > gridCtrl.SectorData.Radius.z)
                 _isInCell = false;
 
             _isInCellRadius = _isInCell;
@@ -172,10 +190,10 @@ namespace Grid
         /// </summary>
         /// <param name="_coordinates">The position to start to take the coordinates of the neighbours</param>
         /// <returns></returns>
-        public static List<Vector3Int> GetNeighbours(Vector3Int _coordinates, NeighboursShape _shape = NeighboursShape.All)
+        public static List<Vector2Int> GetNeighbours(Vector2Int _coordinates, NeighboursShape _shape = NeighboursShape.All)
         {
-            List<Vector3Int> _plusNeighbours = new List<Vector3Int>();
-            List<Vector3Int> _crossNeighbours = new List<Vector3Int>();
+            List<Vector2Int> _plusNeighbours = new List<Vector2Int>();
+            List<Vector2Int> _crossNeighbours = new List<Vector2Int>();
 
             for (int i = -1; i < 2; i++)
             {
@@ -184,16 +202,16 @@ namespace Grid
                     if (i == 0 && j == 0)
                         continue;
                     if (i == 0 || j == 0)
-                        _plusNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
+                        _plusNeighbours.Add(_coordinates + new Vector2Int(i, j));
                     else
-                        _crossNeighbours.Add(_coordinates + new Vector3Int(i, 0, j));
+                        _crossNeighbours.Add(_coordinates + new Vector2Int(i, j));
                 }
             }
 
             switch (_shape)
             {
                 case NeighboursShape.All:
-                    List<Vector3Int> allNeighbours = new List<Vector3Int>();
+                    List<Vector2Int> allNeighbours = new List<Vector2Int>();
                     allNeighbours.AddRange(_plusNeighbours);
                     allNeighbours.AddRange(_crossNeighbours);
                     return allNeighbours;
@@ -211,11 +229,11 @@ namespace Grid
         /// <param name="_coordinates">The position to start to take the coordinates of the neighbours</param>
         /// <param name="_networkType">The type of the LinkNetwork to search</param>
         /// <returns></returns>
-        public static List<Vector3Int> GetNeighboursByLinkNetwork(Vector3Int _coordinates, LinkNetworkType _networkType, NeighboursShape _shape = NeighboursShape.All)
+        public static List<Vector2Int> GetNeighboursByLinkNetwork(Vector2Int _coordinates, LinkNetworkType _networkType, NeighboursShape _shape = NeighboursShape.All)
         {
             List<Layer> layers = gridLayerCtrl.GetLayers();
 
-            List<Vector3Int> filteredNeighbours = GetNeighboursByLinkNetworkUnfiltered(_coordinates, _networkType, layers, _shape);
+            List<Vector2Int> filteredNeighbours = GetNeighboursByLinkNetworkUnfiltered(_coordinates, _networkType, layers, _shape);
 
             List<LayerItem> itemsToCheck = new List<LayerItem>();
             LayerItem itemFound = null;
@@ -226,7 +244,7 @@ namespace Grid
                     itemsToCheck.Add(itemFound);
             }
 
-            List<Vector3Int> unfilterdNeighboursLinks = new List<Vector3Int>();
+            List<Vector2Int> unfilterdNeighboursLinks = new List<Vector2Int>();
 
             for (int i = 0; i < itemsToCheck.Count; i++)
             {
@@ -250,14 +268,14 @@ namespace Grid
         /// <param name="_layers"></param>
         /// <param name="_shape"></param>
         /// <returns></returns>
-        static List<Vector3Int> GetNeighboursByLinkNetworkUnfiltered(Vector3Int _coordinates, LinkNetworkType _networkType, List<Layer> _layers, NeighboursShape _shape = NeighboursShape.All)
+        static List<Vector2Int> GetNeighboursByLinkNetworkUnfiltered(Vector2Int _coordinates, LinkNetworkType _networkType, List<Layer> _layers, NeighboursShape _shape = NeighboursShape.All)
         {
-            List<Vector3Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
+            List<Vector2Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
             
             LayerItem itemFound = SearchLayerItemByCoordinates(_coordinates, _layers);
             if (itemFound != null)
             {
-                List<Vector3Int> links = itemFound.GetBlockedLinkNetworkByID(_networkType.ID).GetLinks();
+                List<Vector2Int> links = itemFound.GetBlockedLinkNetworkByID(_networkType.ID).GetLinks();
                 for (int i = 0; i < links.Count; i++)
                 {
                     filteredNeighbours.Remove(links[i] + _coordinates);
@@ -272,7 +290,7 @@ namespace Grid
         /// <param name="_coordinates"></param>
         /// <param name="_layers"></param>
         /// <returns></returns>
-        static LayerItem SearchLayerItemByCoordinates(Vector3Int _coordinates, List<Layer> _layers)
+        static LayerItem SearchLayerItemByCoordinates(Vector2Int _coordinates, List<Layer> _layers)
         {
             for (int i = 0; i < _layers.Count; i++)
             {
