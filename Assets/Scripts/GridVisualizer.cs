@@ -10,7 +10,9 @@ namespace Grid
     {
         public GridController GridCtrl;
 
-        Vector3 MousePos { get { return GridInput.MousePositionOnGridPlane(); } }    
+        Vector3 MousePos {
+            get { return GridInput.PointerPosition; }
+        }    
 
         public bool ShowGrid = true;
         public Color GridHandlesColor = Color.cyan;
