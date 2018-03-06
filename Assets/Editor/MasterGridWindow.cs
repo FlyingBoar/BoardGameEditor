@@ -12,13 +12,9 @@ namespace Grid
         public static GridControllerWindow GridCtrlWindow { get; private set; }
 
         public static GridVisualizer GridVisualizer { get; private set; }
-        public static GridVisualizerWindow GridVisualizerWindow { get; private set; }
 
         public static GridLayerController LayerCtrl { get { return MasterGrid.gridLayerCtrl; } }
         public static GridLayerControllerWindow GridLayerCtrlWindow { get; private set; }
-
-        public static GridScanner GridScanner { get; private set; }
-        public static GridScannerWindow GridScannerWindow { get; private set; }
 
         #region Save/Load Variables
         TextAsset fileToLoad;
@@ -41,19 +37,13 @@ namespace Grid
             MasterGrid.Init();
 
             GridVisualizer = new GridVisualizer(GridCtrl);
-            GridScanner = new GridScanner();
-
             GridCtrlWindow = new GridControllerWindow(GridCtrl);
-            GridVisualizerWindow = new GridVisualizerWindow(GridVisualizer);
             GridLayerCtrlWindow = new GridLayerControllerWindow(LayerCtrl);
-            GridScannerWindow = new GridScannerWindow(GridScanner, GridCtrl);
 
             if (toolbarEntries.Count == 0)
             {
                 toolbarEntries.Add("Grid Controller");
-                //toolbarEntries.Add("Grid Visualizer");
                 toolbarEntries.Add("Grid Layer Controller");
-                //toolbarEntries.Add("Grid Scanner");
             }
 
             SceneView.onSceneGUIDelegate += DrawCall;
@@ -80,12 +70,6 @@ namespace Grid
                 case 1:   
                     GridLayerCtrlWindow.Show();
                     break;
-                case 2:
-                    GridVisualizerWindow.Show();
-                    break;
-                case 3:
-                    GridScannerWindow.Show();
-                    break;
             }
         }
 
@@ -99,8 +83,6 @@ namespace Grid
                 GUI.enabled = false;
             if (GUILayout.Button("Save", GUILayout.Height(40)))
             {
-                //TODO: check con Luca/Fulvio
-                //GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveData(AssetDatabase.GetAssetPath(fileToLoad));
             }
             if (fileToLoad == null)
@@ -108,8 +90,6 @@ namespace Grid
 
             if (GUILayout.Button("Save as", GUILayout.Height(40)))
             {
-                //TODO: check con Luca/Fulvio
-                //GridCtrl.SaveCellMatrixInData();
                 DataManager.SaveNewData(newDataName);
             }
 
@@ -127,7 +107,7 @@ namespace Grid
             if (GUILayout.Button("Load Grid") && fileToLoad != null)
             {
                 DataManager.LoadData(AssetDatabase.GetAssetPath(fileToLoad));
-                GridCtrl.ReInitVariables();
+                LayerCtrl.LoadFromData(DataManager.GridDataInstance);
             }
 
             fileToLoad = (TextAsset)EditorGUILayout.ObjectField(fileToLoad, typeof(TextAsset), false);
@@ -156,14 +136,7 @@ namespace Grid
         {
             if (_sceneView != SceneView.currentDrawingSceneView)
                 return;
-            if (Event.current.type == EventType.MouseDown)
-            {
-                if (Event.current.button == 0)
-                    OnLeftClick();
-                else if (Event.current.button == 1)
-                    OnRightClick();
-            }
-            else if (Event.current.type == EventType.MouseDrag)
+            if (Event.current.type == EventType.MouseDrag)
             {
                 if (Event.current.button == 0 && Event.current.shift)
                     DragSelection();
@@ -191,36 +164,6 @@ namespace Grid
             }
             else
                 Tools.hidden = false;
-        }
-
-        static void OnLeftClick()
-        {
-            //if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Link)
-            //    GridCtrlWindow.LinkSelectedCell();
-            //else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.LinkMutual)
-            //    GridCtrlWindow.LinkSelectedCell(true);
-            //else if (GridCtrlWindow.CurrentMouseAction == GridControllerWindow.MouseActions.Unlink)
-            //    GridCtrlWindow.UnlinkSelectedCell();
-            //else
-            //    GridCtrlWindow.SelectCell();
-        }
-
-        static void OnRightClick()
-        {
-            if (GridCtrlWindow.SelectedCoordinates == MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition))
-            {
-                GenericMenu menu = new GenericMenu();
-                if (GridCtrlWindow.SelectedCoordinates != null)
-                {
-                    menu.AddItem(new GUIContent("Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Link); });
-                    menu.AddItem(new GUIContent("Mutual Link Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.LinkMutual); });
-                    menu.AddItem(new GUIContent("Unlink Cell"), false, () => { GridCtrlWindow.StartMouseAction(GridControllerWindow.MouseActions.Unlink); });
-                }
-                menu.ShowAsContext();
-            } else if (GridCtrlWindow.CurrentMouseAction != GridControllerWindow.MouseActions.None)
-            {
-                GridCtrlWindow.EndMouseAction();
-            }
         }
 
         private void OnDestroy()

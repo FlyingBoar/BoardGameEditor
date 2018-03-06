@@ -48,8 +48,8 @@ namespace Grid
         public static Vector3 GetPositionByCoordinates(Vector2Int _coordinates)
         {
             Vector3 spacePos = new Vector3(
-                _coordinates.x * (gridCtrl.SectorData.Diameter.x + gridCtrl.ResolutionCorrection.x),
-                _coordinates.y * (gridCtrl.SectorData.Diameter.y + gridCtrl.ResolutionCorrection.y),
+                _coordinates.x * (gridCtrl.GridData.Diameter.x + gridCtrl.ResolutionCorrection.x),
+                _coordinates.y * (gridCtrl.GridData.Diameter.y + gridCtrl.ResolutionCorrection.y),
                 0);
             spacePos = spacePos.FromGridVectorSpace();
             spacePos += gridCtrl.Origin;
@@ -67,7 +67,7 @@ namespace Grid
         {
             Vector3 spacePos = _position - gridCtrl.Origin;
             spacePos = spacePos.ToGridVectorSpace();
-            Vector2 normFactor = gridCtrl.SectorData.Diameter + gridCtrl.ResolutionCorrection;
+            Vector2 normFactor = gridCtrl.GridData.Diameter + gridCtrl.ResolutionCorrection;
 
             int[] coordinates = new int[]
             {
@@ -89,10 +89,10 @@ namespace Grid
             bool _isInCell = true;
 
             Vector3 centerPos = GetPositionByCoordinates(coordinates);
-            if (Mathf.Abs(centerPos.x - _position.x) > gridCtrl.SectorData.Radius.x)
+            if (Mathf.Abs(centerPos.x - _position.x) > gridCtrl.GridData.Radius.x)
                 _isInCell = false;
 
-            if (Mathf.Abs(centerPos.y - _position.y) > gridCtrl.SectorData.Radius.y)
+            if (Mathf.Abs(centerPos.y - _position.y) > gridCtrl.GridData.Radius.y)
                 _isInCell = false;
 
             _isInCellRadius = _isInCell;

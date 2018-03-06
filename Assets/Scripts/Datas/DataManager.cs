@@ -5,9 +5,8 @@ using UnityEngine;
 using UnityEditor;
 using Grid;
 
-public static class DataManager {
-
-    
+public static class DataManager
+{
 
     static GridData _gridData = new GridData();
 

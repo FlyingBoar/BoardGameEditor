@@ -20,8 +20,6 @@ namespace Grid
             }
         }
 
-        public MouseActions CurrentMouseAction { get; private set; }
-
         [SerializeField]
         Vector2 scrollPosition;
 
@@ -38,7 +36,7 @@ namespace Grid
             EditorGUILayout.BeginVertical("Box");
             GUILayout.Label("Sector Data", EditorStyles.boldLabel);
             EditorGUI.indentLevel = 1;   
-            gridCtrl.GridData.SectorData.Radius = EditorGUILayout.Vector2Field("Radius", gridCtrl.SectorData.Radius);
+            gridCtrl.GridData.Radius = EditorGUILayout.Vector2Field("Radius", gridCtrl.GridData.Radius);
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
@@ -51,84 +49,8 @@ namespace Grid
             EditorGUI.indentLevel = 0;
             EditorGUILayout.EndVertical();
 
-            GUILayout.Space(5);
-
-            EditorGUILayout.BeginHorizontal("Box");
-            //TODO: check con Luca/Fulvio
-            //if (GUILayout.Button("Make Grid"))
-            //{
-            //    gridCtrl.CreateNewGrid();
-            //}
-
-            GUILayout.Space(5);
-
-            //TODO: check con Luca/Fulvio
-            //if (GUILayout.Button("Clear Grid"))
-            //{
-            //    gridCtrl.ClearGrid();
-            //}
-
-            GUILayout.Space(5);
-            EditorGUILayout.EndHorizontal();
-
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
-        }
-
-        public void SelectCell()
-        {
-            SelectedCoordinates = MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition);
-        }
-
-        //TODO: risolvere il workaround
-        public void DeselectCell()
-        {
-            Debug.LogError("Attenzione! Workaround");
-            SelectedCoordinates = new Vector2Int(1000,1000);
-        }
-
-        public void StartMouseAction(MouseActions _mouseActions)
-        {
-            CurrentMouseAction = _mouseActions;
-            MasterGridWindow.GridVisualizer.ShowMouseAction = true;
-        }
-
-        public void EndMouseAction()
-        {
-            CurrentMouseAction = MouseActions.None;
-            MasterGridWindow.GridVisualizer.ShowMouseAction = false;
-        }
-
-        /// <summary>
-        /// Chiama la funzione link della cella salvata in precedenza
-        /// </summary>
-        public void LinkSelectedCell(bool _mutualLink = false)
-        {
-            Vector2Int cellToLink = MasterGrid.GetCoordinatesByPosition(GridInput.PointerPosition);
-            if (SelectedCoordinates != null && cellToLink != null)
-            {
-                Debug.LogError("Attenzione! Funzionalità rimossa durante la rimozione del sistema a celle");
-                //gridCtrl.LayerCtrl.LinkCells(SelectedCoordinates, cellToLink, gridCtrl.LayerCtrl.GetLayerAtIndex(gridCtrl.LayerCtrl.SelectedLayer), _mutualLink);
-                EndMouseAction();
-                DeselectCell();
-            }
-        }
-
-        public void UnlinkSelectedCell()
-        {
-            Debug.LogError("Attenzione: funzionalità rimossa durane la rimozione del sistema a celle");
-            //Cell cellToUnlink = MasterGrid.GetCellFromPosition(GridInput.PointerPosition);
-            if (SelectedCoordinates != null /*&& cellToUnlink != null*/)
-            {
-                //gridCtrl.LayerCtrl.UnlinkCells(SelectedCoordinates, cellToUnlink);
-                EndMouseAction();
-                DeselectCell();
-            }
-        }
-
-        public enum MouseActions
-        {
-            None, Link, LinkMutual, Unlink
         }
     }
 }
