@@ -217,18 +217,12 @@ namespace Grid
         #region Update Blocked Directions
         void AddBlockedDirection(Vector2Int _direction)
         {
-            if(MasterGrid.gridLayerCtrl != null)
-                layerItem.AddBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
-            else
-                layerItem.AddBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
+            layerItem.AddBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
         }
 
         void RemoveBlockedDirection(Vector2Int _direction)
         {
-            if (MasterGrid.gridLayerCtrl != null)
-                layerItem.RemoveBlockedLink(_direction, MasterGrid.gridLayerCtrl.GetLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
-            else
-                layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
+            layerItem.RemoveBlockedLink(_direction, layerItem.GetBlockedLinkNetworkByID(networkTypes[selectedNetworkTypes]).ID);
         }
         #endregion
 
