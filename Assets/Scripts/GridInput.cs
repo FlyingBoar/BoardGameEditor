@@ -5,7 +5,7 @@ namespace Grid {
     public class GridInput
     {
         static Ray mouseProjection;
-        static Plane gridLevel = new Plane(DataManager.GridDataInstance.Normal, DataManager.GridDataInstance.Normal.z - 1); //TODO: da adattare alla griglia
+        static Plane gridLevel { get { return new Plane(MasterGrid.gridCtrl.Normal, 0); } }//TODO: da adattare alla griglia
         public static Vector3 PointerPosition { get { return MousePositionOnGridPlane(); } }
 
         public static Vector3 MousePositionOnGridPlane()
