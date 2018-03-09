@@ -155,93 +155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabViewGraphic: {fileID: 1293805298833758, guid: 82a6c57e6e551cd40bcba5f4b763f028,
     type: 2}
---- !u!1001 &310909082
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4266884475780170, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114832350985159100, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: Tester
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114832350985159100, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: PointsOfMovement
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: prefabViewGraphic
-      value: 
-      objectReference: {fileID: 1293805298833758, guid: 82a6c57e6e551cd40bcba5f4b763f028,
-        type: 2}
-    - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: CurrentMovementMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: ViewController
-      value: 
-      objectReference: {fileID: 70085251}
-    - target: {fileID: 114832350985159100, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: TESTController
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: TESTGridController
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114695962407422038, guid: e1bc5dba730c41d48a5fbf370251b1b3,
-        type: 2}
-      propertyPath: InputTester
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1393469623960952, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: e1bc5dba730c41d48a5fbf370251b1b3, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &530846008
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +263,7 @@ Transform:
   m_Children:
   - {fileID: 70085250}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1839428068
 GameObject:
