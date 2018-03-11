@@ -59,6 +59,8 @@ namespace Grid
 
         private void OnGUI()
         {
+            BeginWindows();
+
             ShowSaveLoad();
 
             selectedToolbarItem = GUILayout.Toolbar(selectedToolbarItem, toolbarEntries.ToArray());
@@ -71,6 +73,8 @@ namespace Grid
                     GridLayerCtrlWindow.Show();
                     break;
             }
+
+            EndWindows();
         }
 
         void ShowSaveLoad()
