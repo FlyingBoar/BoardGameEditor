@@ -239,7 +239,7 @@ namespace Grid
             LayerItem itemFound = null;
             for (int i = 0; i < filteredNeighbours.Count; i++)
             {
-                itemFound = SearchLayerItemByCoordinates(_coordinates, layers);
+                itemFound = GetLayerItemByCoordinates(_coordinates, layers);
                 if (itemFound != null)
                     itemsToCheck.Add(itemFound);
             }
@@ -259,7 +259,6 @@ namespace Grid
         }
         #endregion
 
-        #region LinkNetwork
         /// <summary>
         /// Return the list of the neighbours, removing the one blocked by the LayerItem if the is one
         /// </summary>
@@ -272,7 +271,7 @@ namespace Grid
         {
             List<Vector2Int> filteredNeighbours = GetNeighbours(_coordinates, _shape);
             
-            LayerItem itemFound = SearchLayerItemByCoordinates(_coordinates, _layers);
+            LayerItem itemFound = GetLayerItemByCoordinates(_coordinates, _layers);
             if (itemFound != null)
             {
                 List<Vector2Int> links = itemFound.GetBlockedLinkNetworkByID(_networkType.ID).GetLinks();
@@ -290,7 +289,7 @@ namespace Grid
         /// <param name="_coordinates"></param>
         /// <param name="_layers"></param>
         /// <returns></returns>
-        static LayerItem SearchLayerItemByCoordinates(Vector2Int _coordinates, List<Layer> _layers)
+        static LayerItem GetLayerItemByCoordinates(Vector2Int _coordinates, List<Layer> _layers)
         {
             for (int i = 0; i < _layers.Count; i++)
             {
@@ -305,7 +304,6 @@ namespace Grid
             }
             return null;
         }
-        #endregion
     }
 
     public enum RotationDegrees
