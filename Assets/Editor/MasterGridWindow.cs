@@ -30,7 +30,7 @@ namespace Grid
         [MenuItem("Window/Master Grid _%g")]
         static void Init()
         {
-            MasterGridWindow masterGrid = (MasterGridWindow)GetWindow(typeof(MasterGridWindow));
+            MasterGridWindow masterGrid = GetWindow<MasterGridWindow>();
             masterGrid.titleContent = new GUIContent("Master Grid");
             masterGrid.Show();
 
