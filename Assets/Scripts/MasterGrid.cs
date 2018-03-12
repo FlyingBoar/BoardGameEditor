@@ -24,7 +24,7 @@ namespace Grid
         /// <returns></returns>
         public static Vector3 ToGridVectorSpace(this Vector3 _originalV)
         {
-            Vector3 gridSpaceVec = gridCtrl.RotationToGridSpace * _originalV;
+            Vector3 gridSpaceVec = Quaternion.Inverse(gridCtrl.RotationToGridSpace) * _originalV;
             return gridSpaceVec;
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace Grid
         /// <returns></returns>
         public static Vector3 FromGridVectorSpace(this Vector3 _originalV)
         {
-            Vector3 unitySpaceVec = Quaternion.Inverse(gridCtrl.RotationToGridSpace) * _originalV;
+            Vector3 unitySpaceVec = gridCtrl.RotationToGridSpace * _originalV;
             return unitySpaceVec;
         }
         /// <summary>
